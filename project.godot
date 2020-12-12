@@ -8,9 +8,14 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Resource",
+"class": "DialogueActor",
+"language": "GDScript",
+"path": "res://addons/dialogue_editor/model/DialogueActor.gd"
+} ]
 _global_script_class_icons={
-
+"DialogueActor": "res://addons/dialogue_editor/icons/Actor.png"
 }
 
 [application]
