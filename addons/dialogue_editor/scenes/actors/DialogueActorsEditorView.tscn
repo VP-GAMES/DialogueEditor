@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/dialogue_editor/scenes/actors/DialogueActors.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/dialogue_editor/scenes/actors/DialogueActorData.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/dialogue_editor/scenes/actors/DialogueActorsEditorView.gd" type="Script" id=3]
 
 [node name="DialogueActors" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -22,4 +24,4 @@ anchor_bottom = 0.0
 margin_right = 506.0
 margin_bottom = 600.0
 
-[node name="ActorsData" parent="Split" instance=ExtResource( 2 )]
+[node name="ActorData" parent="Split" instance=ExtResource( 2 )]
