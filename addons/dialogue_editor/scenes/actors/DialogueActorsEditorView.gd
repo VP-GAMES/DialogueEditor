@@ -12,8 +12,7 @@ onready var _actor_data_ui = $Split/ActorData
 
 func set_data(data: DialogueData) -> void:
 	_data = data
-	print(_data)
-#	_actors_ui.set_data(data)
+	_actors_ui.set_data(data)
 #	_actor_data_ui.set_data(data)
 
 func _ready() -> void:
@@ -29,7 +28,7 @@ func _process(delta):
 		_init_split_offset()
 
 func _init_split_offset() -> void:
-	var offset = 350
+	var offset = 215
 	if _data:
 		offset = _data.setting_actors_split_offset()
 	_split_ui.set_split_offset(-rect_size.x / 2 + offset)

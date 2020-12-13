@@ -24,7 +24,8 @@ func add_actor(sendSignal = true) -> void:
 			_add_actor(actor, sendSignal)
 
 func _add_actor(actor: DialogueActor, sendSignal: bool) -> void:
-	pass
+	actors.append(actor)
+	emit_signal("data_changed")
 
 func del_actor(actor) -> void:
 	if _undo_redo != null:
@@ -36,7 +37,10 @@ func del_actor(actor) -> void:
 		_del_actor(actor)
 
 func _del_actor(actor) -> void:
-	pass
+	var index = actors.find(actor)
+	if index > -1:
+		actors.remove(actor)
+		emit_signal("data_changed")
 
 func init_data() -> void:
 	pass
@@ -57,7 +61,7 @@ func undo_redo() -> UndoRedo:
 	return _undo_redo
 
 func setting_actors_split_offset() -> int:
-	var offset = 350
+	var offset = 215
 	if ProjectSettings.has_setting(SETTINGS_ACTORS_SPLIT_OFFSET):
 		offset = ProjectSettings.get_setting(SETTINGS_ACTORS_SPLIT_OFFSET)
 	return offset
