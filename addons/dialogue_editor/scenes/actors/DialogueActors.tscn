@@ -33,7 +33,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Add" type="Button" parent="Margin/VBox"]
+[node name="HBox" type="HBoxContainer" parent="Margin/VBox"]
+margin_right = 1018.0
+margin_bottom = 20.0
+
+[node name="Add" type="Button" parent="Margin/VBox/HBox"]
 margin_right = 22.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 20, 20 )
@@ -41,6 +45,13 @@ hint_tooltip = "Add actor"
 size_flags_horizontal = 0
 size_flags_vertical = 0
 icon = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="Margin/VBox/HBox"]
+margin_left = 26.0
+margin_top = 3.0
+margin_right = 67.0
+margin_bottom = 17.0
+text = "Actors"
 
 [node name="HSeparator" type="HSeparator" parent="Margin/VBox"]
 margin_top = 24.0

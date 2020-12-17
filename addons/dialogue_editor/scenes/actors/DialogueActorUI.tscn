@@ -9,6 +9,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -17,10 +21,12 @@ __meta__ = {
 [node name="Panel" type="Panel" parent="."]
 margin_right = 1024.0
 margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="HBox" type="HBoxContainer" parent="."]
 margin_right = 1024.0
-margin_bottom = 20.0
+margin_bottom = 24.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 __meta__ = {
@@ -29,24 +35,21 @@ __meta__ = {
 
 [node name="Texture" type="TextureRect" parent="HBox"]
 margin_right = 20.0
-margin_bottom = 20.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 20, 20 )
 texture = ExtResource( 1 )
 stretch_mode = 4
 
-[node name="Name" type="Label" parent="HBox"]
+[node name="Name" type="LineEdit" parent="HBox"]
 margin_left = 24.0
-margin_top = 3.0
 margin_right = 998.0
-margin_bottom = 17.0
+margin_bottom = 24.0
 size_flags_horizontal = 3
-text = "Actor"
-valign = 1
 
 [node name="Del" type="Button" parent="HBox"]
 margin_left = 1002.0
 margin_right = 1024.0
-margin_bottom = 20.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 20, 20 )
 hint_tooltip = "Delete actor"
 icon = ExtResource( 2 )

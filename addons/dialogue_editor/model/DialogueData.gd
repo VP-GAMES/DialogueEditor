@@ -3,21 +3,34 @@
 extends Resource
 class_name DialogueData
 
-signal data_changed
+signal actor_added(actor)
+signal actor_removed(actor)
+signal selected_actor_changed
 
 var _editor: EditorPlugin
 var _undo_redo: UndoRedo
+
+var _actor_selected: DialogueActor
 
 export(Array) var actors
 
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
 
+func selected_actor() -> DialogueActor:
+	if not _actor_selected and not actors.empty():
+		_actor_selected = actors[0]
+	return _actor_selected
+
+func selected_actor_set(actor: DialogueActor) -> void:
+	_actor_selected = actor
+	emit_signal("selected_actor_changed")
+
 func add_actor(sendSignal = true) -> void:
 		var actor = _create_actor()
 		if _undo_redo != null:
 			_undo_redo.create_action("Add actor")
-			_undo_redo.add_do_method(self, "_add_actor")
+			_undo_redo.add_do_method(self, "_add_actor", actor)
 			_undo_redo.add_undo_method(self, "_del_actor", actor)
 			_undo_redo.commit_action()
 		else:
@@ -50,15 +63,17 @@ func _next_autor_name() -> String:
 		next_name += "1"
 	return next_name
 
-func _add_actor(actor: DialogueActor, sendSignal: bool) -> void:
-	actors.append(actor)
-	emit_signal("data_changed")
+func _add_actor(actor: DialogueActor, sendSignal = true, position = actors.size()) -> void:
+	actors.insert(position, actor)
+	_actor_selected = actor
+	emit_signal("actor_added", actor)
 
 func del_actor(actor) -> void:
 	if _undo_redo != null:
+		var index = actors.find(actor)
 		_undo_redo.create_action("Del actor")
 		_undo_redo.add_do_method(self, "_del_actor", actor)
-		_undo_redo.add_undo_method(self, "_add_actor", actor)
+		_undo_redo.add_undo_method(self, "_add_actor", actor, false, index)
 		_undo_redo.commit_action()
 	else:
 		_del_actor(actor)
@@ -66,8 +81,10 @@ func del_actor(actor) -> void:
 func _del_actor(actor) -> void:
 	var index = actors.find(actor)
 	if index > -1:
-		actors.remove(actor)
-		emit_signal("data_changed")
+		actors.remove(index)
+		_actor_selected = null
+		_actor_selected = selected_actor()
+		emit_signal("actor_removed", actor)
 
 func init_data() -> void:
 	pass

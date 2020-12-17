@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/dialogue_editor/icons/Add.png" type="Texture" id=1]
 [ext_resource path="res://addons/dialogue_editor/icons/Del.png" type="Texture" id=2]
+[ext_resource path="res://addons/dialogue_editor/scenes/actors/DialogueActorData.gd" type="Script" id=3]
 
 [node name="DialogueActorData" type="HBoxContainer"]
 margin_left = 518.0
@@ -9,6 +10,7 @@ margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -22,116 +24,116 @@ custom_constants/margin_top = 3
 custom_constants/margin_left = 3
 custom_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginData"]
+[node name="VBox" type="VBoxContainer" parent="MarginData"]
 margin_left = 3.0
 margin_top = 3.0
 margin_right = 248.0
 margin_bottom = 597.0
 
-[node name="HBox" type="HBoxContainer" parent="MarginData/VBoxContainer"]
+[node name="HBox" type="HBoxContainer" parent="MarginData/VBox"]
+visible = false
 margin_right = 245.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="Label" type="Label" parent="MarginData/VBoxContainer/HBox"]
+[node name="Label" type="Label" parent="MarginData/VBox/HBox"]
 margin_top = 5.0
 margin_right = 38.0
 margin_bottom = 19.0
 text = "Name"
 
-[node name="LineEdit" type="LineEdit" parent="MarginData/VBoxContainer/HBox"]
+[node name="Name" type="LineEdit" parent="MarginData/VBox/HBox"]
 margin_left = 42.0
 margin_right = 245.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
-[node name="ln" type="Label" parent="MarginData/VBoxContainer"]
-margin_top = 28.0
+[node name="ln" type="Label" parent="MarginData/VBox"]
+visible = false
 margin_right = 245.0
-margin_bottom = 42.0
+margin_bottom = 14.0
 text = " "
 
-[node name="Expressions" type="Label" parent="MarginData/VBoxContainer"]
-margin_top = 46.0
+[node name="Expressions" type="Label" parent="MarginData/VBox"]
+visible = false
 margin_right = 245.0
-margin_bottom = 60.0
+margin_bottom = 14.0
 text = "Expressions"
 
-[node name="ln2" type="Label" parent="MarginData/VBoxContainer"]
-margin_top = 64.0
+[node name="ln2" type="Label" parent="MarginData/VBox"]
+visible = false
 margin_right = 245.0
-margin_bottom = 78.0
+margin_bottom = 14.0
 text = " "
 
-[node name="HBoxTextures" type="HBoxContainer" parent="MarginData/VBoxContainer"]
-margin_top = 82.0
+[node name="HBoxTextures" type="HBoxContainer" parent="MarginData/VBox"]
 margin_right = 245.0
-margin_bottom = 102.0
+margin_bottom = 20.0
 
-[node name="Button" type="Button" parent="MarginData/VBoxContainer/HBoxTextures"]
+[node name="Add" type="Button" parent="MarginData/VBox/HBoxTextures"]
 margin_right = 22.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 20, 20 )
 icon = ExtResource( 1 )
 
-[node name="Textures" type="Label" parent="MarginData/VBoxContainer/HBoxTextures"]
+[node name="Textures" type="Label" parent="MarginData/VBox/HBoxTextures"]
 margin_left = 26.0
 margin_top = 3.0
 margin_right = 81.0
 margin_bottom = 17.0
 text = "Textures"
 
-[node name="HSeparator" type="HSeparator" parent="MarginData/VBoxContainer"]
-margin_top = 106.0
+[node name="HSeparator" type="HSeparator" parent="MarginData/VBox"]
+margin_top = 24.0
 margin_right = 245.0
-margin_bottom = 110.0
+margin_bottom = 28.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxTitles" type="HBoxContainer" parent="MarginData/VBoxContainer"]
-margin_top = 114.0
+[node name="HBoxTitles" type="HBoxContainer" parent="MarginData/VBox"]
+margin_top = 32.0
 margin_right = 245.0
-margin_bottom = 128.0
+margin_bottom = 46.0
 
-[node name="Label" type="Label" parent="MarginData/VBoxContainer/HBoxTitles"]
+[node name="Label" type="Label" parent="MarginData/VBox/HBoxTitles"]
 margin_right = 22.0
 margin_bottom = 14.0
 rect_min_size = Vector2( 22, 0 )
 
-[node name="Name" type="Label" parent="MarginData/VBoxContainer/HBoxTitles"]
+[node name="Name" type="Label" parent="MarginData/VBox/HBoxTitles"]
 margin_left = 26.0
 margin_right = 146.0
 margin_bottom = 14.0
 rect_min_size = Vector2( 120, 0 )
 text = "Name"
 
-[node name="Path" type="Label" parent="MarginData/VBoxContainer/HBoxTitles"]
+[node name="Path" type="Label" parent="MarginData/VBox/HBoxTitles"]
 margin_left = 150.0
 margin_right = 245.0
 margin_bottom = 14.0
 size_flags_horizontal = 3
 text = "Path"
 
-[node name="HBoxEdit" type="HBoxContainer" parent="MarginData/VBoxContainer"]
-margin_top = 132.0
+[node name="HBoxEdit" type="HBoxContainer" parent="MarginData/VBox"]
+margin_top = 50.0
 margin_right = 245.0
-margin_bottom = 156.0
+margin_bottom = 74.0
 
-[node name="Button" type="Button" parent="MarginData/VBoxContainer/HBoxEdit"]
+[node name="Button" type="Button" parent="MarginData/VBox/HBoxEdit"]
 margin_right = 22.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 20, 20 )
 icon = ExtResource( 2 )
 
-[node name="Name" type="LineEdit" parent="MarginData/VBoxContainer/HBoxEdit"]
+[node name="Name" type="LineEdit" parent="MarginData/VBox/HBoxEdit"]
 margin_left = 26.0
 margin_right = 146.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 120, 0 )
 
-[node name="Path" type="LineEdit" parent="MarginData/VBoxContainer/HBoxEdit"]
+[node name="Path" type="LineEdit" parent="MarginData/VBox/HBoxEdit"]
 margin_left = 150.0
 margin_right = 245.0
 margin_bottom = 24.0

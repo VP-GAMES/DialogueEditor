@@ -5,7 +5,7 @@ extends Panel
 
 var _data: DialogueData
 
-onready var _add_ui = $Margin/VBox/Add
+onready var _add_ui = $Margin/VBox/HBox/Add
 onready var _actors_ui = $Margin/VBox/Scroll/Actors
 
 const DialogueActorUI = preload("res://addons/dialogue_editor/scenes/actors/DialogueActorUI.tscn")
@@ -18,8 +18,13 @@ func set_data(data: DialogueData) -> void:
 func _init_connections() -> void:
 	if not _add_ui.is_connected("pressed", self, "_add_pressed"):
 		_add_ui.connect("pressed", self, "_add_pressed")
-	if not _data.is_connected("data_changed", self, "_update_view"):
-		_data.connect("data_changed", self, "_update_view")
+	if not _data.is_connected("actor_added", self, "_on_actor_action"):
+		_data.connect("actor_added", self, "_on_actor_action")
+	if not _data.is_connected("actor_removed", self, "_on_actor_action"):
+		_data.connect("actor_removed", self, "_on_actor_action")
+
+func _on_actor_action(actor: DialogueActor) -> void:
+	_update_view()
 
 func _update_view() -> void:
 	_clear_view()
@@ -27,7 +32,7 @@ func _update_view() -> void:
 
 func _clear_view() -> void:
 	for actor_ui in _actors_ui.get_children():
-		actor_ui.remove_child(actor_ui)
+		_actors_ui.remove_child(actor_ui)
 		actor_ui.queue_free()
 
 func _draw_view() -> void:

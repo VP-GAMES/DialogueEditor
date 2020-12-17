@@ -13,7 +13,7 @@ onready var _actor_data_ui = $Split/ActorData
 func set_data(data: DialogueData) -> void:
 	_data = data
 	_actors_ui.set_data(data)
-#	_actor_data_ui.set_data(data)
+	_actor_data_ui.set_data(data)
 
 func _ready() -> void:
 	_init_connections()
