@@ -5,14 +5,17 @@ class_name DialogueData
 
 signal actor_added(actor)
 signal actor_removed(actor)
-signal selected_actor_changed
+signal actor_selection_changed
+
+signal actor_resource_added(resource)
+signal actor_resource_removed(resource)
 
 var _editor: EditorPlugin
 var _undo_redo: UndoRedo
 
 var _actor_selected: DialogueActor
 
-export(Array) var actors
+export(Array) var actors = []
 
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
@@ -24,7 +27,7 @@ func selected_actor() -> DialogueActor:
 
 func selected_actor_set(actor: DialogueActor) -> void:
 	_actor_selected = actor
-	emit_signal("selected_actor_changed")
+	emit_signal("actor_selection_changed")
 
 func add_actor(sendSignal = true) -> void:
 		var actor = _create_actor()
@@ -65,8 +68,8 @@ func _next_autor_name() -> String:
 
 func _add_actor(actor: DialogueActor, sendSignal = true, position = actors.size()) -> void:
 	actors.insert(position, actor)
-	_actor_selected = actor
 	emit_signal("actor_added", actor)
+	selected_actor_set(actor)
 
 func del_actor(actor) -> void:
 	if _undo_redo != null:
@@ -82,15 +85,53 @@ func _del_actor(actor) -> void:
 	var index = actors.find(actor)
 	if index > -1:
 		actors.remove(index)
-		_actor_selected = null
-		_actor_selected = selected_actor()
 		emit_signal("actor_removed", actor)
+		_actor_selected = null
+		var actor_selected = selected_actor()
+		selected_actor_set(actor_selected)
 
 func init_data() -> void:
-	pass
+	var file = File.new()
+	if file.file_exists(PATH_TO_SAVE):
+		var resource = ResourceLoader.load(PATH_TO_SAVE) as DialogueData
+		if resource.actors and not resource.actors.empty():
+			actors = resource.actors
 
 func save() -> void:
-	pass
+	ResourceSaver.save(PATH_TO_SAVE, self)
+
+func add_actor_resource() -> void:
+	var resource = _create_actor_resource()
+	if _undo_redo != null:
+		_undo_redo.create_action("Add actor resource")
+		_undo_redo.add_do_method(self, "_add_actor_resource", resource)
+		_undo_redo.add_undo_method(self, "_del_actor_resource", resource)
+		_undo_redo.commit_action()
+	else:
+		_add_actor_resource(resource)
+
+func _create_actor_resource():
+	return {"name": "", "resource": ""}
+
+func _add_actor_resource(resource, position = _actor_selected.resources.size()) -> void:
+	_actor_selected.resources.insert(position, resource)
+	emit_signal("actor_resource_added", resource)
+
+func del_actor_resource(resource) -> void:
+	if _undo_redo != null:
+		var index = _actor_selected.resources.find(resource)
+		_undo_redo.create_action("Del actor resource")
+		_undo_redo.add_do_method(self, "_del_actor_resource", resource)
+		_undo_redo.add_undo_method(self, "_add_actor_resource", resource, index)
+		_undo_redo.commit_action()
+	else:
+		_del_actor_resource(resource)
+
+func _del_actor_resource(resource) -> void:
+	var index = _actor_selected.resources.find(resource)
+	if index > -1:
+		_actor_selected.resources.remove(index)
+		emit_signal("actor_resource_removed", resource)
 
 # ***** EDITOR SETTINGS *****
 func editor() -> EditorPlugin:

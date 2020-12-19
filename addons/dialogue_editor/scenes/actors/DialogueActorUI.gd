@@ -32,8 +32,8 @@ func _init_connections() -> void:
 		_data.connect("actor_added", self, "_on_actor_action")
 	if not _data.is_connected("actor_removed", self, "_on_actor_action"):
 		_data.connect("actor_removed", self, "_on_actor_action")
-	if not _data.is_connected("selected_actor_changed", self, "_draw_style"):
-		_data.connect("selected_actor_changed", self, "_draw_style")
+	if not _data.is_connected("actor_selection_changed", self, "_draw_style"):
+		_data.connect("actor_selection_changed", self, "_draw_style")
 	if not _texture_ui.is_connected("gui_input", self, "_on_gui_input"):
 		_texture_ui.connect("gui_input", self, "_on_gui_input")
 	if not _name_ui.is_connected("gui_input", self, "_on_gui_input"):
