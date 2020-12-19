@@ -19,6 +19,7 @@ export(Array) var actors = []
 
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
+const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "webp", "webm", "o"]
 
 func selected_actor() -> DialogueActor:
 	if not _actor_selected and not actors.empty():
@@ -111,7 +112,7 @@ func add_actor_resource() -> void:
 		_add_actor_resource(resource)
 
 func _create_actor_resource():
-	return {"name": "", "resource": ""}
+	return {"name": "", "path": ""}
 
 func _add_actor_resource(resource, position = _actor_selected.resources.size()) -> void:
 	_actor_selected.resources.insert(position, resource)
@@ -133,6 +134,32 @@ func _del_actor_resource(resource) -> void:
 		_actor_selected.resources.remove(index)
 		emit_signal("actor_resource_removed", resource)
 
+func actor_resource_name_change(resource: Dictionary, name: String) -> void:
+	var old_name = resource.name
+	if _undo_redo != null:
+		_undo_redo.create_action("Change actor resource name")
+		_undo_redo.add_do_method(self, "_actor_resource_name_change", resource, name)
+		_undo_redo.add_undo_method(self, "_actor_resource_name_change", resource, old_name)
+		_undo_redo.commit_action()
+	else:
+		_actor_resource_name_change(resource, name)
+
+func _actor_resource_name_change(resource: Dictionary, name: String) -> void:
+	resource.name = name
+
+func actor_resource_path_change(resource: Dictionary, path: String) -> void:
+	var old_path = resource.path
+	if _undo_redo != null:
+		_undo_redo.create_action("Change actor resource path")
+		_undo_redo.add_do_method(self, "_actor_resource_path_change", resource, path)
+		_undo_redo.add_undo_method(self, "_actor_resource_path_change", resource, old_path)
+		_undo_redo.commit_action()
+	else:
+		_actor_resource_path_change(resource, path)
+
+func _actor_resource_path_change(resource: Dictionary, path: String) -> void:
+	resource.path = path
+
 # ***** EDITOR SETTINGS *****
 func editor() -> EditorPlugin:
 	return _editor
@@ -153,3 +180,18 @@ func setting_actors_split_offset() -> int:
 
 func setting_actors_split_offset_put(offset: int) -> void:
 	ProjectSettings.set_setting(SETTINGS_ACTORS_SPLIT_OFFSET, offset)
+
+# ***** UTILS *****
+func filename(value: String) -> String:
+	var index = value.find_last("/")
+	return value.substr(index + 1)
+
+func file_path(value: String) -> String:
+	var index = value.find_last("/")
+	return value.substr(0, index)
+
+func file_extension(value: String):
+	var index = value.find_last(".")
+	if index == -1:
+		return null
+	return value.substr(index + 1)

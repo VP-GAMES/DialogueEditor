@@ -57,4 +57,4 @@ func _clear_view() -> void:
 func _draw_resource(resource) -> void:
 	var resource_ui = DialogueActorDataResource.instance()
 	_resources_ui.add_child(resource_ui)
-	# TODO resource_ui.set_data(resource, _data)
+	resource_ui.set_data(resource, _data)
