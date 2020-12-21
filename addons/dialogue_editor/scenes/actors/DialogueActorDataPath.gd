@@ -1,4 +1,4 @@
-# path UI LineEdit for DialogueEditor : MIT License
+# Path UI LineEdit for DialogueEditor : MIT License
 # @author Vladimir Petrenko
 # Drag and drop not work just now, see Workaround -> DialogueActorDataPut
 # https://github.com/godotengine/godot/issues/30480

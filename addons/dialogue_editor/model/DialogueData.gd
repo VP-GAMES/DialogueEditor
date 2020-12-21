@@ -19,6 +19,8 @@ var _actor_selected: DialogueActor
 
 export(Array) var actors = []
 
+const uuid_gen = preload("res://addons/dialogue_editor/uuid/uuid.gd")
+
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
 const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
@@ -114,7 +116,7 @@ func add_actor_resource() -> void:
 		_add_actor_resource(resource)
 
 func _create_actor_resource():
-	return {"name": "", "path": ""}
+	return {"uuid": uuid_gen.v4(), "name": "", "path": ""}
 
 func _add_actor_resource(resource, position = _actor_selected.resources.size()) -> void:
 	_actor_selected.resources.insert(position, resource)
