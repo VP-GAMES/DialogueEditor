@@ -9,6 +9,8 @@ signal actor_selection_changed
 
 signal actor_resource_added(resource)
 signal actor_resource_removed(resource)
+signal actor_resource_selection_changed(resource)
+signal actor_resource_path_changed(resource)
 
 var _editor: EditorPlugin
 var _undo_redo: UndoRedo
@@ -19,7 +21,7 @@ export(Array) var actors = []
 
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
-const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "webp", "webm", "o"]
+const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
 
 func selected_actor() -> DialogueActor:
 	if not _actor_selected and not actors.empty():
@@ -159,6 +161,10 @@ func actor_resource_path_change(resource: Dictionary, path: String) -> void:
 
 func _actor_resource_path_change(resource: Dictionary, path: String) -> void:
 	resource.path = path
+	emit_signal("actor_resource_path_changed", resource)
+
+func actor_resource_selection(resource) -> void:
+	emit_signal("actor_resource_selection_changed", resource)
 
 # ***** EDITOR SETTINGS *****
 func editor() -> EditorPlugin:
@@ -195,3 +201,15 @@ func file_extension(value: String):
 	if index == -1:
 		return null
 	return value.substr(index + 1)
+
+func resource_exists(resource) -> bool:
+	var file = File.new()
+	return file.file_exists(resource.path)
+
+func resize_texture(t: Texture, size: Vector2):
+	var image = t.get_data()
+	if size.x > 0 && size.y > 0:
+		image.resize(size.x, size.y)
+	var itex = ImageTexture.new()
+	itex.create_from_image(image)
+	return itex

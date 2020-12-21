@@ -34,6 +34,8 @@ func _init_connections() -> void:
 		_data.connect("actor_removed", self, "_on_actor_action")
 	if not _data.is_connected("actor_selection_changed", self, "_draw_style"):
 		_data.connect("actor_selection_changed", self, "_draw_style")
+	if not _data.is_connected("actor_resource_path_changed", self, "_on_actor_resource_path_changed"):
+		_data.connect("actor_resource_path_changed", self, "_on_actor_resource_path_changed")
 	if not _texture_ui.is_connected("gui_input", self, "_on_gui_input"):
 		_texture_ui.connect("gui_input", self, "_on_gui_input")
 	if not _name_ui.is_connected("gui_input", self, "_on_gui_input"):
@@ -50,6 +52,10 @@ func _on_actor_action(actor: DialogueActor) -> void:
 
 func _on_focus_exited() -> void:
 	_draw_style()
+
+func _on_actor_resource_path_changed(resource) -> void:
+	if not _actor.resources.empty() and _actor.resources[0] == resource:
+		_draw_texture()
 
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -68,8 +74,14 @@ func _del_pressed() -> void:
 	_data.del_actor(_actor)
 
 func _draw_view() -> void:
-	# TODO _texture_ui.texture = 
+	_draw_texture()
 	_name_ui.text = _actor.name
+
+func _draw_texture() -> void:
+	if not _actor.resources.empty():
+		var image = load(_actor.resources[0].path)
+		image = _data.resize_texture(image, Vector2(16, 16))
+		_texture_ui.texture = image
 
 func _draw_style() -> void:
 	if _data.selected_actor() == _actor:

@@ -4,11 +4,9 @@
 [ext_resource path="res://addons/dialogue_editor/default/fonts/Pangolin-Regular.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://addons/dialogue_editor/scenes/actors/DialogueActorDataResource.gd" type="Script" id=3]
 [ext_resource path="res://addons/dialogue_editor/scenes/actors/DialogueActorDataPut.tscn" type="PackedScene" id=4]
+[ext_resource path="res://addons/dialogue_editor/scenes/actors/DialogueActorDataPath.tscn" type="PackedScene" id=5]
 
 [sub_resource type="DynamicFont" id=1]
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=2]
 font_data = ExtResource( 2 )
 
 [node name="DialogueActorDataResource" type="HBoxContainer"]
@@ -33,12 +31,12 @@ margin_right = 144.0
 margin_bottom = 30.0
 stretch_mode = 4
 
-[node name="Path" type="LineEdit" parent="."]
+[node name="Path" parent="." instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 148.0
 margin_right = 219.0
 margin_bottom = 30.0
-size_flags_horizontal = 3
-custom_fonts/font = SubResource( 2 )
 
 [node name="Del" type="Button" parent="."]
 margin_left = 223.0

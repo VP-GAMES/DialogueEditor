@@ -20,11 +20,12 @@ func set_data(resource: Dictionary, data: DialogueData) -> void:
 	_draw_view()
 
 func _init_styles() -> void:
-	var style_box = get_stylebox("normal", "LineEdit")
-	_path_ui_style_resource = style_box.duplicate()
+	_path_ui_style_resource = StyleBoxFlat.new()
 	_path_ui_style_resource.set_bg_color(Color("#192e59"))
 
 func _init_connections() -> void:
+	if not _data.is_connected("actor_resource_path_changed", self, "_on_actor_resource_path_changed"):
+		_data.connect("actor_resource_path_changed", self, "_on_actor_resource_path_changed")
 	if not is_connected("focus_entered", self, "_on_focus_entered"):
 		connect("focus_entered", self, "_on_focus_entered")
 	if not is_connected("focus_exited", self, "_on_focus_exited"):
@@ -33,6 +34,10 @@ func _init_connections() -> void:
 		connect("text_changed", self, "_path_value_changed")
 	if not is_connected("gui_input", self, "_on_gui_input"):
 		connect("gui_input", self, "_on_gui_input")
+
+func _on_actor_resource_path_changed(resource) -> void:
+	if _resource == resource:
+		_draw_view()
 
 func _draw_view() -> void:
 	if has_focus():
@@ -48,6 +53,7 @@ func _input(event) -> void:
 
 func _on_focus_entered() -> void:
 	text = _resource.path
+	_data.actor_resource_selection(_resource)
 
 func _on_focus_exited() -> void:
 	text = _data.filename(_resource.path)
@@ -57,14 +63,14 @@ func _path_value_changed(path_value) -> void:
 
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_MIDDLE:
-			if event.pressed:
+		if event.pressed:
+			if event.button_index == BUTTON_MIDDLE:
 				grab_focus()
 				var file_dialog = DialogueActorDataResourceDialogFile.instance()
-				if _resource_exists():
+				if _data.resource_exists(_resource):
 					file_dialog.current_dir = _data.file_path(_resource.path)
 					file_dialog.current_file = _data.filename(_resource.path)
-				for extension in _data.supported_file_extensions():
+				for extension in _data.SUPPORTED_ACTOR_RESOURCES:
 					file_dialog.add_filter("*." + extension)
 				var root = get_tree().get_root()
 				root.add_child(file_dialog)
@@ -89,13 +95,9 @@ func drop_data(position, data) -> void:
 	_path_value_changed(path_value)
 
 func _check_path_ui() -> void:
-	if not _resource_exists():
+	if not _data.resource_exists(_resource):
 		set("custom_styles/normal", _path_ui_style_resource)
 		hint_tooltip =  "Your resource path: \"" + _resource.path + "\" does not exists"
 	else:
 		set("custom_styles/normal", null)
 		hint_tooltip =  ""
-
-func _resource_exists() -> bool:
-	var file = File.new()
-	return file.file_exists(_resource.path)
