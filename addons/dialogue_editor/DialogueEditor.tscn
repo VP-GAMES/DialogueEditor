@@ -6,6 +6,8 @@
 [ext_resource path="res://addons/dialogue_editor/scenes/dialogues/DialogueDialoguesEditorView.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenesEditorView.tscn" type="PackedScene" id=6]
 
+
+
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0

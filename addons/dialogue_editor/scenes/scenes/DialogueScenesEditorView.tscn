@@ -1,8 +1,23 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
 
-[node name="DialogueDialoguesEditorView" type="Control"]
+[ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenesEditorView.gd" type="Script" id=1]
+[ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenes.tscn" type="PackedScene" id=2]
+
+[node name="DialogueScenesEditorView" type="HBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Split" type="HSplitContainer" parent="."]
+margin_bottom = 600.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" parent="Split" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_bottom = 600.0

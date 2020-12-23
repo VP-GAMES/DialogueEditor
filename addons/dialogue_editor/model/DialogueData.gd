@@ -18,12 +18,14 @@ var _undo_redo: UndoRedo
 var _actor_selected: DialogueActor
 
 export(Array) var actors = []
+export(Array) var scenes = []
 
 const uuid_gen = preload("res://addons/dialogue_editor/uuid/uuid.gd")
 
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
 const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
+const SETTINGS_SCENES_SPLIT_OFFSET = "dialogue_editor/scenes_split_offset"
 
 func selected_actor() -> DialogueActor:
 	if not _actor_selected and not actors.empty():
@@ -188,6 +190,15 @@ func setting_actors_split_offset() -> int:
 
 func setting_actors_split_offset_put(offset: int) -> void:
 	ProjectSettings.set_setting(SETTINGS_ACTORS_SPLIT_OFFSET, offset)
+
+func setting_scenes_split_offset() -> int:
+	var offset = 215
+	if ProjectSettings.has_setting(SETTINGS_SCENES_SPLIT_OFFSET):
+		offset = ProjectSettings.get_setting(SETTINGS_SCENES_SPLIT_OFFSET)
+	return offset
+
+func setting_scenes_split_offset_put(offset: int) -> void:
+	ProjectSettings.set_setting(SETTINGS_SCENES_SPLIT_OFFSET, offset)
 
 # ***** UTILS *****
 func filename(value: String) -> String:
