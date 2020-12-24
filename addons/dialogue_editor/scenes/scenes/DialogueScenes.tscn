@@ -39,7 +39,7 @@ size_flags_vertical = 3
 margin_right = 1018.0
 margin_bottom = 20.0
 
-[node name="Button" type="Button" parent="Margin/VBox/HBox"]
+[node name="Add" type="Button" parent="Margin/VBox/HBox"]
 margin_right = 22.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 20, 20 )
@@ -67,7 +67,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" parent="Margin/VBox/Scroll" instance=ExtResource( 3 )]
+[node name="Scenes" parent="Margin/VBox/Scroll" instance=ExtResource( 3 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1018.0

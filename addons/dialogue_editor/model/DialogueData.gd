@@ -12,13 +12,24 @@ signal actor_resource_removed(resource)
 signal actor_resource_selection_changed(resource)
 signal actor_resource_path_changed(resource)
 
+signal scene_added(scene)
+signal scene_removed(scene)
+signal scene_selection_changed
+
+signal scene_resource_selection_changed(resource)
+signal scene_resource_path_changed(resource)
+
 var _editor: EditorPlugin
 var _undo_redo: UndoRedo
 
+export(Array) var actors = []
 var _actor_selected: DialogueActor
 
-export(Array) var actors = []
-export(Array) var scenes = []
+export(Array) var scenes = [
+	{"uuid": uuid_gen.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorLeft.tscn"},
+	{"uuid": uuid_gen.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorRight.tscn"}
+]
+var _scene_selected
 
 const uuid_gen = preload("res://addons/dialogue_editor/uuid/uuid.gd")
 
@@ -27,6 +38,7 @@ const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
 const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
 const SETTINGS_SCENES_SPLIT_OFFSET = "dialogue_editor/scenes_split_offset"
 
+# ***** ACTORS *****
 func selected_actor() -> DialogueActor:
 	if not _actor_selected and not actors.empty():
 		_actor_selected = actors[0]
@@ -103,6 +115,8 @@ func init_data() -> void:
 		var resource = ResourceLoader.load(PATH_TO_SAVE) as DialogueData
 		if resource.actors and not resource.actors.empty():
 			actors = resource.actors
+		if resource.scenes and not resource.scenes.empty():
+			scenes = resource.scenes
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)
@@ -169,6 +183,34 @@ func _actor_resource_path_change(resource: Dictionary, path: String) -> void:
 
 func actor_resource_selection(resource) -> void:
 	emit_signal("actor_resource_selection_changed", resource)
+
+# ***** SCENES *****
+func selected_scene():
+	if not _scene_selected and not scenes.empty():
+		_scene_selected = scenes[0]
+	return _scene_selected
+
+func selected_scene_set(scene) -> void:
+	_scene_selected = scene
+	emit_signal("scene_selection_changed")
+
+func add_scene(resource: String, sendSignal = true) -> void:
+		var scene = _create_scene(resource)
+		if _undo_redo != null:
+			_undo_redo.create_action("Add scene")
+			_undo_redo.add_do_method(self, "_add_scene", scene)
+			_undo_redo.add_undo_method(self, "_del_scene", scene)
+			_undo_redo.commit_action()
+		else:
+			_add_scene(scene, sendSignal)
+
+func _create_scene(resource):
+	return {"uuid": uuid_gen.v4(), "resource": resource}
+
+func _add_scene(scene, sendSignal = true, position = scenes.size()) -> void:
+	scenes.insert(position, scene)
+	emit_signal("scene_added", scene)
+	selected_scene_set(scene)
 
 # ***** EDITOR SETTINGS *****
 func editor() -> EditorPlugin:
