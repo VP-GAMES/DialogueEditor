@@ -54,7 +54,7 @@ func _on_focus_exited() -> void:
 	_draw_style()
 
 func _on_actor_resource_path_changed(resource) -> void:
-	if not _actor.resources.empty() and _actor.resources[0] == resource:
+	if _data.selected_actor() == _actor and not _actor.resources.empty() and _actor.resources[0] == resource:
 		_draw_texture()
 
 func _on_gui_input(event: InputEvent) -> void:
