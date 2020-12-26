@@ -75,7 +75,7 @@ func _resource_request_focus(resource) -> void:
 			resource_ui.request_focus()
 
 func _draw_preview_default() -> void:
-	if not _actor.resources.empty():
+	if _actor and not _actor.resources.empty():
 		_texture_ui.set_resource(_actor.resources[0])
 	else:
 		_texture_ui.set_resource(null)

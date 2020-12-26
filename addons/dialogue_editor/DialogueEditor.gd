@@ -8,6 +8,7 @@ var _data:= DialogueData.new()
 
 onready var _save_ui = $VBox/Margin/HBox/Save
 onready var _actors_ui = $VBox/Tabs/Actors
+onready var _scenes_ui = $VBox/Tabs/Scenes
 
 func set_editor(editor: EditorPlugin) -> void:
 	_editor = editor
@@ -28,6 +29,7 @@ func _load_data() -> void:
 	
 func _data_to_childs() -> void:
 	_actors_ui.set_data(_data)
+	_scenes_ui.set_data(_data)
 
 func save_data() -> void:
 	_data.save()

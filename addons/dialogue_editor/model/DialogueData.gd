@@ -247,6 +247,11 @@ func filename(value: String) -> String:
 	var index = value.find_last("/")
 	return value.substr(index + 1)
 
+func filename_only(value: String) -> String:
+	var first = value.find_last("/")
+	var second = value.find_last(".")
+	return value.substr(first + 1, second - first - 1)
+
 func file_path(value: String) -> String:
 	var index = value.find_last("/")
 	return value.substr(0, index)

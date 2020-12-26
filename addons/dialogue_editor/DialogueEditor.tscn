@@ -6,8 +6,6 @@
 [ext_resource path="res://addons/dialogue_editor/scenes/dialogues/DialogueDialoguesEditorView.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenesEditorView.tscn" type="PackedScene" id=6]
 
-
-
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -57,6 +55,7 @@ size_flags_vertical = 3
 tab_align = 0
 
 [node name="Actors" parent="VBox/Tabs" instance=ExtResource( 3 )]
+visible = false
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
@@ -65,7 +64,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Scenes" parent="VBox/Tabs" instance=ExtResource( 6 )]
-visible = false
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0

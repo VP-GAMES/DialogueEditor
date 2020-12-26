@@ -1,19 +1,17 @@
 # Dialogues view for DialogueEditor : MIT License
 # @author Vladimir Petrenko
 tool
-extends VBoxContainer
+extends HBoxContainer
 
 var _data: DialogueData
 var _split_viewport_size = 0
 
 onready var _split_ui = $Split
-onready var _actors_ui = $Split/Actors
-onready var _actor_data_ui = $Split/ActorData
+onready var _scenes_ui = $Split/Scenes
 
 func set_data(data: DialogueData) -> void:
 	_data = data
-	_actors_ui.set_data(data)
-	_actor_data_ui.set_data(data)
+	_scenes_ui.set_data(data)
 
 func _ready() -> void:
 	_init_connections()

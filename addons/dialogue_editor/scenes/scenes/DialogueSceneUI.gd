@@ -8,7 +8,7 @@ var _data: DialogueData
 
 var _ui_style_selected: StyleBoxFlat
 
-onready var _name_ui = $HBox/Name as LineEdit
+onready var _name_ui = $HBox/Name as Label
 onready var _open_ui = $HBox/Open as Button
 onready var _del_ui = $HBox/Del as Button
 
@@ -36,12 +36,12 @@ func _init_connections() -> void:
 		_data.connect("scene_selection_changed", self, "_draw_style")
 	if not _data.is_connected("scene_resource_path_changed", self, "_on_scene_resource_path_changed"):
 		_data.connect("scene_resource_path_changed", self, "_on_scene_resource_path_changed")
-	if not _name_ui.is_connected("gui_input", self, "_on_gui_input"):
-		_name_ui.connect("gui_input", self, "_on_gui_input")
-	if not _name_ui.is_connected("focus_exited", self, "_on_focus_exited"):
-		_name_ui.connect("focus_exited", self, "_on_focus_exited")
-	if not _del_ui.is_connected("pressed", self, "_del_pressed"):
-		_del_ui.connect("pressed", self, "_del_pressed")
+#	if not _name_ui.is_connected("gui_input", self, "_on_gui_input"):
+#		_name_ui.connect("gui_input", self, "_on_gui_input")
+#	if not _name_ui.is_connected("focus_exited", self, "_on_focus_exited"):
+#		_name_ui.connect("focus_exited", self, "_on_focus_exited")
+#	if not _del_ui.is_connected("pressed", self, "_del_pressed"):
+#		_del_ui.connect("pressed", self, "_del_pressed")
 
 func _on_scene_action(scene) -> void:
 	_draw_style()
@@ -70,7 +70,7 @@ func _del_pressed() -> void:
 	_data.del_scene(_scene)
 
 func _draw_view() -> void:
-	_name_ui.text = _scene.resource
+	_name_ui.text = _data.filename_only(_scene.resource)
 
 func _draw_style() -> void:
 	if _data.selected_scene() == _scene:
