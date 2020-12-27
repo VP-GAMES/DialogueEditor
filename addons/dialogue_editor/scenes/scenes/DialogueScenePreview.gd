@@ -26,9 +26,19 @@ func _input(event: InputEvent) -> void:
 				_drag = true
 			else:
 				_drag = false
-		var transform = _loaded_scene.transform.scaled(Vector2(_scale_factor, _scale_factor))
-		_loaded_scene.set_transform(transform)
-	
+		_scale_transform(event.position)
 	if event is InputEventMouseMotion and _drag:
-		var transform = _loaded_scene.transform.translated(event.relative)
-		_loaded_scene.set_transform(transform)
+		_drag_transform(event.relative)
+
+func _scale_transform(position: Vector2) -> void:
+	var offset_start = _loaded_scene.transform.xform_inv(Vector2(position))
+	var transform_end = _loaded_scene.transform.scaled(Vector2(_scale_factor, _scale_factor))
+	var offset_end = transform_end.xform_inv(Vector2(position))
+	var offset = Vector2(offset_end.x - offset_start.x, offset_end.y - offset_start.y)
+	var origin = transform_end.origin
+	transform_end.origin = Vector2(origin.x - offset.x, origin.y - offset.y)
+	_loaded_scene.set_transform(transform_end)
+
+func _drag_transform(offset: Vector2) -> void:
+	var transform = _loaded_scene.transform.translated(offset)
+	_loaded_scene.set_transform(transform)
