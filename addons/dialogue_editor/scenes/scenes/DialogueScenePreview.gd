@@ -5,15 +5,18 @@ var _loaded_scene
 var _drag = false
 
 func _ready():
+	var LoadedScene = load("res://addons/dialogue_editor/default/DialogueActorLeft.tscn")
+	_loaded_scene = LoadedScene.instance() as CanvasLayer
+	_add_reference_rect()
+	add_child(_loaded_scene)
+
+func _add_reference_rect() -> void:
 	var ref_rect = ReferenceRect.new()
 	ref_rect.border_color = Color.white
 	ref_rect.editor_only = false
 	ref_rect.anchor_right  = 1
 	ref_rect.anchor_bottom = 1
-	var LoadedScene = load("res://addons/dialogue_editor/default/DialogueActorLeft.tscn")
-	_loaded_scene = LoadedScene.instance() as CanvasLayer
 	_loaded_scene.add_child(ref_rect)
-	add_child(_loaded_scene)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -22,10 +25,7 @@ func _input(event: InputEvent) -> void:
 		elif (event.button_index == BUTTON_WHEEL_DOWN):
 			_scale_factor = 0.99
 		elif event.button_index == BUTTON_MIDDLE:
-			if event.pressed:
-				_drag = true
-			else:
-				_drag = false
+			_drag = event.pressed
 		_scale_transform(event.position)
 	if event is InputEventMouseMotion and _drag:
 		_drag_transform(event.relative)
