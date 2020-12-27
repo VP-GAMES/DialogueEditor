@@ -2,10 +2,7 @@
 
 [ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenePreview.gd" type="Script" id=1]
 
-[node name="Viewport" type="ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}

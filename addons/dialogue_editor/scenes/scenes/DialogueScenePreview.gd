@@ -1,12 +1,18 @@
-extends ScrollContainer
+extends MarginContainer
 
 var _scale_factor = 1
 var _loaded_scene
 var _drag = false
 
 func _ready():
+	var ref_rect = ReferenceRect.new()
+	ref_rect.border_color = Color.white
+	ref_rect.editor_only = false
+	ref_rect.anchor_right  = 1
+	ref_rect.anchor_bottom = 1
 	var LoadedScene = load("res://addons/dialogue_editor/default/DialogueActorLeft.tscn")
 	_loaded_scene = LoadedScene.instance() as CanvasLayer
+	_loaded_scene.add_child(ref_rect)
 	add_child(_loaded_scene)
 
 func _input(event: InputEvent) -> void:
