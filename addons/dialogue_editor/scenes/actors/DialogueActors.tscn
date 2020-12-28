@@ -4,8 +4,8 @@
 [ext_resource path="res://addons/dialogue_editor/scenes/actors/DialogueActors.gd" type="Script" id=3]
 
 [node name="DialogueActors" type="Panel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = 250.0
+margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 3 )
@@ -27,14 +27,14 @@ __meta__ = {
 [node name="VBox" type="VBoxContainer" parent="Margin"]
 margin_left = 3.0
 margin_top = 3.0
-margin_right = 1021.0
+margin_right = 247.0
 margin_bottom = 597.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HBox" type="HBoxContainer" parent="Margin/VBox"]
-margin_right = 1018.0
+margin_right = 244.0
 margin_bottom = 20.0
 
 [node name="Add" type="Button" parent="Margin/VBox/HBox"]
@@ -55,18 +55,18 @@ text = "Actors"
 
 [node name="HSeparator" type="HSeparator" parent="Margin/VBox"]
 margin_top = 24.0
-margin_right = 1018.0
+margin_right = 244.0
 margin_bottom = 28.0
 
 [node name="Scroll" type="ScrollContainer" parent="Margin/VBox"]
 margin_top = 32.0
-margin_right = 1018.0
+margin_right = 244.0
 margin_bottom = 594.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Actors" type="VBoxContainer" parent="Margin/VBox/Scroll"]
-margin_right = 1018.0
+margin_right = 244.0
 margin_bottom = 562.0
 size_flags_horizontal = 3
 size_flags_vertical = 3

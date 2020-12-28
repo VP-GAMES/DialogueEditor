@@ -7,6 +7,8 @@
 [node name="DialogueActorsEditorView" type="VBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -20,10 +22,8 @@ size_flags_vertical = 3
 split_offset = -297
 
 [node name="Actors" parent="Split" instance=ExtResource( 1 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
 margin_right = 209.0
-margin_bottom = 600.0
+rect_clip_content = true
 
 [node name="ActorData" parent="Split" instance=ExtResource( 2 )]
 margin_left = 221.0

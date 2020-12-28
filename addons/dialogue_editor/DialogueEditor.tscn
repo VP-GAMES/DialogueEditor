@@ -59,8 +59,6 @@ margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
 [node name="Scenes" parent="VBox/Tabs" instance=ExtResource( 6 )]
 visible = false
