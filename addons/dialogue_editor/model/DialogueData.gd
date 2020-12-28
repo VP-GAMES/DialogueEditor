@@ -38,7 +38,7 @@ const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
 const SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT = 215
 const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
 const SETTINGS_SCENES_SPLIT_OFFSET = "dialogue_editor/scenes_split_offset"
-const SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT = 250
+const SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT = 215
 
 # ***** ACTORS *****
 func selected_actor() -> DialogueActor:

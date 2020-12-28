@@ -35,6 +35,11 @@ _global_script_class_icons={
 config/name="Dialogue Editor"
 config/icon="res://icon.png"
 
+[dialogue_editor]
+
+actors_split_offset=215
+scenes_split_offset=215
+
 [editor_plugins]
 
 enabled=PoolStringArray( "dialogue_editor" )

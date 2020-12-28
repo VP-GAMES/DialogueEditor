@@ -18,7 +18,7 @@ margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-split_offset = -100
+split_offset = -9
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -26,11 +26,12 @@ __meta__ = {
 [node name="Scenes" parent="Split" instance=ExtResource( 2 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 406.0
+margin_right = 497.0
 margin_bottom = 600.0
+rect_clip_content = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Split"]
-margin_left = 418.0
+margin_left = 509.0
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
