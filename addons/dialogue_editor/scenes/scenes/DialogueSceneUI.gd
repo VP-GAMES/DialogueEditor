@@ -34,24 +34,15 @@ func _init_connections() -> void:
 		_data.connect("scene_removed", self, "_on_scene_action")
 	if not _data.is_connected("scene_selection_changed", self, "_draw_style"):
 		_data.connect("scene_selection_changed", self, "_draw_style")
-	if not _data.is_connected("scene_resource_path_changed", self, "_on_scene_resource_path_changed"):
-		_data.connect("scene_resource_path_changed", self, "_on_scene_resource_path_changed")
-#	if not _name_ui.is_connected("gui_input", self, "_on_gui_input"):
-#		_name_ui.connect("gui_input", self, "_on_gui_input")
-#	if not _name_ui.is_connected("focus_exited", self, "_on_focus_exited"):
-#		_name_ui.connect("focus_exited", self, "_on_focus_exited")
-#	if not _del_ui.is_connected("pressed", self, "_del_pressed"):
-#		_del_ui.connect("pressed", self, "_del_pressed")
+	if not _name_ui.is_connected("gui_input", self, "_on_gui_input"):
+		_name_ui.connect("gui_input", self, "_on_gui_input")
+	if not _open_ui.is_connected("pressed", self, "_on_open_pressed"):
+		_open_ui.connect("pressed", self, "_on_open_pressed")
+	if not _del_ui.is_connected("pressed", self, "_on_del_pressed"):
+		_del_ui.connect("pressed", self, "_on_del_pressed")
 
 func _on_scene_action(scene) -> void:
 	_draw_style()
-
-func _on_focus_exited() -> void:
-	_draw_style()
-
-func _on_scene_resource_path_changed(resource) -> void:
-	if not _scene.resources.empty() and _scene.resources[0] == resource:
-		pass
 
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -59,14 +50,13 @@ func _on_gui_input(event: InputEvent) -> void:
 			if event.pressed:
 				if not _data.selected_scene() == _scene:
 					_data.selected_scene_set(_scene)
-					_del_ui.grab_focus()
 				else:
 					_name_ui.set("custom_styles/normal", null)
 
-func _on_text_changed(new_text: String) -> void:
-	_scene.name = new_text
+func _on_open_pressed() -> void:
+	_data.editor().get_editor_interface().open_scene_from_path(_scene.resource)
 
-func _del_pressed() -> void:
+func _on_del_pressed() -> void:
 	_data.del_scene(_scene)
 
 func _draw_view() -> void:

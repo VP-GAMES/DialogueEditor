@@ -1,16 +1,15 @@
+tool
 extends VBoxContainer
 
+var _data: DialogueData
 
-# Declare member variables here. Examples:
-# var a: int = 2
-# var b: String = "text"
+func set_data(data: DialogueData) -> void:
+	_data = data
 
+func can_drop_data(position, data) -> bool:
+	var resource_value = data["files"][0]
+	return _data.file_extension(resource_value) == "tscn"
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta: float) -> void:
-#	pass
+func drop_data(position, data) -> void:
+	var resource_value = data["files"][0]
+	_data.add_scene(resource_value)

@@ -8,10 +8,12 @@ var _data: DialogueData
 onready var _add_ui = $Margin/VBox/HBox/Add
 onready var _scenes_ui = $Margin/VBox/Scroll/Scenes
 
+const DialogueSceneResourceFile = preload("res://addons/dialogue_editor/scenes/scenes/DialogueSceneResourceFile.tscn")
 const DialogueSceneUI = preload("res://addons/dialogue_editor/scenes/scenes/DialogueSceneUI.tscn")
 
 func set_data(data: DialogueData) -> void:
 	_data = data
+	_scenes_ui.set_data(data)
 	_init_connections()
 	_update_view()
 
@@ -45,5 +47,17 @@ func _draw_scene(scene) -> void:
 	scene_ui.set_data(scene, _data)
 
 func _add_pressed() -> void:
-	pass
-	# TODO add scene
+	var file_dialog = DialogueSceneResourceFile.instance()
+	file_dialog.add_filter("*.tscn")
+	var root = get_tree().get_root()
+	root.add_child(file_dialog)
+	file_dialog.connect("file_selected", self, "_add_scene_resource")
+	file_dialog.connect("popup_hide", self, "_on_popup_hide", [root, file_dialog])
+	file_dialog.popup_centered()
+
+func _add_scene_resource(resource_value) -> void:
+	_data.add_scene(resource_value)
+
+func _on_popup_hide(root, dialog) -> void:
+	root.remove_child(dialog)
+	dialog.queue_free()

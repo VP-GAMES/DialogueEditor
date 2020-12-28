@@ -35,8 +35,10 @@ const uuid_gen = preload("res://addons/dialogue_editor/uuid/uuid.gd")
 
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
+const SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT = 215
 const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
 const SETTINGS_SCENES_SPLIT_OFFSET = "dialogue_editor/scenes_split_offset"
+const SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT = 250
 
 # ***** ACTORS *****
 func selected_actor() -> DialogueActor:
@@ -117,6 +119,7 @@ func init_data() -> void:
 			actors = resource.actors
 		if resource.scenes and not resource.scenes.empty():
 			scenes = resource.scenes
+		print(scenes)
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)
@@ -195,14 +198,23 @@ func selected_scene_set(scene) -> void:
 	emit_signal("scene_selection_changed")
 
 func add_scene(resource: String, sendSignal = true) -> void:
-		var scene = _create_scene(resource)
-		if _undo_redo != null:
-			_undo_redo.create_action("Add scene")
-			_undo_redo.add_do_method(self, "_add_scene", scene)
-			_undo_redo.add_undo_method(self, "_del_scene", scene)
-			_undo_redo.commit_action()
-		else:
-			_add_scene(scene, sendSignal)
+	if _scene_exists(resource):
+		printerr("Dialog resource: ", resource, " allready exists")
+		return
+	var scene = _create_scene(resource)
+	if _undo_redo != null:
+		_undo_redo.create_action("Add scene")
+		_undo_redo.add_do_method(self, "_add_scene", scene)
+		_undo_redo.add_undo_method(self, "_del_scene", scene)
+		_undo_redo.commit_action()
+	else:
+		_add_scene(scene, sendSignal)
+
+func _scene_exists(resource: String) -> bool:
+	for scene in scenes:
+		if scene.resource == resource:
+			return true
+	return false 
 
 func _create_scene(resource):
 	return {"uuid": uuid_gen.v4(), "resource": resource}
@@ -211,6 +223,25 @@ func _add_scene(scene, sendSignal = true, position = scenes.size()) -> void:
 	scenes.insert(position, scene)
 	emit_signal("scene_added", scene)
 	selected_scene_set(scene)
+
+func del_scene(scene) -> void:
+	if _undo_redo != null:
+		var index = scenes.find(scene)
+		_undo_redo.create_action("Del scene")
+		_undo_redo.add_do_method(self, "_del_scene", scene)
+		_undo_redo.add_undo_method(self, "_add_scene", scene, false, index)
+		_undo_redo.commit_action()
+	else:
+		_del_scene(scene)
+
+func _del_scene(scene) -> void:
+	var index = scenes.find(scene)
+	if index > -1:
+		scenes.remove(index)
+		emit_signal("scene_removed", scene)
+		_scene_selected = null
+		var scene_selected = selected_scene()
+		selected_scene_set(scene_selected)
 
 # ***** EDITOR SETTINGS *****
 func editor() -> EditorPlugin:
@@ -225,7 +256,7 @@ func undo_redo() -> UndoRedo:
 	return _undo_redo
 
 func setting_actors_split_offset() -> int:
-	var offset = 215
+	var offset = SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT
 	if ProjectSettings.has_setting(SETTINGS_ACTORS_SPLIT_OFFSET):
 		offset = ProjectSettings.get_setting(SETTINGS_ACTORS_SPLIT_OFFSET)
 	return offset
@@ -234,7 +265,7 @@ func setting_actors_split_offset_put(offset: int) -> void:
 	ProjectSettings.set_setting(SETTINGS_ACTORS_SPLIT_OFFSET, offset)
 
 func setting_scenes_split_offset() -> int:
-	var offset = 215
+	var offset = SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT
 	if ProjectSettings.has_setting(SETTINGS_SCENES_SPLIT_OFFSET):
 		offset = ProjectSettings.get_setting(SETTINGS_SCENES_SPLIT_OFFSET)
 	return offset
