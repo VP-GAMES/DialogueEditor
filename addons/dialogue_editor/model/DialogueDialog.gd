@@ -1,5 +1,5 @@
 tool
-extends CanvasLayer
+extends Control
 
 var _sentence: DialogueSentence
 var _buttons_array = []
