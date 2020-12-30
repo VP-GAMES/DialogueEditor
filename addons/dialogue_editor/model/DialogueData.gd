@@ -52,6 +52,7 @@ func selected_actor_set(actor: DialogueActor) -> void:
 
 func add_actor(sendSignal = true) -> void:
 		var actor = _create_actor()
+		print(actor.resources)
 		if _undo_redo != null:
 			_undo_redo.create_action("Add actor")
 			_undo_redo.add_do_method(self, "_add_actor", actor)
@@ -63,6 +64,7 @@ func add_actor(sendSignal = true) -> void:
 func _create_actor() -> DialogueActor:
 	var actor = DialogueActor.new()
 	actor.name = _next_autor_name()
+	actor.resources = []
 	return actor
 
 func _next_autor_name() -> String:
@@ -119,7 +121,6 @@ func init_data() -> void:
 			actors = resource.actors
 		if resource.scenes and not resource.scenes.empty():
 			scenes = resource.scenes
-		print(scenes)
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)

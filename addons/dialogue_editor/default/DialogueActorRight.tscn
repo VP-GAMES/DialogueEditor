@@ -34,6 +34,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Reference" type="ReferenceRect" parent="."]
+anchor_left = 0.99
+anchor_top = 0.75
+anchor_right = 0.99
+anchor_bottom = 0.75
+margin_left = -150.0
+margin_top = -150.0
+border_color = Color( 1, 1, 1, 1 )
+
 [node name="Name" type="Label" parent="."]
 anchor_left = 0.01
 anchor_top = 0.74

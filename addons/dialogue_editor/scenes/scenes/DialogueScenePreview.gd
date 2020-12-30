@@ -1,37 +1,51 @@
-extends ScrollContainer
+# Dialogues scene preview for DialogueEditor : MIT License
+# @author Vladimir Petrenko
+tool
+extends MarginContainer
 
-var _scale_factor = 1
+var _scene
 var _loaded_scene
-var _drag = false
+var _data: DialogueData
 
-func _ready():
-	var LoadedScene = load("res://addons/dialogue_editor/default/DialogueActorLeft.tscn")
-	_loaded_scene = LoadedScene.instance() as Control
-	add_child(_loaded_scene)
+onready var _reference_ui = $Reference
 
-#func _input(event: InputEvent) -> void:
-#	if event is InputEventMouseButton:
-#		if (event.button_index == BUTTON_WHEEL_UP):
-#			_scale_factor = 1.01
-#		elif (event.button_index == BUTTON_WHEEL_DOWN):
-#			_scale_factor = 0.99
-#		elif event.button_index == BUTTON_MIDDLE:
-#			_drag = event.pressed
-#		_scale_transform(event.position)
-#	if event is InputEventMouseMotion and _drag:
-#		var scale = _loaded_scene.transform.get_scale()
-#		var relative = Vector2(event.relative.x * scale.x, event.relative.y * scale.y)
-#		_drag_transform(event.relative)
-#
-#func _scale_transform(position: Vector2) -> void:
-#	var offset_start = _loaded_scene.transform.xform_inv(Vector2(position))
-#	var transform_end = _loaded_scene.transform.scaled(Vector2(_scale_factor, _scale_factor))
-#	var offset_end = transform_end.xform_inv(Vector2(position))
-#	var offset = Vector2(offset_end.x - offset_start.x, offset_end.y - offset_start.y)
-#	var origin = transform_end.origin
-#	transform_end.origin = Vector2(origin.x - offset.x, origin.y - offset.y)
-#	_loaded_scene.set_transform(transform_end)
-#
-#func _drag_transform(offset: Vector2) -> void:
-#	var transform = _loaded_scene.transform.translated(offset)
-#	_loaded_scene.set_transform(transform)
+func set_data(data: DialogueData) -> void:
+	_data = data
+	_init_connections()
+	_update_view()
+
+signal scene_added(scene)
+signal scene_removed(scene)
+signal scene_selection_changed
+
+func _init_connections() -> void:
+	if not _data.is_connected("scene_selection_changed", self, "_on_scene_selection"):
+		_data.connect("scene_selection_changed", self, "_on_scene_selection")
+	if not _data.is_connected("scene_added", self, "_on_scene_action"):
+		_data.connect("scene_added", self, "_on_scene_action")
+	if not _data.is_connected("scene_removed", self, "_on_scene_action"):
+		_data.connect("scene_removed", self, "_on_scene_action")
+
+func _on_scene_selection() -> void:
+	_update_view()
+
+func _on_scene_action(scene) -> void:
+	_update_view()
+
+func _update_view() -> void:
+	_scene = _data.selected_scene()
+	if _scene:
+		_clear_view()
+		_draw_view()
+	else:
+		_clear_view()
+
+func _draw_view() -> void:
+	var LoadedScene = load(_scene.resource)
+	_loaded_scene = LoadedScene.instance()
+	_reference_ui.add_child(_loaded_scene)
+
+func _clear_view() -> void:
+	for child_ui in _reference_ui.get_children():
+		_reference_ui.remove_child(child_ui)
+		child_ui.queue_free()

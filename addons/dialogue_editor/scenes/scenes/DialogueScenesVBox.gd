@@ -1,3 +1,5 @@
+# Dialogues container to drag and drop scene data for DialogueEditor : MIT License
+# @author Vladimir Petrenko
 tool
 extends VBoxContainer
 

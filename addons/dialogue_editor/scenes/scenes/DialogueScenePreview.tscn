@@ -2,12 +2,25 @@
 
 [ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenePreview.gd" type="Script" id=1]
 
-[node name="Scroll" type="ScrollContainer"]
+[node name="DialogueScenePreview" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+custom_constants/margin_right = 3
+custom_constants/margin_top = 3
+custom_constants/margin_left = 3
+custom_constants/margin_bottom = 3
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Reference" type="ReferenceRect" parent="."]
+margin_left = 3.0
+margin_top = 3.0
+margin_right = 1021.0
+margin_bottom = 597.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+border_color = Color( 1, 1, 1, 1 )

@@ -8,10 +8,12 @@ var _split_viewport_size = 0
 
 onready var _split_ui = $Split
 onready var _scenes_ui = $Split/Scenes
+onready var _preview_ui = $Split/Preview
 
 func set_data(data: DialogueData) -> void:
 	_data = data
 	_scenes_ui.set_data(data)
+	_preview_ui.set_data(data)
 
 func _ready() -> void:
 	_init_connections()
