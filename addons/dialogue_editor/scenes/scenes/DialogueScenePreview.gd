@@ -7,16 +7,23 @@ var _scene
 var _loaded_scene
 var _data: DialogueData
 
-onready var _reference_ui = $Reference
+onready var _margin_ui = $Scroll/Margin
+onready var _reference_ui = $Scroll/Margin/Reference
 
 func set_data(data: DialogueData) -> void:
 	_data = data
+	_init_reference_ui()
 	_init_connections()
 	_update_view()
 
 signal scene_added(scene)
 signal scene_removed(scene)
 signal scene_selection_changed
+
+func _init_reference_ui() -> void:
+	_reference_ui.set_custom_minimum_size(_data.setting_display_size())
+	_reference_ui.rect_size = _data.setting_display_size()
+	# Scale to vieport size .set_scale(Vector(1, 1))
 
 func _init_connections() -> void:
 	if not _data.is_connected("scene_selection_changed", self, "_on_scene_selection"):

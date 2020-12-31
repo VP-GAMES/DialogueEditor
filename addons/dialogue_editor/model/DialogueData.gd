@@ -39,6 +39,8 @@ const SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT = 215
 const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
 const SETTINGS_SCENES_SPLIT_OFFSET = "dialogue_editor/scenes_split_offset"
 const SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT = 215
+const SETTINGS_DISPLAY_WIDTH = "display/window/size/width"
+const SETTINGS_DISPLAY_HEIGHT = "display/window/size/height"
 
 # ***** ACTORS *****
 func selected_actor() -> DialogueActor:
@@ -273,6 +275,11 @@ func setting_scenes_split_offset() -> int:
 
 func setting_scenes_split_offset_put(offset: int) -> void:
 	ProjectSettings.set_setting(SETTINGS_SCENES_SPLIT_OFFSET, offset)
+
+func setting_display_size() -> Vector2:
+	var width = ProjectSettings.get_setting(SETTINGS_DISPLAY_WIDTH)
+	var height = ProjectSettings.get_setting(SETTINGS_DISPLAY_HEIGHT)
+	return Vector2(width, height)
 
 # ***** UTILS *****
 func filename(value: String) -> String:

@@ -38,7 +38,7 @@ config/icon="res://icon.png"
 [dialogue_editor]
 
 actors_split_offset=215
-scenes_split_offset=220
+scenes_split_offset=237
 
 [editor_plugins]
 
