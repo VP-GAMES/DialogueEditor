@@ -12,22 +12,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Scroll" type="ScrollContainer" parent="."]
-margin_right = 1024.0
-margin_bottom = 600.0
-
-[node name="Margin" type="MarginContainer" parent="Scroll"]
-margin_right = 6.0
-margin_bottom = 6.0
+[node name="Margin" type="MarginContainer" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
 custom_constants/margin_right = 3
 custom_constants/margin_top = 3
 custom_constants/margin_left = 3
 custom_constants/margin_bottom = 3
 
-[node name="Reference" type="ReferenceRect" parent="Scroll/Margin"]
+[node name="Preview" type="Control" parent="Margin"]
 margin_left = 3.0
 margin_top = 3.0
-margin_right = 3.0
-margin_bottom = 3.0
-border_color = Color( 1, 1, 1, 1 )
-editor_only = false
+margin_right = 1917.0
+margin_bottom = 1077.0
