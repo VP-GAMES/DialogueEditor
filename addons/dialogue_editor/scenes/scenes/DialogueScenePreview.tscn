@@ -25,3 +25,4 @@ margin_left = 3.0
 margin_top = 3.0
 margin_right = 1917.0
 margin_bottom = 1077.0
+[connection signal="resized" from="." to="." method="_on_DialogueScenePreview_resized"]
