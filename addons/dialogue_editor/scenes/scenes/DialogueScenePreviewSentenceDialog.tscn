@@ -9,12 +9,11 @@
 resource_name = "Type"
 
 [node name="WindowDialog" type="WindowDialog"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -1320.0
 margin_bottom = -680.0
-rect_min_size = Vector2( 350, 200 )
+rect_min_size = Vector2( 450, 350 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource( 4 )
@@ -36,64 +35,64 @@ __meta__ = {
 [node name="VBox" type="VBoxContainer" parent="Margin"]
 margin_left = 3.0
 margin_top = 3.0
-margin_right = 347.0
-margin_bottom = 197.0
+margin_right = 447.0
+margin_bottom = 347.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="HBoxName" type="HBoxContainer" parent="Margin/VBox"]
-margin_right = 344.0
+margin_right = 444.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 
-[node name="Actor" type="Label" parent="Margin/VBox/HBoxName"]
+[node name="ActorLabel" type="Label" parent="Margin/VBox/HBoxName"]
 margin_top = 3.0
 margin_right = 34.0
 margin_bottom = 17.0
 text = "Actor"
 
-[node name="OptionButton" type="OptionButton" parent="Margin/VBox/HBoxName"]
+[node name="Actor" type="OptionButton" parent="Margin/VBox/HBoxName"]
 margin_left = 38.0
-margin_right = 344.0
+margin_right = 444.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="Texture" type="Label" parent="Margin/VBox"]
 margin_top = 24.0
-margin_right = 344.0
+margin_right = 444.0
 margin_bottom = 38.0
 text = "Texture"
 align = 1
 
 [node name="TextureRect" type="TextureRect" parent="Margin/VBox"]
 margin_top = 42.0
-margin_right = 344.0
-margin_bottom = 64.0
+margin_right = 444.0
+margin_bottom = 139.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource( 1 )
 stretch_mode = 6
 
 [node name="HBoxType" type="HBoxContainer" parent="Margin/VBox"]
-margin_top = 68.0
-margin_right = 344.0
-margin_bottom = 92.0
+margin_top = 143.0
+margin_right = 444.0
+margin_bottom = 167.0
 
-[node name="Label" type="Label" parent="Margin/VBox/HBoxType"]
+[node name="Type" type="Label" parent="Margin/VBox/HBoxType"]
 margin_top = 5.0
 margin_right = 30.0
 margin_bottom = 19.0
 text = "Type"
 
-[node name="CheckBox" type="CheckBox" parent="Margin/VBox/HBoxType"]
+[node name="TypeText" type="CheckBox" parent="Margin/VBox/HBoxType"]
 margin_left = 34.0
 margin_right = 89.0
 margin_bottom = 24.0
 group = SubResource( 1 )
 text = "Text"
 
-[node name="CheckBox2" type="CheckBox" parent="Margin/VBox/HBoxType"]
+[node name="TypeButtons" type="CheckBox" parent="Margin/VBox/HBoxType"]
 margin_left = 93.0
 margin_right = 171.0
 margin_bottom = 24.0
@@ -101,34 +100,34 @@ group = SubResource( 1 )
 text = "Buttons"
 
 [node name="VBoxText" type="VBoxContainer" parent="Margin/VBox"]
-margin_top = 96.0
-margin_right = 344.0
-margin_bottom = 118.0
+margin_top = 171.0
+margin_right = 444.0
+margin_bottom = 268.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Text" type="Label" parent="Margin/VBox/VBoxText"]
-margin_right = 344.0
+[node name="TextLabel" type="Label" parent="Margin/VBox/VBoxText"]
+margin_right = 444.0
 margin_bottom = 14.0
 text = "Text"
 
-[node name="TextEdit" type="TextEdit" parent="Margin/VBox/VBoxText"]
+[node name="Text" type="TextEdit" parent="Margin/VBox/VBoxText"]
 margin_top = 18.0
-margin_right = 344.0
-margin_bottom = 22.0
+margin_right = 444.0
+margin_bottom = 97.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxButtons" type="VBoxContainer" parent="Margin/VBox"]
-margin_top = 122.0
-margin_right = 344.0
-margin_bottom = 170.0
+margin_top = 272.0
+margin_right = 444.0
+margin_bottom = 320.0
 
 [node name="HBoxAdd" type="HBoxContainer" parent="Margin/VBox/VBoxButtons"]
-margin_right = 344.0
+margin_right = 444.0
 margin_bottom = 20.0
 
-[node name="Button" type="Button" parent="Margin/VBox/VBoxButtons/HBoxAdd"]
+[node name="Add" type="Button" parent="Margin/VBox/VBoxButtons/HBoxAdd"]
 margin_right = 22.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 20, 20 )
@@ -145,7 +144,7 @@ text = "Buttons"
 
 [node name="HBoxButton" type="HBoxContainer" parent="Margin/VBox/VBoxButtons"]
 margin_top = 24.0
-margin_right = 344.0
+margin_right = 444.0
 margin_bottom = 48.0
 
 [node name="ButtonLabel" type="Label" parent="Margin/VBox/VBoxButtons/HBoxButton"]
@@ -157,31 +156,31 @@ valign = 1
 
 [node name="ButtonLine" type="LineEdit" parent="Margin/VBox/VBoxButtons/HBoxButton"]
 margin_left = 47.0
-margin_right = 318.0
+margin_right = 418.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Delete" type="Button" parent="Margin/VBox/VBoxButtons/HBoxButton"]
-margin_left = 322.0
-margin_right = 344.0
+margin_left = 422.0
+margin_right = 444.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 20, 20 )
 icon = ExtResource( 3 )
 
 [node name="HBoxAction" type="HBoxContainer" parent="Margin/VBox"]
-margin_top = 174.0
-margin_right = 344.0
-margin_bottom = 194.0
+margin_top = 324.0
+margin_right = 444.0
+margin_bottom = 344.0
 alignment = 1
 
 [node name="Clear" type="Button" parent="Margin/VBox/HBoxAction"]
-margin_left = 124.0
-margin_right = 168.0
+margin_left = 174.0
+margin_right = 218.0
 margin_bottom = 20.0
 text = "Clear"
 
 [node name="Close" type="Button" parent="Margin/VBox/HBoxAction"]
-margin_left = 172.0
-margin_right = 219.0
+margin_left = 222.0
+margin_right = 269.0
 margin_bottom = 20.0
 text = "Close"
