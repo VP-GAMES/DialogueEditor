@@ -63,7 +63,7 @@ func _on_sentence_pressed() -> void:
 	var sentence_dialog  = DialogueScenePreviewSentenceDialog.instance()
 	var root = get_tree().get_root()
 	root.add_child(sentence_dialog)
-	sentence_dialog.set_data(_data)
+	sentence_dialog.set_data(_scene, _data)
 	sentence_dialog.window_title = "Preview Sentence"
 	sentence_dialog.get_close_button().hide()
 	sentence_dialog.connect("popup_hide", self, "_on_popup_hide", [root, sentence_dialog])
