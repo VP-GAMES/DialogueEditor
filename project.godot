@@ -40,11 +40,6 @@ config/icon="res://icon.png"
 actors_split_offset=215
 scenes_split_offset=245
 
-[display]
-
-window/size/width=1920
-window/size/height=1080
-
 [editor_plugins]
 
 enabled=PoolStringArray( "dialogue_editor" )

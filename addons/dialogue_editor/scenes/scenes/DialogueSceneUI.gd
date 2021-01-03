@@ -9,8 +9,12 @@ var _data: DialogueData
 var _ui_style_selected: StyleBoxFlat
 
 onready var _name_ui = $HBox/Name as Label
+onready var _sentence_ui = $HBox/Sentence as Button
 onready var _open_ui = $HBox/Open as Button
 onready var _del_ui = $HBox/Del as Button
+
+
+const DialogueScenePreviewSentenceDialog = preload("res://addons/dialogue_editor/scenes/scenes/DialogueScenePreviewSentenceDialog.tscn")
 
 func scene():
 	return _scene
@@ -36,6 +40,8 @@ func _init_connections() -> void:
 		_data.connect("scene_selection_changed", self, "_draw_style")
 	if not _name_ui.is_connected("gui_input", self, "_on_gui_input"):
 		_name_ui.connect("gui_input", self, "_on_gui_input")
+	if not _sentence_ui.is_connected("pressed", self, "_on_sentence_pressed"):
+		_sentence_ui.connect("pressed", self, "_on_sentence_pressed")
 	if not _open_ui.is_connected("pressed", self, "_on_open_pressed"):
 		_open_ui.connect("pressed", self, "_on_open_pressed")
 	if not _del_ui.is_connected("pressed", self, "_on_del_pressed"):
@@ -52,6 +58,19 @@ func _on_gui_input(event: InputEvent) -> void:
 					_data.selected_scene_set(_scene)
 				else:
 					_name_ui.set("custom_styles/normal", null)
+
+func _on_sentence_pressed() -> void:
+	var sentence_dialog  = DialogueScenePreviewSentenceDialog.instance()
+	var root = get_tree().get_root()
+	root.add_child(sentence_dialog)
+	sentence_dialog.window_title = "Preview Sentence"
+	sentence_dialog.get_close_button().hide()
+	sentence_dialog.connect("popup_hide", self, "_on_popup_hide", [root, sentence_dialog])
+	sentence_dialog.popup_centered()
+
+func _on_popup_hide(root, dialog) -> void:
+	root.remove_child(dialog)
+	dialog.queue_free()
 
 func _on_open_pressed() -> void:
 	_data.editor().get_editor_interface().open_scene_from_path(_scene.resource)

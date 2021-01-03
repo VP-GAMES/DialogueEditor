@@ -1,0 +1,187 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://addons/dialogue_editor/icons/Image.png" type="Texture" id=1]
+[ext_resource path="res://addons/dialogue_editor/icons/Add.png" type="Texture" id=2]
+[ext_resource path="res://addons/dialogue_editor/icons/Trash.png" type="Texture" id=3]
+[ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenePreviewSentenceDialog.gd" type="Script" id=4]
+
+[sub_resource type="ButtonGroup" id=1]
+resource_name = "Type"
+
+[node name="WindowDialog" type="WindowDialog"]
+visible = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -1320.0
+margin_bottom = -680.0
+rect_min_size = Vector2( 350, 200 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 3
+custom_constants/margin_top = 3
+custom_constants/margin_left = 3
+custom_constants/margin_bottom = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+margin_left = 3.0
+margin_top = 3.0
+margin_right = 347.0
+margin_bottom = 197.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxName" type="HBoxContainer" parent="Margin/VBox"]
+margin_right = 344.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Actor" type="Label" parent="Margin/VBox/HBoxName"]
+margin_top = 3.0
+margin_right = 34.0
+margin_bottom = 17.0
+text = "Actor"
+
+[node name="OptionButton" type="OptionButton" parent="Margin/VBox/HBoxName"]
+margin_left = 38.0
+margin_right = 344.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Texture" type="Label" parent="Margin/VBox"]
+margin_top = 24.0
+margin_right = 344.0
+margin_bottom = 38.0
+text = "Texture"
+align = 1
+
+[node name="TextureRect" type="TextureRect" parent="Margin/VBox"]
+margin_top = 42.0
+margin_right = 344.0
+margin_bottom = 64.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 1 )
+stretch_mode = 6
+
+[node name="HBoxType" type="HBoxContainer" parent="Margin/VBox"]
+margin_top = 68.0
+margin_right = 344.0
+margin_bottom = 92.0
+
+[node name="Label" type="Label" parent="Margin/VBox/HBoxType"]
+margin_top = 5.0
+margin_right = 30.0
+margin_bottom = 19.0
+text = "Type"
+
+[node name="CheckBox" type="CheckBox" parent="Margin/VBox/HBoxType"]
+margin_left = 34.0
+margin_right = 89.0
+margin_bottom = 24.0
+group = SubResource( 1 )
+text = "Text"
+
+[node name="CheckBox2" type="CheckBox" parent="Margin/VBox/HBoxType"]
+margin_left = 93.0
+margin_right = 171.0
+margin_bottom = 24.0
+group = SubResource( 1 )
+text = "Buttons"
+
+[node name="VBoxText" type="VBoxContainer" parent="Margin/VBox"]
+margin_top = 96.0
+margin_right = 344.0
+margin_bottom = 118.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Text" type="Label" parent="Margin/VBox/VBoxText"]
+margin_right = 344.0
+margin_bottom = 14.0
+text = "Text"
+
+[node name="TextEdit" type="TextEdit" parent="Margin/VBox/VBoxText"]
+margin_top = 18.0
+margin_right = 344.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxButtons" type="VBoxContainer" parent="Margin/VBox"]
+margin_top = 122.0
+margin_right = 344.0
+margin_bottom = 170.0
+
+[node name="HBoxAdd" type="HBoxContainer" parent="Margin/VBox/VBoxButtons"]
+margin_right = 344.0
+margin_bottom = 20.0
+
+[node name="Button" type="Button" parent="Margin/VBox/VBoxButtons/HBoxAdd"]
+margin_right = 22.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 20, 20 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+icon = ExtResource( 2 )
+
+[node name="Buttons" type="Label" parent="Margin/VBox/VBoxButtons/HBoxAdd"]
+margin_left = 26.0
+margin_top = 3.0
+margin_right = 76.0
+margin_bottom = 17.0
+text = "Buttons"
+
+[node name="HBoxButton" type="HBoxContainer" parent="Margin/VBox/VBoxButtons"]
+margin_top = 24.0
+margin_right = 344.0
+margin_bottom = 48.0
+
+[node name="ButtonLabel" type="Label" parent="Margin/VBox/VBoxButtons/HBoxButton"]
+margin_right = 43.0
+margin_bottom = 24.0
+size_flags_vertical = 5
+text = "Button"
+valign = 1
+
+[node name="ButtonLine" type="LineEdit" parent="Margin/VBox/VBoxButtons/HBoxButton"]
+margin_left = 47.0
+margin_right = 318.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Delete" type="Button" parent="Margin/VBox/VBoxButtons/HBoxButton"]
+margin_left = 322.0
+margin_right = 344.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 20, 20 )
+icon = ExtResource( 3 )
+
+[node name="HBoxAction" type="HBoxContainer" parent="Margin/VBox"]
+margin_top = 174.0
+margin_right = 344.0
+margin_bottom = 194.0
+alignment = 1
+
+[node name="Clear" type="Button" parent="Margin/VBox/HBoxAction"]
+margin_left = 124.0
+margin_right = 168.0
+margin_bottom = 20.0
+text = "Clear"
+
+[node name="Close" type="Button" parent="Margin/VBox/HBoxAction"]
+margin_left = 172.0
+margin_right = 219.0
+margin_bottom = 20.0
+text = "Close"

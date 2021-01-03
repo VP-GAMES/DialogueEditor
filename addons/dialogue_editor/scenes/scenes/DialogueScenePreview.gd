@@ -47,7 +47,8 @@ func _draw_view() -> void:
 	var default_size = rect_size
 	var scale = min(default_size.x / display_size.x, default_size.y / display_size.y)
 	_loaded_scene.set_custom_minimum_size(display_size)
-	_loaded_scene.set_scale(Vector2(scale, scale))
+	if scale < 1:
+		_loaded_scene.set_scale(Vector2(scale, scale))
 	_preview_ui.add_child(_loaded_scene)
 
 func _add_reference_rect() -> void:
@@ -62,7 +63,6 @@ func _clear_view() -> void:
 	for child_ui in _preview_ui.get_children():
 		_preview_ui.remove_child(child_ui)
 		child_ui.queue_free()
-
 
 func _on_DialogueScenePreview_resized():
 	_update_view()
