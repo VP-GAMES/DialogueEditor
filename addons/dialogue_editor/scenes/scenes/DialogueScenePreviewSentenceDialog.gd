@@ -3,13 +3,15 @@ extends WindowDialog
 
 var _scene
 var _data: DialogueData
-# texte_events = [{"text": "", "event": null}]
 
 onready var _actor_ui = $Margin/VBox/HBoxName/Actor as OptionButton
 onready var _texture_ui = $Margin/VBox/TextureRect as TextureRect
-onready var _buttons_add_ui = $Margin/VBox/VBoxText/HBoxAdd/Add as Button
-onready var _clear_ui = $Margin/VBox/HBoxAction/Clear
-onready var _close_ui = $Margin/VBox/HBoxAction/Close
+onready var _buttons_add_ui = $Margin/VBox/VBoxAdd/HBoxAdd/Add as Button
+onready var _text_vbox_ui = $Margin/VBox/VBoxText as VBoxContainer
+onready var _clear_ui = $Margin/VBox/HBoxAction/Clear as Button
+onready var _close_ui = $Margin/VBox/HBoxAction/Close as Button
+
+const DialogueScenePreviewSentenceDialogText = preload("res://addons/dialogue_editor/scenes/scenes/DialogueScenePreviewSentenceDialogText.tscn")
 
 func set_data(scene, data: DialogueData) -> void:
 	_scene = scene
@@ -21,7 +23,9 @@ func set_data(scene, data: DialogueData) -> void:
 
 func _check_scene() -> void:
 	if not _scene.has("preview"):
-		_scene["preview"] = {}
+		_scene["preview"] = { "texts": [""] }
+	if not _scene["preview"].has("texts"):
+		_scene["preview"]["texts"] = [""]
 
 func _actor_ui_fill() -> void:
 	_actor_ui.clear()
@@ -40,8 +44,12 @@ func _actor_ui_fill() -> void:
 func _init_connections() -> void:
 	if not _actor_ui.is_connected("item_selected", self, "_on_item_selected"):
 		_actor_ui.connect("item_selected", self, "_on_item_selected")
+	if not _buttons_add_ui.is_connected("pressed", self, "_on_add_pressed"):
+		_buttons_add_ui.connect("pressed", self, "_on_add_pressed")
 	if not _clear_ui.is_connected("pressed", self, "_on_clear_pressed"):
 		_clear_ui.connect("pressed", self, "_on_clear_pressed")
+	if not _close_ui.is_connected("pressed", self, "_on_close_pressed"):
+		_close_ui.connect("pressed", self, "_on_close_pressed")
 
 func _on_item_selected(index: int) -> void:
 	if index > 0:
@@ -50,13 +58,22 @@ func _on_item_selected(index: int) -> void:
 		_scene["preview"].erase("actor")
 	_draw_texture()
 
+func _on_add_pressed() -> void:
+	if _scene.has("preview") and _scene["preview"].has("texts"):
+		_scene["preview"]["texts"].append("")
+		_clear_and_draw_texts()
+
 func _on_clear_pressed() -> void:
 	_scene["preview"] = {}
 	_draw_view()
 
+func _on_close_pressed() -> void:
+	hide()
+
 func _draw_view() -> void:
 	_draw_actor()
 	_draw_texture()
+	_clear_and_draw_texts()
 
 func _draw_actor() -> void:
 	if _scene.has("preview") and _scene["preview"].has("actor"):
@@ -64,7 +81,6 @@ func _draw_actor() -> void:
 		var actor = _scene["preview"]["actor"]
 		for i in range(_actor_ui.get_item_count()):
 			if actor == _actor_ui.get_item_metadata(i):
-				print(i)
 				_actor_ui.select(i)
 				return
 		_actor_ui.select(0)
@@ -80,3 +96,19 @@ func _draw_texture() -> void:
 
 func _set_default_texture() -> void:
 	_texture_ui.texture = load("res://addons/dialogue_editor/icons/Image.png")
+
+func _clear_and_draw_texts() -> void:
+	_clear_texts()
+	_draw_texts()
+
+func _draw_texts() -> void:
+	if _scene.has("preview") and _scene["preview"].has("texts"):
+		for text in _scene["preview"]["texts"]:
+			var text_ui = DialogueScenePreviewSentenceDialogText.instance()
+			_text_vbox_ui.add_child(text_ui)
+		set_size(Vector2(rect_min_size.x, rect_min_size.y + 28 * _scene["preview"]["texts"].size()))
+
+func _clear_texts() -> void:
+	for text_ui in _text_vbox_ui.get_children():
+		_text_vbox_ui.remove_child(text_ui)
+		text_ui.queue_free()
