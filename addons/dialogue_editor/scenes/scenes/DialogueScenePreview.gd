@@ -19,14 +19,18 @@ signal scene_removed(scene)
 signal scene_selection_changed
 
 func _init_connections() -> void:
-	if not _data.is_connected("scene_selection_changed", self, "_on_scene_selection"):
-		_data.connect("scene_selection_changed", self, "_on_scene_selection")
+	if not _data.is_connected("scene_selection_changed", self, "_on_scene_need_update_view"):
+		_data.connect("scene_selection_changed", self, "_on_scene_need_update_view")
 	if not _data.is_connected("scene_added", self, "_on_scene_action"):
 		_data.connect("scene_added", self, "_on_scene_action")
 	if not _data.is_connected("scene_removed", self, "_on_scene_action"):
 		_data.connect("scene_removed", self, "_on_scene_action")
+	if not is_connected("resized", self, "_on_scene_need_update_view"):
+		connect("resized", self, "_on_scene_need_update_view")
+	if not _data.is_connected("scene_preview_changed", self, "_on_scene_need_update_view"):
+		_data.connect("scene_preview_changed", self, "_on_scene_need_update_view")
 
-func _on_scene_selection() -> void:
+func _on_scene_need_update_view():
 	_update_view()
 
 func _on_scene_action(scene) -> void:
@@ -38,6 +42,7 @@ func _update_view() -> void:
 		_scene = _data.selected_scene()
 		if _scene:
 			_draw_view()
+			_draw_sentence()
 
 func _draw_view() -> void:
 	var LoadedScene = load(_scene.resource)
@@ -64,5 +69,15 @@ func _clear_view() -> void:
 		_preview_ui.remove_child(child_ui)
 		child_ui.queue_free()
 
-func _on_DialogueScenePreview_resized():
-	_update_view()
+func _draw_sentence() -> void:
+	var sentence = _build_dialogue_sentence()
+	if sentence and sentence.actor and not sentence.actor.resources.empty():
+		sentence.texture_uuid = sentence.actor.resources[0].uuid
+	_loaded_scene.sentence_set(sentence)
+
+func _build_dialogue_sentence() -> DialogueSentence:
+	var sentence = DialogueSentence.new()
+	if _scene.has("preview"):
+		if _scene["preview"].has("actor"):
+			sentence.actor = _scene["preview"]["actor"]
+	return sentence

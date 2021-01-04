@@ -13,8 +13,8 @@ __meta__ = {
 }
 
 [node name="Margin" type="MarginContainer" parent="."]
-margin_right = 1920.0
-margin_bottom = 1080.0
+margin_right = 1024.0
+margin_bottom = 600.0
 custom_constants/margin_right = 3
 custom_constants/margin_top = 3
 custom_constants/margin_left = 3
@@ -23,6 +23,5 @@ custom_constants/margin_bottom = 3
 [node name="Preview" type="Control" parent="Margin"]
 margin_left = 3.0
 margin_top = 3.0
-margin_right = 1917.0
-margin_bottom = 1077.0
-[connection signal="resized" from="." to="." method="_on_DialogueScenePreview_resized"]
+margin_right = 1021.0
+margin_bottom = 597.0

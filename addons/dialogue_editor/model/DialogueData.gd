@@ -19,6 +19,8 @@ signal scene_selection_changed
 signal scene_resource_selection_changed(resource)
 signal scene_resource_path_changed(resource)
 
+signal scene_preview_changed
+
 var _editor: EditorPlugin
 var _undo_redo: UndoRedo
 
@@ -245,6 +247,9 @@ func _del_scene(scene) -> void:
 		_scene_selected = null
 		var scene_selected = selected_scene()
 		selected_scene_set(scene_selected)
+
+func emit_scene_preview_changed() -> void:
+	emit_signal("scene_preview_changed")
 
 # ***** EDITOR SETTINGS *****
 func editor() -> EditorPlugin:

@@ -26,6 +26,8 @@ func _check_scene() -> void:
 		_scene["preview"] = { "texts": [""] }
 	if not _scene["preview"].has("texts"):
 		_scene["preview"]["texts"] = [""]
+	if _scene["preview"]["texts"].empty():
+		_scene["preview"]["texts"] = [""]
 
 func _actor_ui_fill() -> void:
 	_actor_ui.clear()
@@ -50,6 +52,8 @@ func _init_connections() -> void:
 		_clear_ui.connect("pressed", self, "_on_clear_pressed")
 	if not _close_ui.is_connected("pressed", self, "_on_close_pressed"):
 		_close_ui.connect("pressed", self, "_on_close_pressed")
+	if not is_connected("hide", self, "_on_hide"):
+		connect("hide", self, "_on_hide")
 
 func _on_item_selected(index: int) -> void:
 	if index > 0:
@@ -69,6 +73,9 @@ func _on_clear_pressed() -> void:
 
 func _on_close_pressed() -> void:
 	hide()
+
+func _on_hide() -> void:
+	_data.emit_scene_preview_changed()
 
 func _draw_view() -> void:
 	_draw_actor()
@@ -103,10 +110,15 @@ func _clear_and_draw_texts() -> void:
 
 func _draw_texts() -> void:
 	if _scene.has("preview") and _scene["preview"].has("texts"):
-		for text in _scene["preview"]["texts"]:
+		for index in range(_scene["preview"]["texts"].size()):
 			var text_ui = DialogueScenePreviewSentenceDialogText.instance()
 			_text_vbox_ui.add_child(text_ui)
+			text_ui.set_data(index, _scene)
+			text_ui.connect("delete_action", self, "_on_delete_action")
 		set_size(Vector2(rect_min_size.x, rect_min_size.y + 28 * _scene["preview"]["texts"].size()))
+
+func _on_delete_action() -> void:
+	_clear_and_draw_texts()
 
 func _clear_texts() -> void:
 	for text_ui in _text_vbox_ui.get_children():

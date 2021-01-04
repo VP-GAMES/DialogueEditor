@@ -17,7 +17,7 @@ func texture_by_uuid(uuid = null) -> Texture:
 	var texture = null
 	if not resources.empty():
 		if resources.size() == 1:
-			texture = resources[0].texture
+			texture = load(resources[0].path)
 		elif uuid and resources.size() > 1:
 			for res in resources:
 				if res.uuid == uuid:

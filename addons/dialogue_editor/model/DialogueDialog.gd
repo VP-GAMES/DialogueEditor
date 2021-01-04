@@ -23,7 +23,17 @@ func _texture() -> void:
 	var texture = null
 	if _sentence and _sentence.texture_uuid:
 		texture = _sentence.actor.texture_by_uuid(_sentence.texture_uuid)
+		if texture:
+			texture = _resize_texture(texture, _texture_ui.rect_size)
 	_texture_ui.texture = texture
+
+func _resize_texture(t: Texture, size: Vector2):
+	var image = t.get_data()
+	if size.x > 0 && size.y > 0:
+		image.resize(size.x, size.y)
+	var itex = ImageTexture.new()
+	itex.create_from_image(image)
+	return itex
 
 func _name() -> void:
 	if _sentence and _sentence.actor and not _sentence.actor.name_exists():
