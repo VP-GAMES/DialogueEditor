@@ -4,6 +4,8 @@ extends Control
 var _sentence: DialogueSentence
 var _buttons_array = []
 
+export(bool) var show_name = true
+
 onready var _texture_ui = $Texture
 onready var _name_ui = $Name
 onready var _text_ui = $Text
@@ -24,20 +26,13 @@ func _texture() -> void:
 	if _sentence and _sentence.texture_uuid:
 		texture = _sentence.actor.texture_by_uuid(_sentence.texture_uuid)
 		if texture:
-			texture = _resize_texture(texture, _texture_ui.rect_size)
-	_texture_ui.texture = texture
-
-func _resize_texture(t: Texture, size: Vector2):
-	var image = t.get_data()
-	if size.x > 0 && size.y > 0:
-		image.resize(size.x, size.y)
-	var itex = ImageTexture.new()
-	itex.create_from_image(image)
-	return itex
+			_texture_ui.texture = texture
 
 func _name() -> void:
-	if _sentence and _sentence.actor and not _sentence.actor.name_exists():
+	if show_name and _sentence and _sentence.actor and _sentence.actor.name_exists():
 		_name_ui.text = _sentence.actor.name
+	else:
+		_name_ui.text = ""
 
 func _text() -> void:
 	if _sentence.text_exists():

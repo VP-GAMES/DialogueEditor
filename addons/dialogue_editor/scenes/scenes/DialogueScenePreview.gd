@@ -71,8 +71,6 @@ func _clear_view() -> void:
 
 func _draw_sentence() -> void:
 	var sentence = _build_dialogue_sentence()
-	if sentence and sentence.actor and not sentence.actor.resources.empty():
-		sentence.texture_uuid = sentence.actor.resources[0].uuid
 	_loaded_scene.sentence_set(sentence)
 
 func _build_dialogue_sentence() -> DialogueSentence:
@@ -80,4 +78,6 @@ func _build_dialogue_sentence() -> DialogueSentence:
 	if _scene.has("preview"):
 		if _scene["preview"].has("actor"):
 			sentence.actor = _scene["preview"]["actor"]
+		if _scene["preview"].has("texture_uuid"):
+			sentence.texture_uuid = _scene["preview"]["texture_uuid"]
 	return sentence

@@ -30,6 +30,7 @@ anchor_right = 0.99
 anchor_bottom = 0.75
 margin_left = -150.0
 margin_top = -150.0
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

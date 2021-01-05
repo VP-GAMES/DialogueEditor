@@ -13,7 +13,7 @@ func default_uuid() -> String:
 		uuid = resources[0].uuid
 	return uuid
 
-func texture_by_uuid(uuid = null) -> Texture:
+func texture_by_uuid(uuid = null) -> Resource:
 	var texture = null
 	if not resources.empty():
 		if resources.size() == 1:

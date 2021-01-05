@@ -5,7 +5,7 @@
 [ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenePreviewSentenceDialog.gd" type="Script" id=4]
 
 [node name="WindowDialog" type="WindowDialog"]
-rect_min_size = Vector2( 400, 190 )
+rect_min_size = Vector2( 400, 210 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource( 4 )
@@ -28,7 +28,7 @@ __meta__ = {
 margin_left = 3.0
 margin_top = 3.0
 margin_right = 397.0
-margin_bottom = 187.0
+margin_bottom = 207.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -40,29 +40,54 @@ size_flags_horizontal = 3
 
 [node name="ActorLabel" type="Label" parent="Margin/VBox/HBoxName"]
 margin_top = 3.0
-margin_right = 34.0
+margin_right = 50.0
 margin_bottom = 17.0
+rect_min_size = Vector2( 50, 0 )
 text = "Actor"
 
 [node name="Actor" type="OptionButton" parent="Margin/VBox/HBoxName"]
-margin_left = 38.0
+margin_left = 54.0
 margin_right = 394.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 
-[node name="TextureRect" type="TextureRect" parent="Margin/VBox"]
+[node name="HBoxTexture" type="HBoxContainer" parent="Margin/VBox"]
 margin_top = 24.0
 margin_right = 394.0
-margin_bottom = 124.0
-rect_min_size = Vector2( 0, 100 )
+margin_bottom = 44.0
 size_flags_horizontal = 3
-texture = ExtResource( 1 )
-stretch_mode = 6
 
-[node name="VBoxAdd" type="VBoxContainer" parent="Margin/VBox"]
-margin_top = 128.0
+[node name="ActorTexture" type="Label" parent="Margin/VBox/HBoxTexture"]
+margin_top = 3.0
+margin_right = 50.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 50, 0 )
+text = "Texture"
+
+[node name="Textures" type="OptionButton" parent="Margin/VBox/HBoxTexture"]
+margin_left = 54.0
+margin_right = 394.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Center" type="CenterContainer" parent="Margin/VBox"]
+margin_top = 48.0
 margin_right = 394.0
 margin_bottom = 148.0
+
+[node name="Texture" type="TextureRect" parent="Margin/VBox/Center"]
+margin_left = 147.0
+margin_right = 247.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 100, 100 )
+size_flags_horizontal = 3
+texture = ExtResource( 1 )
+expand = true
+
+[node name="VBoxAdd" type="VBoxContainer" parent="Margin/VBox"]
+margin_top = 152.0
+margin_right = 394.0
+margin_bottom = 172.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -86,16 +111,16 @@ margin_bottom = 17.0
 text = "New field"
 
 [node name="VBoxText" type="VBoxContainer" parent="Margin/VBox"]
-margin_top = 152.0
+margin_top = 176.0
 margin_right = 394.0
-margin_bottom = 170.0
+margin_bottom = 180.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxAction" type="HBoxContainer" parent="Margin/VBox"]
-margin_top = 174.0
+margin_top = 184.0
 margin_right = 394.0
-margin_bottom = 194.0
+margin_bottom = 204.0
 alignment = 1
 
 [node name="Clear" type="Button" parent="Margin/VBox/HBoxAction"]
