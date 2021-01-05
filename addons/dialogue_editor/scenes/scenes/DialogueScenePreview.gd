@@ -80,4 +80,8 @@ func _build_dialogue_sentence() -> DialogueSentence:
 			sentence.actor = _scene["preview"]["actor"]
 		if _scene["preview"].has("texture_uuid"):
 			sentence.texture_uuid = _scene["preview"]["texture_uuid"]
+		if _scene["preview"].has("texts"):
+			sentence.texte_events.clear()
+			for text in _scene["preview"]["texts"]:
+				sentence.texte_events.append({"text": text, "event": null})
 	return sentence

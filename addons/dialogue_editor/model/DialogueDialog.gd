@@ -56,6 +56,7 @@ func _buttons_clear() -> void:
 		if not button_ui == _button_ui:
 			remove_child(button_ui)
 			button_ui.queue_free()
+	_buttons_array = []
 
 func _buttons_generate() -> void:
 	_buttons_array.append(_button_ui)
@@ -65,13 +66,19 @@ func _buttons_generate() -> void:
 	var margin = 0.01
 	var offset = margin + _button_ui.anchor_bottom - _button_ui.anchor_top
 	for index in range(_buttons_array.size() - 1, -1, -1):
+		var index_reverse = _buttons_array.size() - (index +1)
 		var button_ui = _buttons_array[index] as Button
 		button_ui.anchor_top = _button_ui.anchor_top - offset * index
 		button_ui.anchor_bottom = _button_ui.anchor_bottom - offset * index
-		button_ui.text = _sentence.texte_events[index].text
-		if _sentence.texte_events[index].event:
-			button_ui.connect("pressed", self, "_on_button_pressed", [_sentence.texte_events[index].event])
+		button_ui.text = _sentence.texte_events[index_reverse].text
+		if _sentence.texte_events[index_reverse].event:
+			button_ui.connect("pressed", self, "_on_button_pressed", [_sentence.texte_events[index_reverse].event])
+	for child in get_children():
+		for button_ui in _buttons_array:
+			if child == button_ui:
+				remove_child(button_ui)
+	for button_ui in _buttons_array:
 		add_child(button_ui)
 
 func _on_button_pressed(event_name: String) -> void:
-	print("TODO DialogueManager emit_signal for button")
+	print("TODO DialogueManager emit_signal for button -> " + event_name)
