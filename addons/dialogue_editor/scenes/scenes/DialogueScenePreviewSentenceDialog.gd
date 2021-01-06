@@ -160,7 +160,7 @@ func _draw_texts() -> void:
 			_text_vbox_ui.add_child(text_ui)
 			text_ui.set_data(index, _scene)
 			text_ui.connect("delete_action", self, "_on_delete_action")
-		set_size(Vector2(rect_min_size.x, rect_min_size.y + 28 * _scene["preview"]["texts"].size()))
+		set_size(Vector2(rect_min_size.x, rect_min_size.y + 34 * _scene["preview"]["texts"].size()))
 
 func _on_delete_action() -> void:
 	_clear_and_draw_texts()

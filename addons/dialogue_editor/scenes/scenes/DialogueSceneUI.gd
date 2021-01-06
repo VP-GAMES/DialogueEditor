@@ -60,6 +60,7 @@ func _on_gui_input(event: InputEvent) -> void:
 					_name_ui.set("custom_styles/normal", null)
 
 func _on_sentence_pressed() -> void:
+	_data.selected_scene_set(_scene)
 	var sentence_dialog  = DialogueScenePreviewSentenceDialog.instance()
 	var root = get_tree().get_root()
 	root.add_child(sentence_dialog)
@@ -74,6 +75,7 @@ func _on_popup_hide(root, dialog) -> void:
 	dialog.queue_free()
 
 func _on_open_pressed() -> void:
+	_data.selected_scene_set(_scene)
 	_data.editor().get_editor_interface().open_scene_from_path(_scene.resource)
 
 func _on_del_pressed() -> void:
