@@ -1,3 +1,5 @@
+# Dialogues preview dialog text for DialogueEditor : MIT License
+# @author Vladimir Petrenko
 tool
 extends HBoxContainer
 

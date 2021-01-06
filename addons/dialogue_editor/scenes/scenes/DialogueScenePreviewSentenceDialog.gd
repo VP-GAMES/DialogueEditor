@@ -1,3 +1,5 @@
+# Dialogues preview dialog for DialogueEditor : MIT License
+# @author Vladimir Petrenko
 tool
 extends WindowDialog
 
