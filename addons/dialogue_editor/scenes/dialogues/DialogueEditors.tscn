@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/dialogue_editor/scenes/dialogues/DialogueEditors.gd" type="Script" id=1]
+
+[node name="Editors" type="MarginContainer"]
+margin_left = 221.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
