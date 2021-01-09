@@ -15,6 +15,7 @@ const DialogueDialogueUI = preload("res://addons/dialogue_editor/scenes/dialogue
 func set_data(data: DialogueData) -> void:
 	_data = data
 	_init_connections()
+	_update_view()
 
 func _init_connections() -> void:
 	if not _add_ui.is_connected("pressed", self, "_add_pressed"):
