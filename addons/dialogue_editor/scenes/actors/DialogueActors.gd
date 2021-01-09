@@ -5,7 +5,7 @@ extends Panel
 
 var _data: DialogueData
 
-onready var _add_ui = $Margin/VBox/HBox/Add
+onready var _add_ui = $Margin/VBox/HBox/Add as Button
 onready var _actors_ui = $Margin/VBox/Scroll/Actors
 
 const DialogueActorUI = preload("res://addons/dialogue_editor/scenes/actors/DialogueActorUI.tscn")

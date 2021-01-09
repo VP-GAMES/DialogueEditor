@@ -84,4 +84,8 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Dialogs" type="VBoxContainer" parent="Margin/VBox/Scroll"]
+[node name="Dialogues" type="VBoxContainer" parent="Margin/VBox/Scroll"]
+margin_right = 1018.0
+margin_bottom = 560.0
+size_flags_horizontal = 3
+size_flags_vertical = 3

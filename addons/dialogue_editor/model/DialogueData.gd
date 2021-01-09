@@ -3,6 +3,12 @@
 extends Resource
 class_name DialogueData
 
+var _editor: EditorPlugin
+var _undo_redo: UndoRedo
+
+const uuid_gen = preload("res://addons/dialogue_editor/uuid/uuid.gd")
+
+# ***** ACTORS *****
 signal actor_added(actor)
 signal actor_removed(actor)
 signal actor_selection_changed
@@ -12,41 +18,9 @@ signal actor_resource_removed(resource)
 signal actor_resource_selection_changed(resource)
 signal actor_resource_path_changed(resource)
 
-signal scene_added(scene)
-signal scene_removed(scene)
-signal scene_selection_changed
-
-signal scene_resource_selection_changed(resource)
-signal scene_resource_path_changed(resource)
-
-signal scene_preview_changed
-
-var _editor: EditorPlugin
-var _undo_redo: UndoRedo
-
 export(Array) var actors = []
 var _actor_selected: DialogueActor
 
-export(Array) var scenes = [
-	{"uuid": uuid_gen.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorLeft.tscn"},
-	{"uuid": uuid_gen.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorRight.tscn"}
-]
-var _scene_selected
-
-const uuid_gen = preload("res://addons/dialogue_editor/uuid/uuid.gd")
-
-const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
-const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
-const SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT = 215
-const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
-const SETTINGS_SCENES_SPLIT_OFFSET = "dialogue_editor/scenes_split_offset"
-const SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT = 215
-const SETTINGS_DIALOGS_SPLIT_OFFSET = "dialogue_editor/dialogs_split_offset"
-const SETTINGS_DIALOGS_SPLIT_OFFSET_DEFAULT = 215
-const SETTINGS_DISPLAY_WIDTH = "display/window/size/width"
-const SETTINGS_DISPLAY_HEIGHT = "display/window/size/height"
-
-# ***** ACTORS *****
 func selected_actor() -> DialogueActor:
 	if not _actor_selected and not actors.empty():
 		_actor_selected = actors[0]
@@ -58,7 +32,6 @@ func selected_actor_set(actor: DialogueActor) -> void:
 
 func add_actor(sendSignal = true) -> void:
 		var actor = _create_actor()
-		print(actor.resources)
 		if _undo_redo != null:
 			_undo_redo.create_action("Add actor")
 			_undo_redo.add_do_method(self, "_add_actor", actor)
@@ -69,11 +42,11 @@ func add_actor(sendSignal = true) -> void:
 
 func _create_actor() -> DialogueActor:
 	var actor = DialogueActor.new()
-	actor.name = _next_autor_name()
+	actor.name = _next_actor_name()
 	actor.resources = []
 	return actor
 
-func _next_autor_name() -> String:
+func _next_actor_name() -> String:
 	var value = -9223372036854775807
 	var actor_found = false
 	for actor in actors:
@@ -118,18 +91,6 @@ func _del_actor(actor) -> void:
 		_actor_selected = null
 		var actor_selected = selected_actor()
 		selected_actor_set(actor_selected)
-
-func init_data() -> void:
-	var file = File.new()
-	if file.file_exists(PATH_TO_SAVE):
-		var resource = ResourceLoader.load(PATH_TO_SAVE) as DialogueData
-		if resource.actors and not resource.actors.empty():
-			actors = resource.actors
-		if resource.scenes and not resource.scenes.empty():
-			scenes = resource.scenes
-
-func save() -> void:
-	ResourceSaver.save(PATH_TO_SAVE, self)
 
 func add_actor_resource() -> void:
 	var resource = _create_actor_resource()
@@ -195,6 +156,21 @@ func actor_resource_selection(resource) -> void:
 	emit_signal("actor_resource_selection_changed", resource)
 
 # ***** SCENES *****
+signal scene_added(scene)
+signal scene_removed(scene)
+signal scene_selection_changed
+
+signal scene_resource_selection_changed(resource)
+signal scene_resource_path_changed(resource)
+
+signal scene_preview_changed
+
+export(Array) var scenes = [
+	{"uuid": uuid_gen.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorLeft.tscn"},
+	{"uuid": uuid_gen.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorRight.tscn"}
+]
+var _scene_selected
+
 func selected_scene():
 	if not _scene_selected and not scenes.empty():
 		_scene_selected = scenes[0]
@@ -253,7 +229,111 @@ func _del_scene(scene) -> void:
 func emit_scene_preview_changed() -> void:
 	emit_signal("scene_preview_changed")
 
+# ***** DIALOGUES *****
+signal dialogue_added(actor)
+signal dialogue_removed(actor)
+signal dialogue_selection_changed
+signal dialogue_view_selection_changed
+
+export(Array) var dialogues = []
+
+var _dialogue_selected: DialogueDialogue
+
+func selected_dialogue() -> DialogueDialogue:
+	if not _dialogue_selected and not dialogues.empty():
+		_dialogue_selected = dialogues[0]
+	return _dialogue_selected
+
+func selected_dialogue_set(dialogue: DialogueDialogue) -> void:
+	_dialogue_selected = dialogue
+	emit_signal("dialogue_selection_changed")
+
+func add_dialogue(sendSignal = true) -> void:
+		var dialogue = _create_dialogue()
+		if _undo_redo != null:
+			_undo_redo.create_action("Add dialogue")
+			_undo_redo.add_do_method(self, "_add_dialogue", dialogue)
+			_undo_redo.add_undo_method(self, "_del_dialogue", dialogue)
+			_undo_redo.commit_action()
+		else:
+			_add_dialogue(dialogue, sendSignal)
+
+func _create_dialogue() -> DialogueDialogue:
+	var dialogue = DialogueDialogue.new()
+	dialogue.name = _next_dialogue_name()
+	return dialogue
+
+func _next_dialogue_name() -> String:
+	var value = -9223372036854775807
+	var dialogue_found = false
+	for dialogue in dialogues:
+		var name = dialogue.name
+		if name.begins_with("Dialogue"):
+			dialogue_found = true
+			var behind = dialogue.name.substr(5)
+			var regex = RegEx.new()
+			regex.compile("^[0-9]+$")
+			var result = regex.search(behind)
+			if result:
+				var new_value = int(behind)
+				if  value < new_value:
+					value = new_value
+	var next_name = "Dialogue"
+	if value != -9223372036854775807:
+		next_name += str(value + 1)
+	elif dialogue_found:
+		next_name += "1"
+	return next_name
+
+func _add_dialogue(dialogue: DialogueDialogue, sendSignal = true, position = dialogues.size()) -> void:
+	dialogues.insert(position, dialogue)
+	emit_signal("dialogue_added", dialogue)
+	selected_dialogue_set(dialogue)
+
+func del_dialogue(dialogue) -> void:
+	if _undo_redo != null:
+		var index = dialogues.find(dialogue)
+		_undo_redo.create_action("Del dialogue")
+		_undo_redo.add_do_method(self, "_del_dialogue", dialogue)
+		_undo_redo.add_undo_method(self, "_add_dialogue", dialogue, false, index)
+		_undo_redo.commit_action()
+	else:
+		_del_dialogue(dialogue)
+
+func _del_dialogue(dialogue) -> void:
+	var index = dialogues.find(dialogue)
+	if index > -1:
+		dialogues.remove(index)
+		emit_signal("dialogue_removed", dialogue)
+		_dialogue_selected = null
+		var dialogue_selected = selected_dialogue()
+		selected_dialogue_set(dialogue_selected)
+
+# ***** LOAD SAVE *****
+func init_data() -> void:
+	var file = File.new()
+	if file.file_exists(PATH_TO_SAVE):
+		var resource = ResourceLoader.load(PATH_TO_SAVE) as DialogueData
+		if resource.actors and not resource.actors.empty():
+			actors = resource.actors
+		if resource.scenes and not resource.scenes.empty():
+			scenes = resource.scenes
+
+func save() -> void:
+	ResourceSaver.save(PATH_TO_SAVE, self)
+
 # ***** EDITOR SETTINGS *****
+const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
+const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
+const SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT = 215
+const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
+const SETTINGS_SCENES_SPLIT_OFFSET = "dialogue_editor/scenes_split_offset"
+const SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT = 215
+const SETTINGS_DIALOGS_SPLIT_OFFSET = "dialogue_editor/dialogs_split_offset"
+const SETTINGS_DIALOGS_SPLIT_OFFSET_DEFAULT = 215
+const SETTINGS_DISPLAY_WIDTH = "display/window/size/width"
+const SETTINGS_DISPLAY_HEIGHT = "display/window/size/height"
+
 func editor() -> EditorPlugin:
 	return _editor
 

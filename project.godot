@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://addons/dialogue_editor/model/DialogueData.gd"
 }, {
 "base": "Resource",
+"class": "DialogueDialogue",
+"language": "GDScript",
+"path": "res://addons/dialogue_editor/model/DialogueDialogue.gd"
+}, {
+"base": "Resource",
 "class": "DialogueSentence",
 "language": "GDScript",
 "path": "res://addons/dialogue_editor/model/DialogueSentence.gd"
@@ -27,6 +32,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "DialogueActor": "res://addons/dialogue_editor/icons/Actor.png",
 "DialogueData": "",
+"DialogueDialogue": "res://addons/dialogue_editor/icons/Dialogue.png",
 "DialogueSentence": "res://addons/dialogue_editor/icons/Sentence.png"
 }
 
