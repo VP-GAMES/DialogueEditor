@@ -60,6 +60,7 @@ margin_left = 964.0
 margin_right = 992.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 20, 20 )
+toggle_mode = true
 icon = ExtResource( 3 )
 
 [node name="Bricks" type="Button" parent="Margin/VBox/HBox"]
@@ -67,6 +68,7 @@ margin_left = 996.0
 margin_right = 1018.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 20, 20 )
+toggle_mode = true
 icon = ExtResource( 4 )
 
 [node name="HSeparator" type="HSeparator" parent="Margin/VBox"]

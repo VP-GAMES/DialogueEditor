@@ -329,8 +329,10 @@ const SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT = 215
 const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
 const SETTINGS_SCENES_SPLIT_OFFSET = "dialogue_editor/scenes_split_offset"
 const SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT = 215
-const SETTINGS_DIALOGS_SPLIT_OFFSET = "dialogue_editor/dialogs_split_offset"
-const SETTINGS_DIALOGS_SPLIT_OFFSET_DEFAULT = 215
+const SETTINGS_DIALOGUES_SPLIT_OFFSET = "dialogue_editor/dialogues_split_offset"
+const SETTINGS_DIALOGUES_SPLIT_OFFSET_DEFAULT = 215
+const SETTINGS_DIALOGUES_EDITOR_TYPE = "dialogue_editor/dialogues_editor_type"
+const SETTINGS_DIALOGUES_EDITOR_TYPE_DEFAULT = "NODES"
 const SETTINGS_DISPLAY_WIDTH = "display/window/size/width"
 const SETTINGS_DISPLAY_HEIGHT = "display/window/size/height"
 
@@ -363,14 +365,24 @@ func setting_scenes_split_offset() -> int:
 func setting_scenes_split_offset_put(offset: int) -> void:
 	ProjectSettings.set_setting(SETTINGS_SCENES_SPLIT_OFFSET, offset)
 
-func setting_dialogs_split_offset() -> int:
-	var offset = SETTINGS_DIALOGS_SPLIT_OFFSET_DEFAULT
-	if ProjectSettings.has_setting(SETTINGS_DIALOGS_SPLIT_OFFSET):
-		offset = ProjectSettings.get_setting(SETTINGS_DIALOGS_SPLIT_OFFSET)
+func setting_dialogues_split_offset() -> int:
+	var offset = SETTINGS_DIALOGUES_SPLIT_OFFSET_DEFAULT
+	if ProjectSettings.has_setting(SETTINGS_DIALOGUES_SPLIT_OFFSET):
+		offset = ProjectSettings.get_setting(SETTINGS_DIALOGUES_SPLIT_OFFSET)
 	return offset
 
-func setting_dialogs_split_offset_put(offset: int) -> void:
-	ProjectSettings.set_setting(SETTINGS_DIALOGS_SPLIT_OFFSET, offset)
+func setting_dialogues_split_offset_put(offset: int) -> void:
+	ProjectSettings.set_setting(SETTINGS_DIALOGUES_SPLIT_OFFSET, offset)
+
+func setting_dialogues_editor_type() -> String:
+	var type = SETTINGS_DIALOGUES_EDITOR_TYPE_DEFAULT
+	if ProjectSettings.has_setting(SETTINGS_DIALOGUES_EDITOR_TYPE):
+		type = ProjectSettings.get_setting(SETTINGS_DIALOGUES_EDITOR_TYPE)
+	return type
+
+func setting_dialogues_editor_type_put(type: String) -> void:
+	ProjectSettings.set_setting(SETTINGS_DIALOGUES_EDITOR_TYPE, type)
+	emit_signal("dialogue_view_selection_changed")
 
 func setting_display_size() -> Vector2:
 	var width = ProjectSettings.get_setting(SETTINGS_DISPLAY_WIDTH)

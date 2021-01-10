@@ -24,13 +24,32 @@ func _init_connections() -> void:
 		_data.connect("dialogue_added", self, "_on_dialogue_action")
 	if not _data.is_connected("dialogue_removed", self, "_on_dialogue_action"):
 		_data.connect("dialogue_removed", self, "_on_dialogue_action")
+	if not _nodes_ui.is_connected("pressed", self, "_on_type_pressed"):
+		_nodes_ui.connect("pressed", self, "_on_type_pressed", ["NODES"])
+	if not _bricks_ui.is_connected("pressed", self, "_on_type_pressed"):
+		_bricks_ui.connect("pressed", self, "_on_type_pressed", ["BRICKS"])
 
 func _on_dialogue_action(dialogue: DialogueDialogue) -> void:
 	_update_view()
 
 func _update_view() -> void:
+	_draw_editor_type()
 	_clear_view()
 	_draw_view()
+
+func _on_type_pressed(type: String) -> void:
+	_data.setting_dialogues_editor_type_put(type)
+	_draw_editor_type()
+
+func _draw_editor_type() -> void:
+	_nodes_ui.set_pressed(false)
+	_bricks_ui.set_pressed(false)
+	var type = _data.setting_dialogues_editor_type()
+	match type:
+		"NODES":
+			_nodes_ui.set_pressed(true)
+		"BRICKS":
+			_bricks_ui.set_pressed(true)
 
 func _clear_view() -> void:
 	for dialogue_ui in _dialogues_ui.get_children():

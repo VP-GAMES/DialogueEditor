@@ -45,6 +45,7 @@ config/icon="res://icon.png"
 
 actors_split_offset=215
 scenes_split_offset=245
+dialogues_editor_type="BRICKS"
 
 [editor_plugins]
 
