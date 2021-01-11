@@ -8,6 +8,17 @@ var _undo_redo: UndoRedo
 
 const uuid_gen = preload("res://addons/dialogue_editor/uuid/uuid.gd")
 
+func editor() -> EditorPlugin:
+	return _editor
+
+func set_editor(editor: EditorPlugin) -> void:
+	_editor = editor
+	if _editor:
+		_undo_redo = _editor.get_undo_redo()
+
+func undo_redo() -> UndoRedo:
+	return _undo_redo
+
 # ***** ACTORS *****
 signal actor_added(actor)
 signal actor_removed(actor)
@@ -335,17 +346,6 @@ const SETTINGS_DIALOGUES_EDITOR_TYPE = "dialogue_editor/dialogues_editor_type"
 const SETTINGS_DIALOGUES_EDITOR_TYPE_DEFAULT = "NODES"
 const SETTINGS_DISPLAY_WIDTH = "display/window/size/width"
 const SETTINGS_DISPLAY_HEIGHT = "display/window/size/height"
-
-func editor() -> EditorPlugin:
-	return _editor
-
-func set_editor(editor: EditorPlugin) -> void:
-	_editor = editor
-	if _editor:
-		_undo_redo = _editor.get_undo_redo()
-
-func undo_redo() -> UndoRedo:
-	return _undo_redo
 
 func setting_actors_split_offset() -> int:
 	var offset = SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT

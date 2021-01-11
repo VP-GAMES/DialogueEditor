@@ -14,7 +14,10 @@ func set_data(data: DialogueData) -> void:
 	_update_view()
 
 func _init_connections() -> void:
-	_data.connect("dialogue_view_selection_changed", self, "_update_view")
+	if not _data.is_connected("dialogue_view_selection_changed", self, "_update_view"):
+		_data.connect("dialogue_view_selection_changed", self, "_update_view")
+	if not _data.is_connected("dialogue_selection_changed", self, "_update_view"):
+		_data.connect("dialogue_selection_changed", self, "_update_view")
 
 func _update_view() -> void:
 	_clear_view()
@@ -36,7 +39,9 @@ func _draw_view() -> void:
 func _draw_nodes_view() -> void:
 	var nodes_ui = DialogueNodesView.instance()
 	add_child(nodes_ui)
+	nodes_ui.set_data(_data)
 
 func _draw_bricks_view() -> void:
 	var bricks_ui = DialogueBricksView.instance()
 	add_child(bricks_ui)
+	bricks_ui.set_data(_data)

@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="ButtonGroup" id=1]
+
+[node name="PanelSentence" type="PanelContainer"]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBox" type="HBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 121.0
+margin_bottom = 31.0
+
+[node name="Remove" type="Button" parent="HBox"]
+margin_right = 20.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 20, 20 )
+text = "-"
+
+[node name="Select" type="CheckBox" parent="HBox"]
+margin_left = 24.0
+margin_right = 48.0
+margin_bottom = 24.0
+group = SubResource( 1 )
+
+[node name="LineEdit" type="LineEdit" parent="HBox"]
+margin_left = 52.0
+margin_right = 110.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBox"]
+margin_left = 114.0
+margin_top = 5.0
+margin_right = 114.0
+margin_bottom = 19.0
