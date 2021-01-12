@@ -329,8 +329,11 @@ func init_data() -> void:
 			actors = resource.actors
 		if resource.scenes and not resource.scenes.empty():
 			scenes = resource.scenes
+		if resource.dialogues and not resource.dialogues.empty():
+			dialogues = resource.dialogues
 
 func save() -> void:
+	print(dialogues[0].nodes)
 	ResourceSaver.save(PATH_TO_SAVE, self)
 
 # ***** EDITOR SETTINGS *****
