@@ -328,10 +328,11 @@ func hide() -> void:
 	self.hide()
 
 func _sync_dialogue_data() -> void:
-	if _nodes_count() <= 0:
-		return
+	_selected_dialogue.scrolloffset = Vector2.ZERO
 	_selected_dialogue.nodes.clear()
 	_selected_dialogue.connections.clear()
+	if _nodes_count() <= 0:
+		return
 	_selected_dialogue.scrolloffset = _graph_ui.scroll_offset
 	for node in _graph_ui.get_children():
 		if node is GraphNode and node.has_method("save_data"):
