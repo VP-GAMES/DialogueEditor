@@ -16,16 +16,22 @@ func set_data(data: DialogueData) -> void:
 	_update_view()
 
 func _init_connections() -> void:
-	if not _add_ui.is_connected("pressed", self, "_add_pressed"):
-		_add_ui.connect("pressed", self, "_add_pressed")
-	if not _data.is_connected("actor_added", self, "_on_actor_action"):
-		_data.connect("actor_added", self, "_on_actor_action")
-	if not _data.is_connected("actor_removed", self, "_on_actor_action"):
-		_data.connect("actor_removed", self, "_on_actor_action")
+	if not _add_ui.is_connected("pressed", self, "_on_add_pressed"):
+		assert(_add_ui.connect("pressed", self, "_on_add_pressed") == OK)
+	if not _data.is_connected("actor_added", self, "_on_actor_added"):
+		assert(_data.connect("actor_added", self, "_on_actor_added") == OK)
+	if not _data.is_connected("actor_removed", self, "_on_actor_removed"):
+		assert(_data.connect("actor_removed", self, "_on_actor_removed") == OK)
 
-func _on_actor_action(actor: DialogueActor) -> void:
+func _on_add_pressed() -> void:
+	_data.add_actor()
+
+func _on_actor_added(actor: DialogueActor) -> void:
 	_update_view()
 
+func _on_actor_removed(actor: DialogueActor) -> void:
+	_update_view()
+	
 func _update_view() -> void:
 	_clear_view()
 	_draw_view()
@@ -43,6 +49,3 @@ func _draw_actor(actor: DialogueActor) -> void:
 	var actor_ui = DialogueActorUI.instance()
 	_actors_ui.add_child(actor_ui)
 	actor_ui.set_data(actor, _data)
-
-func _add_pressed() -> void:
-	_data.add_actor()

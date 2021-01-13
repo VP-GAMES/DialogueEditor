@@ -24,12 +24,12 @@ func sentence_set(sentence: DialogueSentence) -> void:
 func _texture() -> void:
 	var texture = null
 	if _sentence and _sentence.texture_uuid:
-		texture = _sentence.actor.texture_by_uuid(_sentence.texture_uuid)
+		texture = _sentence.actor.resource_by_uuid(_sentence.texture_uuid)
 		if texture:
 			_texture_ui.texture = texture
 
 func _name() -> void:
-	if show_name and _sentence and _sentence.actor and _sentence.actor.name_exists():
+	if show_name and _sentence and _sentence.actor:
 		_name_ui.text = _sentence.actor.name
 	else:
 		_name_ui.text = ""

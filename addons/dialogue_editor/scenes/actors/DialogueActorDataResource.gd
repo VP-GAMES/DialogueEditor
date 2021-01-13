@@ -4,6 +4,7 @@ tool
 extends HBoxContainer
 
 var _resource: Dictionary
+var _actor: DialogueActor
 var _data: DialogueData
 
 onready var _name_ui = $Name as LineEdit
@@ -14,11 +15,12 @@ onready var _del_ui = $Del as Button
 func resource():
 	return _resource
 
-func set_data(resource: Dictionary, data: DialogueData):
+func set_data(resource: Dictionary, actor: DialogueActor, data: DialogueData):
 	_resource = resource
+	_actor = actor
 	_data = data
-	_put_ui.set_data(resource, data)
-	_path_ui.set_data(resource, data)
+	_put_ui.set_data(_resource, _actor, _data)
+	_path_ui.set_data(_resource, _actor, _data)
 	_init_connections()
 	_update_view()
 
@@ -36,13 +38,13 @@ func _init_connections() -> void:
 func _on_name_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed:
-			_data.actor_resource_selection(_resource)
+			_actor.select_resource(_resource)
 
 func _on_name_changed(new_text: String) -> void:
-	_data.actor_resource_name_change(_resource, new_text)
+	_actor.change_resource_name(_resource, new_text)
 
 func _del_pressed() -> void:
-	_data.del_actor_resource(_resource)
+	_actor.del_resource(_resource)
 
 func _update_view() -> void:
 	_name_ui.text = _resource.name

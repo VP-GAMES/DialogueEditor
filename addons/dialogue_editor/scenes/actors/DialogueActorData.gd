@@ -17,33 +17,33 @@ func set_data(data: DialogueData):
 	_texture_ui.set_data(data)
 	_init_connections()
 	_update_view()
-	_draw_preview_default()
 
 func _init_connections() -> void:
-	if not _add_ui.is_connected("pressed", self, "_add_pressed"):
-		_add_ui.connect("pressed", self, "_add_pressed")
+	if not _add_ui.is_connected("pressed", self, "_on_add_pressed"):
+		assert(_add_ui.connect("pressed", self, "_on_add_pressed") == OK)
 	if not _data.is_connected("actor_selection_changed", self, "_on_actor_selection_changed"):
-		_data.connect("actor_selection_changed", self, "_on_actor_selection_changed")
-	if not _data.is_connected("actor_resource_added", self, "_on_actor_resource_added"):
-		_data.connect("actor_resource_added", self, "_on_actor_resource_added")
-	if not _data.is_connected("actor_resource_removed", self, "_on_actor_resource_removed"):
-		_data.connect("actor_resource_removed", self, "_on_actor_resource_removed")
+		assert(_data.connect("actor_selection_changed", self, "_on_actor_selection_changed") == OK)
 
-func _add_pressed() -> void:
-	_data.add_actor_resource()
-	_draw_preview_clear()
+func _on_add_pressed() -> void:
+	_actor.add_resource()
 
-func _on_actor_selection_changed() -> void:
+func _on_actor_selection_changed(actor: DialogueActor) -> void:
+	_actor = actor
+	_init_actor_connections()
 	_update_view()
-	_draw_preview_default()
 
-func _on_actor_resource_added(resource) -> void:
+func _init_actor_connections() -> void:
+	if not _actor.is_connected("resource_added", self, "_on_resource_added"):
+		assert(_actor.connect("resource_added", self, "_on_resource_added") == OK)
+	if not _actor.is_connected("resource_removed", self, "_on_resource_removed"):
+		assert(_actor.connect("resource_removed", self, "_on_resource_removed") == OK)
+
+func _on_resource_added(resource) -> void:
 	_update_view()
 	_resource_request_focus(resource)
 
-func _on_actor_resource_removed(resource) -> void:
+func _on_resource_removed(resource) -> void:
 	_update_view()
-	_draw_preview_default()
 
 func _update_view() -> void:
 	_actor = _data.selected_actor()
@@ -67,14 +67,14 @@ func _clear_view() -> void:
 func _draw_resource(resource) -> void:
 	var resource_ui = DialogueActorDataResource.instance()
 	_resources_ui.add_child(resource_ui)
-	resource_ui.set_data(resource, _data)
+	resource_ui.set_data(resource, _actor, _data)
 
 func _resource_request_focus(resource) -> void:
 	for resource_ui in _resources_ui.get_children():
 		if resource_ui.resource() == resource:
 			resource_ui.request_focus()
 
-func _draw_preview_default() -> void:
+func _draw_preview_texture() -> void:
 	if _actor and not _actor.resources.empty():
 		_texture_ui.set_resource(_actor.resources[0])
 	else:

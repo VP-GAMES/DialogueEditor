@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://addons/dialogue_editor/icons/Save.png" type="Texture" id=1]
 [ext_resource path="res://addons/dialogue_editor/scenes/actors/DialogueActorsEditorView.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/dialogue_editor/DialogueEditor.gd" type="Script" id=4]
-[ext_resource path="res://addons/dialogue_editor/scenes/dialogues/DialogueDialoguesEditorView.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenesEditorView.tscn" type="PackedScene" id=6]
 
 [node name="Control" type="Control"]
@@ -61,13 +60,6 @@ margin_right = -4.0
 margin_bottom = -4.0
 
 [node name="Scenes" parent="VBox/Tabs" instance=ExtResource( 6 )]
-visible = false
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-
-[node name="Dialogues" parent="VBox/Tabs" instance=ExtResource( 5 )]
 visible = false
 margin_left = 4.0
 margin_top = 32.0

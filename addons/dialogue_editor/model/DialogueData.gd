@@ -3,43 +3,26 @@
 extends Resource
 class_name DialogueData
 
+# ***** EDITOR_PLUGIN *****
 var _editor: EditorPlugin
 var _undo_redo: UndoRedo
 
-const uuid_gen = preload("res://addons/dialogue_editor/uuid/uuid.gd")
-
-func editor() -> EditorPlugin:
-	return _editor
-
 func set_editor(editor: EditorPlugin) -> void:
 	_editor = editor
-	if _editor:
-		_undo_redo = _editor.get_undo_redo()
+	for actor in actors:
+		actor.set_editor(_editor)
+	_undo_redo = _editor.get_undo_redo()
 
-func undo_redo() -> UndoRedo:
-	return _undo_redo
+const UUID = preload("res://addons/dialogue_editor/uuid/uuid.gd")
+# ***** EDITOR_PLUGIN_END *****
 
 # ***** ACTORS *****
 signal actor_added(actor)
 signal actor_removed(actor)
-signal actor_selection_changed
-
-signal actor_resource_added(resource)
-signal actor_resource_removed(resource)
-signal actor_resource_selection_changed(resource)
-signal actor_resource_path_changed(resource)
+signal actor_selection_changed(actor)
 
 export(Array) var actors = []
 var _actor_selected: DialogueActor
-
-func selected_actor() -> DialogueActor:
-	if not _actor_selected and not actors.empty():
-		_actor_selected = actors[0]
-	return _actor_selected
-
-func selected_actor_set(actor: DialogueActor) -> void:
-	_actor_selected = actor
-	emit_signal("actor_selection_changed")
 
 func add_actor(sendSignal = true) -> void:
 		var actor = _create_actor()
@@ -82,7 +65,7 @@ func _next_actor_name() -> String:
 func _add_actor(actor: DialogueActor, sendSignal = true, position = actors.size()) -> void:
 	actors.insert(position, actor)
 	emit_signal("actor_added", actor)
-	selected_actor_set(actor)
+	select_actor(actor)
 
 func del_actor(actor) -> void:
 	if _undo_redo != null:
@@ -101,70 +84,16 @@ func _del_actor(actor) -> void:
 		emit_signal("actor_removed", actor)
 		_actor_selected = null
 		var actor_selected = selected_actor()
-		selected_actor_set(actor_selected)
+		select_actor(actor_selected)
 
-func add_actor_resource() -> void:
-	var resource = _create_actor_resource()
-	if _undo_redo != null:
-		_undo_redo.create_action("Add actor resource")
-		_undo_redo.add_do_method(self, "_add_actor_resource", resource)
-		_undo_redo.add_undo_method(self, "_del_actor_resource", resource)
-		_undo_redo.commit_action()
-	else:
-		_add_actor_resource(resource)
+func selected_actor() -> DialogueActor:
+	if not _actor_selected and not actors.empty():
+		_actor_selected = actors[0]
+	return _actor_selected
 
-func _create_actor_resource():
-	return {"uuid": uuid_gen.v4(), "name": "", "path": ""}
-
-func _add_actor_resource(resource, position = _actor_selected.resources.size()) -> void:
-	_actor_selected.resources.insert(position, resource)
-	emit_signal("actor_resource_added", resource)
-
-func del_actor_resource(resource) -> void:
-	if _undo_redo != null:
-		var index = _actor_selected.resources.find(resource)
-		_undo_redo.create_action("Del actor resource")
-		_undo_redo.add_do_method(self, "_del_actor_resource", resource)
-		_undo_redo.add_undo_method(self, "_add_actor_resource", resource, index)
-		_undo_redo.commit_action()
-	else:
-		_del_actor_resource(resource)
-
-func _del_actor_resource(resource) -> void:
-	var index = _actor_selected.resources.find(resource)
-	if index > -1:
-		_actor_selected.resources.remove(index)
-		emit_signal("actor_resource_removed", resource)
-
-func actor_resource_name_change(resource: Dictionary, name: String) -> void:
-	var old_name = resource.name
-	if _undo_redo != null:
-		_undo_redo.create_action("Change actor resource name")
-		_undo_redo.add_do_method(self, "_actor_resource_name_change", resource, name)
-		_undo_redo.add_undo_method(self, "_actor_resource_name_change", resource, old_name)
-		_undo_redo.commit_action()
-	else:
-		_actor_resource_name_change(resource, name)
-
-func _actor_resource_name_change(resource: Dictionary, name: String) -> void:
-	resource.name = name
-
-func actor_resource_path_change(resource: Dictionary, path: String) -> void:
-	var old_path = resource.path
-	if _undo_redo != null:
-		_undo_redo.create_action("Change actor resource path")
-		_undo_redo.add_do_method(self, "_actor_resource_path_change", resource, path)
-		_undo_redo.add_undo_method(self, "_actor_resource_path_change", resource, old_path)
-		_undo_redo.commit_action()
-	else:
-		_actor_resource_path_change(resource, path)
-
-func _actor_resource_path_change(resource: Dictionary, path: String) -> void:
-	resource.path = path
-	emit_signal("actor_resource_path_changed", resource)
-
-func actor_resource_selection(resource) -> void:
-	emit_signal("actor_resource_selection_changed", resource)
+func select_actor(actor: DialogueActor) -> void:
+	_actor_selected = actor
+	emit_signal("actor_selection_changed", _actor_selected)
 
 # ***** SCENES *****
 signal scene_added(scene)
@@ -177,8 +106,8 @@ signal scene_resource_path_changed(resource)
 signal scene_preview_changed
 
 export(Array) var scenes = [
-	{"uuid": uuid_gen.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorLeft.tscn"},
-	{"uuid": uuid_gen.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorRight.tscn"}
+	{"uuid": UUID.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorLeft.tscn"},
+	{"uuid": UUID.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorRight.tscn"}
 ]
 var _scene_selected
 
@@ -211,7 +140,7 @@ func _scene_exists(resource: String) -> bool:
 	return false 
 
 func _create_scene(resource):
-	return {"uuid": uuid_gen.v4(), "resource": resource}
+	return {"uuid": UUID.v4(), "resource": resource}
 
 func _add_scene(scene, sendSignal = true, position = scenes.size()) -> void:
 	scenes.insert(position, scene)
@@ -329,14 +258,15 @@ func init_data() -> void:
 			actors = resource.actors
 		if resource.scenes and not resource.scenes.empty():
 			scenes = resource.scenes
-		if resource.dialogues and not resource.dialogues.empty():
-			dialogues = resource.dialogues
+#		if resource.dialogues and not resource.dialogues.empty():
+#			dialogues = resource.dialogues
 
 func save() -> void:
-	print(dialogues[0].nodes)
 	ResourceSaver.save(PATH_TO_SAVE, self)
 
 # ***** EDITOR SETTINGS *****
+const BACKGROUND_COLOR_SELECTED = Color("#868991")
+
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
 const SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT = 215
@@ -417,9 +347,11 @@ func resource_exists(resource) -> bool:
 	return file.file_exists(resource.path)
 
 func resize_texture(t: Texture, size: Vector2):
-	var image = t.get_data()
-	if size.x > 0 && size.y > 0:
-		image.resize(size.x, size.y)
-	var itex = ImageTexture.new()
-	itex.create_from_image(image)
+	var itex = t
+	if itex:
+		var texture = t.get_data()
+		if size.x > 0 && size.y > 0:
+			texture.resize(size.x, size.y)
+		itex = ImageTexture.new()
+		itex.create_from_image(texture)
 	return itex

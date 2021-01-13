@@ -6,14 +6,16 @@ tool
 extends LineEdit
 
 var _resource: Dictionary
+var _actor: DialogueActor
 var _data: DialogueData
 
 var _path_ui_style_resource: StyleBoxFlat
 
 const DialogueActorDataResourceDialogFile = preload("res://addons/dialogue_editor/scenes/actors/DialogueActorDataResourceDialogFile.tscn")
 
-func set_data(resource: Dictionary, data: DialogueData) -> void:
+func set_data(resource: Dictionary, actor: DialogueActor, data: DialogueData) -> void:
 	_resource = resource
+	_actor = actor
 	_data = data
 	_init_styles()
 	_init_connections()
@@ -24,8 +26,8 @@ func _init_styles() -> void:
 	_path_ui_style_resource.set_bg_color(Color("#192e59"))
 
 func _init_connections() -> void:
-	if not _data.is_connected("actor_resource_path_changed", self, "_on_actor_resource_path_changed"):
-		_data.connect("actor_resource_path_changed", self, "_on_actor_resource_path_changed")
+	if not _actor.is_connected("resource_path_changed", self, "_on_resource_path_changed"):
+		_actor.connect("resource_path_changed", self, "_on_resource_path_changed")
 	if not is_connected("focus_entered", self, "_on_focus_entered"):
 		connect("focus_entered", self, "_on_focus_entered")
 	if not is_connected("focus_exited", self, "_on_focus_exited"):
@@ -35,7 +37,7 @@ func _init_connections() -> void:
 	if not is_connected("gui_input", self, "_on_gui_input"):
 		connect("gui_input", self, "_on_gui_input")
 
-func _on_actor_resource_path_changed(resource) -> void:
+func _on_resource_path_changed(resource) -> void:
 	if _resource == resource:
 		_draw_view()
 
@@ -53,7 +55,7 @@ func _input(event) -> void:
 
 func _on_focus_entered() -> void:
 	text = _resource.path
-	_data.actor_resource_selection(_resource)
+	_actor.select_resource(_resource)
 
 func _on_focus_exited() -> void:
 	text = _data.filename(_resource.path)

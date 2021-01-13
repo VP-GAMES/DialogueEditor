@@ -5,10 +5,12 @@ tool
 extends TextureRect
 
 var _resource: Dictionary
+var _actor: DialogueActor
 var _data: DialogueData
 
-func set_data(resource: Dictionary, data: DialogueData) -> void:
+func set_data(resource: Dictionary, actor: DialogueActor, data: DialogueData) -> void:
 	_resource = resource
+	_actor = actor
 	_data = data
 
 func can_drop_data(position, data) -> bool:
@@ -24,4 +26,4 @@ func drop_data(position, data) -> void:
 	_resource_value_changed(resource_value)
 
 func _resource_value_changed(resource_value) -> void:
-	_data.actor_resource_path_change(_resource, resource_value)
+	_actor.change_resource_path(_resource, resource_value)
