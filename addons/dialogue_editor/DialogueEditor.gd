@@ -10,7 +10,7 @@ onready var _save_ui = $VBox/Margin/HBox/Save as Button
 onready var _tabs_ui = $VBox/Tabs as TabContainer
 onready var _actors_ui = $VBox/Tabs/Actors as VBoxContainer
 onready var _scenes_ui = $VBox/Tabs/Scenes as HBoxContainer
-#onready var _dialogues_ui = $VBox/Tabs/Dialogues
+onready var _dialogues_ui = $VBox/Tabs/Dialogues as HBoxContainer
 
 func set_editor(editor: EditorPlugin) -> void:
 	_editor = editor
@@ -34,7 +34,7 @@ func _on_tab_changed(tab: int) -> void:
 func _data_to_childs() -> void:
 	_actors_ui.set_data(_data)
 	_scenes_ui.set_data(_data)
-	#_dialogues_ui.set_data(_data)
+	_dialogues_ui.set_data(_data)
 
 func save_data() -> void:
 	_data.save()

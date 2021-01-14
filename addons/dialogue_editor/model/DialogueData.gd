@@ -171,23 +171,14 @@ func emit_signal_scene_preview_data_changed(scene) -> void:
 	emit_signal("scene_preview_data_changed", scene)
 
 # ***** DIALOGUES *****
-signal dialogue_added(actor)
-signal dialogue_removed(actor)
-signal dialogue_selection_changed
+signal dialogue_added(dialogue)
+signal dialogue_removed(dialogue)
+signal dialogue_selection_changed(dialogue)
 signal dialogue_view_selection_changed
 
 export(Array) var dialogues = []
 
 var _dialogue_selected: DialogueDialogue
-
-func selected_dialogue() -> DialogueDialogue:
-	if not _dialogue_selected and not dialogues.empty():
-		_dialogue_selected = dialogues[0]
-	return _dialogue_selected
-
-func selected_dialogue_set(dialogue: DialogueDialogue) -> void:
-	_dialogue_selected = dialogue
-	emit_signal("dialogue_selection_changed")
 
 func add_dialogue(sendSignal = true) -> void:
 		var dialogue = _create_dialogue()
@@ -229,7 +220,7 @@ func _next_dialogue_name() -> String:
 func _add_dialogue(dialogue: DialogueDialogue, sendSignal = true, position = dialogues.size()) -> void:
 	dialogues.insert(position, dialogue)
 	emit_signal("dialogue_added", dialogue)
-	selected_dialogue_set(dialogue)
+	select_dialogue(dialogue)
 
 func del_dialogue(dialogue) -> void:
 	if _undo_redo != null:
@@ -248,7 +239,16 @@ func _del_dialogue(dialogue) -> void:
 		emit_signal("dialogue_removed", dialogue)
 		_dialogue_selected = null
 		var dialogue_selected = selected_dialogue()
-		selected_dialogue_set(dialogue_selected)
+		select_dialogue(dialogue_selected)
+
+func selected_dialogue() -> DialogueDialogue:
+	if not _dialogue_selected and not dialogues.empty():
+		_dialogue_selected = dialogues[0]
+	return _dialogue_selected
+
+func select_dialogue(dialogue: DialogueDialogue) -> void:
+	_dialogue_selected = dialogue
+	emit_signal("dialogue_selection_changed")
 
 # ***** LOAD SAVE *****
 func init_data() -> void:
