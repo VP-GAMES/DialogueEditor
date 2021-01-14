@@ -29,11 +29,11 @@ func request_focus() -> void:
 
 func _init_connections() -> void:
 	if not _name_ui.is_connected("gui_input", self, "_on_name_gui_input"):
-		_name_ui.connect("gui_input", self, "_on_name_gui_input")
+		assert(_name_ui.connect("gui_input", self, "_on_name_gui_input") == OK)
 	if not _name_ui.is_connected("text_changed", self, "_on_name_changed"):
-		_name_ui.connect("text_changed", self, "_on_name_changed")
+		assert(_name_ui.connect("text_changed", self, "_on_name_changed") == OK)
 	if not _del_ui.is_connected("pressed", self, "_del_pressed"):
-		_del_ui.connect("pressed", self, "_del_pressed")
+		assert(_del_ui.connect("pressed", self, "_del_pressed") == OK)
 
 func _on_name_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

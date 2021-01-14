@@ -86,7 +86,7 @@ func _on_close_pressed() -> void:
 	hide()
 
 func _on_hide() -> void:
-	_data.emit_scene_preview_changed()
+	_data.emit_signal_scene_preview_data_changed(_scene)
 
 func _draw_view() -> void:
 	_actor_ui_fill_and_draw()
@@ -142,7 +142,7 @@ func _draw_texture() -> void:
 	if _is_scene_has_texture_uuid():
 		var texture_uuid = _scene["preview"]["texture_uuid"]
 		var actor = _scene["preview"]["actor"]
-		var texture = actor.texture_by_uuid(texture_uuid)
+		var texture = actor.resource_by_uuid(texture_uuid)
 		if texture:
 			_texture_ui.texture = texture
 

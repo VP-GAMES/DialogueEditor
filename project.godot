@@ -49,7 +49,7 @@ config/icon="res://icon.png"
 
 [dialogue_editor]
 
-actors_split_offset=215
+actors_split_offset=213
 scenes_split_offset=245
 dialogues_editor_type="NODES"
 

@@ -27,15 +27,15 @@ func _init_styles() -> void:
 
 func _init_connections() -> void:
 	if not _actor.is_connected("resource_path_changed", self, "_on_resource_path_changed"):
-		_actor.connect("resource_path_changed", self, "_on_resource_path_changed")
+		assert(_actor.connect("resource_path_changed", self, "_on_resource_path_changed") == OK)
 	if not is_connected("focus_entered", self, "_on_focus_entered"):
-		connect("focus_entered", self, "_on_focus_entered")
+		assert(connect("focus_entered", self, "_on_focus_entered") == OK)
 	if not is_connected("focus_exited", self, "_on_focus_exited"):
-		connect("focus_exited", self, "_on_focus_exited")
+		assert(connect("focus_exited", self, "_on_focus_exited") == OK)
 	if not is_connected("text_changed", self, "_path_value_changed"):
-		connect("text_changed", self, "_path_value_changed")
+		assert(connect("text_changed", self, "_path_value_changed") == OK)
 	if not is_connected("gui_input", self, "_on_gui_input"):
-		connect("gui_input", self, "_on_gui_input")
+		assert(connect("gui_input", self, "_on_gui_input") == OK)
 
 func _on_resource_path_changed(resource) -> void:
 	if _resource == resource:
@@ -76,8 +76,8 @@ func _on_gui_input(event: InputEvent) -> void:
 					file_dialog.add_filter("*." + extension)
 				var root = get_tree().get_root()
 				root.add_child(file_dialog)
-				file_dialog.connect("file_selected", self, "_path_value_changed")
-				file_dialog.connect("popup_hide", self, "_on_popup_hide", [root, file_dialog])
+				assert(file_dialog.connect("file_selected", self, "_path_value_changed") == OK)
+				assert(file_dialog.connect("popup_hide", self, "_on_popup_hide", [root, file_dialog]) == OK)
 				file_dialog.popup_centered()
 
 func _on_popup_hide(root, dialog) -> void:

@@ -57,6 +57,7 @@ func _draw_view() -> void:
 	_add_ui.disabled = false
 	for resource in _actor.resources:
 		_draw_resource(resource)
+		_draw_preview_texture()
 
 func _clear_view() -> void:
 	_add_ui.disabled = true

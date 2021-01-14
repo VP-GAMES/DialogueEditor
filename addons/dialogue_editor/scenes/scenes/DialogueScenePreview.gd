@@ -12,49 +12,56 @@ onready var _preview_ui = $Margin/Preview
 
 func set_data(data: DialogueData) -> void:
 	_data = data
+	_scene = _data.selected_scene()
 	_init_connections()
-
-signal scene_added(scene)
-signal scene_removed(scene)
-signal scene_selection_changed
-
-func _init_connections() -> void:
-	if not _data.is_connected("scene_selection_changed", self, "_on_scene_need_update_view"):
-		_data.connect("scene_selection_changed", self, "_on_scene_need_update_view")
-	if not _data.is_connected("scene_added", self, "_on_scene_action"):
-		_data.connect("scene_added", self, "_on_scene_action")
-	if not _data.is_connected("scene_removed", self, "_on_scene_action"):
-		_data.connect("scene_removed", self, "_on_scene_action")
-	if not is_connected("resized", self, "_on_scene_need_update_view"):
-		connect("resized", self, "_on_scene_need_update_view")
-	if not _data.is_connected("scene_preview_changed", self, "_on_scene_need_update_view"):
-		_data.connect("scene_preview_changed", self, "_on_scene_need_update_view")
-
-func _on_scene_need_update_view():
 	_update_view()
 
-func _on_scene_action(scene) -> void:
+func _init_connections() -> void:
+	if not _data.is_connected("scene_selection_changed", self, "_on_scene_selection_changed"):
+		_data.connect("scene_selection_changed", self, "_on_scene_selection_changed")
+	if not _data.is_connected("scene_preview_data_changed", self, "_on_scene_preview_data_changed"):
+		_data.connect("scene_preview_data_changed", self, "_on_scene_preview_data_changed")
+	if not _data.is_connected("scene_added", self, "_on_scene_added"):
+		_data.connect("scene_added", self, "_on_scene_added")
+	if not _data.is_connected("scene_removed", self, "_on_scene_removed"):
+		_data.connect("scene_removed", self, "_on_scene_removed")
+	if not is_connected("resized", self, "_on_resized"):
+		connect("resized", self, "_on_resized")
+
+func _on_scene_selection_changed(scene) -> void:
+	_scene = scene
+	_update_view()
+
+func _on_scene_preview_data_changed(scene) -> void:
+	if _scene == scene:
+		_update_view()
+
+func _on_scene_added(scene) -> void:
+	_update_view()
+
+func _on_scene_removed(scene) -> void:
+	_update_view()
+
+func _on_resized() -> void:
 	_update_view()
 
 func _update_view() -> void:
 	_clear_view()
-	if _data:
-		_scene = _data.selected_scene()
-		if _scene:
-			_draw_view()
-			_draw_sentence()
+	_draw_view()
+	_draw_sentence()
 
 func _draw_view() -> void:
-	var LoadedScene = load(_scene.resource)
-	_loaded_scene = LoadedScene.instance()
-	_add_reference_rect()
-	var display_size = _data.setting_display_size()
-	var default_size = rect_size
-	var scale = min(default_size.x / display_size.x, default_size.y / display_size.y)
-	_loaded_scene.set_custom_minimum_size(display_size)
-	if scale < 1:
-		_loaded_scene.set_scale(Vector2(scale, scale))
-	_preview_ui.add_child(_loaded_scene)
+	if _scene:
+		var LoadedScene = load(_scene.resource)
+		_loaded_scene = LoadedScene.instance()
+		_add_reference_rect()
+		var display_size = _data.setting_display_size()
+		var default_size = rect_size
+		var scale = min(default_size.x / display_size.x, default_size.y / display_size.y)
+		_loaded_scene.set_custom_minimum_size(display_size)
+		if scale < 1:
+			_loaded_scene.set_scale(Vector2(scale, scale))
+		_preview_ui.add_child(_loaded_scene)
 
 func _add_reference_rect() -> void:
 	var ref_rect = ReferenceRect.new()

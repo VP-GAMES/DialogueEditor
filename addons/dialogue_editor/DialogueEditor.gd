@@ -6,9 +6,10 @@ extends Control
 var _editor: EditorPlugin
 var _data:= DialogueData.new()
 
-onready var _save_ui = $VBox/Margin/HBox/Save
-onready var _actors_ui = $VBox/Tabs/Actors
-onready var _scenes_ui = $VBox/Tabs/Scenes
+onready var _save_ui = $VBox/Margin/HBox/Save as Button
+onready var _tabs_ui = $VBox/Tabs as TabContainer
+onready var _actors_ui = $VBox/Tabs/Actors as VBoxContainer
+onready var _scenes_ui = $VBox/Tabs/Scenes as HBoxContainer
 #onready var _dialogues_ui = $VBox/Tabs/Dialogues
 
 func set_editor(editor: EditorPlugin) -> void:
@@ -20,10 +21,15 @@ func set_editor(editor: EditorPlugin) -> void:
 
 func _init_connections() -> void:
 	if not _save_ui.is_connected("pressed", self, "save_data"):
-		_save_ui.connect("pressed", self, "save_data")
+		assert(_save_ui.connect("pressed", self, "save_data") == OK)
+	if not _tabs_ui.is_connected("tab_changed", self, "_on_tab_changed"):
+		assert(_tabs_ui.connect("tab_changed", self, "_on_tab_changed") == OK)
 
 func _load_data() -> void:
 	_data.init_data()
+
+func _on_tab_changed(tab: int) -> void:
+	_data_to_childs()
 
 func _data_to_childs() -> void:
 	_actors_ui.set_data(_data)

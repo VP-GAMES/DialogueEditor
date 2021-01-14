@@ -7,6 +7,9 @@ class_name DialogueData
 var _editor: EditorPlugin
 var _undo_redo: UndoRedo
 
+func editor() -> EditorPlugin:
+	return _editor
+
 func set_editor(editor: EditorPlugin) -> void:
 	_editor = editor
 	for actor in actors:
@@ -36,6 +39,7 @@ func add_actor(sendSignal = true) -> void:
 
 func _create_actor() -> DialogueActor:
 	var actor = DialogueActor.new()
+	actor.uuid = UUID.v4()
 	actor.name = _next_actor_name()
 	actor.resources = []
 	return actor
@@ -98,27 +102,15 @@ func select_actor(actor: DialogueActor) -> void:
 # ***** SCENES *****
 signal scene_added(scene)
 signal scene_removed(scene)
-signal scene_selection_changed
-
-signal scene_resource_selection_changed(resource)
-signal scene_resource_path_changed(resource)
-
-signal scene_preview_changed
+signal scene_selection_changed(scene)
+signal scene_preview_data_changed(scene)
 
 export(Array) var scenes = [
 	{"uuid": UUID.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorLeft.tscn"},
+	{"uuid": UUID.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorCenter.tscn"},
 	{"uuid": UUID.v4(), "resource": "res://addons/dialogue_editor/default/DialogueActorRight.tscn"}
 ]
 var _scene_selected
-
-func selected_scene():
-	if not _scene_selected and not scenes.empty():
-		_scene_selected = scenes[0]
-	return _scene_selected
-
-func selected_scene_set(scene) -> void:
-	_scene_selected = scene
-	emit_signal("scene_selection_changed")
 
 func add_scene(resource: String, sendSignal = true) -> void:
 	if _scene_exists(resource):
@@ -145,7 +137,7 @@ func _create_scene(resource):
 func _add_scene(scene, sendSignal = true, position = scenes.size()) -> void:
 	scenes.insert(position, scene)
 	emit_signal("scene_added", scene)
-	selected_scene_set(scene)
+	select_scene(scene)
 
 func del_scene(scene) -> void:
 	if _undo_redo != null:
@@ -164,10 +156,19 @@ func _del_scene(scene) -> void:
 		emit_signal("scene_removed", scene)
 		_scene_selected = null
 		var scene_selected = selected_scene()
-		selected_scene_set(scene_selected)
+		select_scene(scene_selected)
 
-func emit_scene_preview_changed() -> void:
-	emit_signal("scene_preview_changed")
+func selected_scene():
+	if not _scene_selected and not scenes.empty():
+		_scene_selected = scenes[0]
+	return _scene_selected
+
+func select_scene(scene) -> void:
+	_scene_selected = scene
+	emit_signal("scene_selection_changed", _scene_selected)
+
+func emit_signal_scene_preview_data_changed(scene) -> void:
+	emit_signal("scene_preview_data_changed", scene)
 
 # ***** DIALOGUES *****
 signal dialogue_added(actor)

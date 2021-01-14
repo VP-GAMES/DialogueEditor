@@ -22,6 +22,7 @@ signal resource_name_changed(resource)
 signal resource_path_changed(resource)
 signal resource_selection_changed(resource)
 
+export (String) var uuid
 export (String) var name = ""
 export (Array) var resources = [] # List of Resources
 var _resource_selected = null

@@ -80,9 +80,13 @@ func _draw_view() -> void:
 	_draw_texture()
 
 func _draw_texture() -> void:
-	var uuid = _actor.default_uuid()
-	var texture = _actor.resource_by_uuid(uuid)
-	texture = _data.resize_texture(texture, Vector2(16, 16))
+	var texture
+	if _actor and not _actor.resources.empty():
+		var uuid = _actor.default_uuid()
+		texture = _actor.resource_by_uuid(uuid)
+		texture = _data.resize_texture(texture, Vector2(16, 16))
+	else:
+		texture = load("res://addons/dialogue_editor/icons/Actor.png")
 	_texture_ui.texture = texture
 
 func _draw_style() -> void:
