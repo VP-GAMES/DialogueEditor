@@ -248,7 +248,7 @@ func selected_dialogue() -> DialogueDialogue:
 
 func select_dialogue(dialogue: DialogueDialogue) -> void:
 	_dialogue_selected = dialogue
-	emit_signal("dialogue_selection_changed")
+	emit_signal("dialogue_selection_changed", _dialogue_selected)
 
 # ***** LOAD SAVE *****
 func init_data() -> void:

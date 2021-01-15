@@ -27,12 +27,12 @@ func _init_styles() -> void:
 	_ui_style_selected.set_bg_color(Color("#868991"))
 
 func _init_connections() -> void:
-	if not _data.is_connected("dialogue_added", self, "_on_dialogue_action"):
-		_data.connect("dialogue_added", self, "_on_dialogue_action")
-	if not _data.is_connected("dialogue_removed", self, "_on_dialogue_action"):
-		_data.connect("dialogue_removed", self, "_on_dialogue_action")
-	if not _data.is_connected("dialogue_selection_changed", self, "_draw_style"):
-		_data.connect("dialogue_selection_changed", self, "_draw_style")
+	if not _data.is_connected("dialogue_added", self, "_on_dialogue_added"):
+		assert(_data.connect("dialogue_added", self, "_on_dialogue_added") == OK)
+	if not _data.is_connected("dialogue_removed", self, "_on_dialogue_removed"):
+		assert(_data.connect("dialogue_removed", self, "_on_dialogue_removed") == OK)
+	if not _data.is_connected("dialogue_selection_changed", self, "_on_dialogue_selection_changed"):
+		assert(_data.connect("dialogue_selection_changed", self, "_on_dialogue_selection_changed") == OK)
 	if not _name_ui.is_connected("gui_input", self, "_on_gui_input"):
 		_name_ui.connect("gui_input", self, "_on_gui_input")
 	if not _name_ui.is_connected("focus_exited", self, "_on_focus_exited"):
@@ -42,7 +42,13 @@ func _init_connections() -> void:
 	if not _del_ui.is_connected("pressed", self, "_del_pressed"):
 		_del_ui.connect("pressed", self, "_del_pressed")
 
-func _on_dialogue_action(dialogue: DialogueDialogue) -> void:
+func _on_dialogue_added(dialogue: DialogueDialogue) -> void:
+	_draw_style()
+
+func _on_dialogue_removed(dialogue: DialogueDialogue) -> void:
+	_draw_style()
+
+func _on_dialogue_selection_changed(dialogue: DialogueDialogue) -> void:
 	_draw_style()
 
 func _on_focus_exited() -> void:
@@ -53,7 +59,7 @@ func _on_gui_input(event: InputEvent) -> void:
 		if event.button_index == BUTTON_LEFT:
 			if event.pressed:
 				if not _data.selected_dialogue() == _dialogue:
-					_data.selected_dialogue_set(_dialogue)
+					_data.select_dialogue(_dialogue)
 					_del_ui.grab_focus()
 				else:
 					_name_ui.set("custom_styles/normal", null)

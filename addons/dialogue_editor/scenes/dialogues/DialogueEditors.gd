@@ -25,7 +25,8 @@ func _on_dialogue_view_selection_changed(dialogue: DialogueDialogue) -> void:
 	_dialogue = dialogue
 	_update_view()
 
-func _on_dialogue_selection_changed() -> void:
+func _on_dialogue_selection_changed(dialogue: DialogueDialogue) -> void:
+	_dialogue = dialogue
 	_update_view()
 
 func _update_view() -> void:

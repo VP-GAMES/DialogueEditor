@@ -9,8 +9,7 @@ enum { START, END, SENTENCE }
 export (String) var uuid
 export (int) var type
 export (String) var name
-export (String) var filename
-export (Vector2) var editor_position
+export (Vector2) var position
 export (Resource) var actor # DialogueActor
 export (String) var texture_uuid
 export (Array) var subnodes = [] # {"text": "", "event": null, "node": null}

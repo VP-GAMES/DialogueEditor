@@ -18,6 +18,9 @@ margin_bottom = 40.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 right_disconnects = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Popup" type="PopupMenu" parent="."]
 margin_right = 20.0

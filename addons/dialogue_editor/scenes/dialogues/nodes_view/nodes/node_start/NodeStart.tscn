@@ -2,7 +2,6 @@
 
 [ext_resource path="res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_start/NodeStart.gd" type="Script" id=1]
 
-
 [node name="NodeStart" type="GraphNode"]
 margin_right = 67.0
 margin_bottom = 55.0
