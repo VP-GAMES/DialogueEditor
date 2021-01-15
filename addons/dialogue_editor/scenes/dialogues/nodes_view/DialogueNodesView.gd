@@ -8,13 +8,14 @@ var _dialogue: DialogueDialogue
 
 var _mouse_position: Vector2
 var _mouse_over_popup = false
-
 var _selected_node: Node
 
 onready var _graph_ui = $Graph as GraphEdit
 onready var _popup_ui = $Popup as PopupMenu
 
 const NodeStart = preload("res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_start/NodeStart.tscn")
+const NodeSentence = preload("res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_sentence/NodeSentence.tscn")
+const NodeEnd = preload("res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_end/NodeEnd.tscn")
 
 func set_data(dialogue: DialogueDialogue, data: DialogueData) -> void:
 	if dialogue:
@@ -26,14 +27,20 @@ func set_data(dialogue: DialogueDialogue, data: DialogueData) -> void:
 func _init_connections() -> void:
 	if not _dialogue.is_connected("node_added", self, "_on_node_added"):
 		assert(_dialogue.connect("node_added", self, "_on_node_added") == OK)
+	if not _dialogue.is_connected("nodes_added", self, "_on_nodes_added"):
+		assert(_dialogue.connect("nodes_added", self, "_on_nodes_added") == OK)
 	if not _dialogue.is_connected("node_removed", self, "_on_node_removed"):
 		assert(_dialogue.connect("node_removed", self, "_on_node_removed") == OK)
+	if not _dialogue.is_connected("nodes_removed", self, "_on_nodes_removed"):
+		assert(_dialogue.connect("nodes_removed", self, "_on_nodes_removed") == OK)
 	if not _popup_ui.is_connected("mouse_entered", self, "_on_mouse_popup_entered"):
 		assert(_popup_ui.connect("mouse_entered", self, "_on_mouse_popup_entered") == OK)
 	if not _popup_ui.is_connected("mouse_exited", self, "_on_mouse_popup_exited"):
 		assert(_popup_ui.connect("mouse_exited", self, "_on_mouse_popup_exited") == OK)
 	if not _graph_ui.is_connected("scroll_offset_changed", self, "_on_scroll_offset_changed"):
 		assert(_graph_ui.connect("scroll_offset_changed", self, "_on_scroll_offset_changed") == OK)
+	if not _graph_ui.is_connected("node_selected", self, "_on_node_selected"):
+		assert(_graph_ui.connect("node_selected", self, "_on_node_selected") == OK)
 	if not _graph_ui.is_connected("gui_input", self, "_on_gui_input"):
 		assert(_graph_ui.connect("gui_input", self, "_on_gui_input") == OK)
 	if not _popup_ui.is_connected("id_pressed", self, "_on_popup_item_selected"):
@@ -42,7 +49,13 @@ func _init_connections() -> void:
 func _on_node_added(node: DialogueNode) -> void:
 	_update_view()
 
+func _on_nodes_added(nodes: Array) -> void:
+	_update_view()
+
 func _on_node_removed(node: DialogueNode) -> void:
+	_update_view()
+
+func _on_nodes_removed(nodes: Array) -> void:
 	_update_view()
 
 func _on_mouse_popup_entered() -> void:
@@ -53,6 +66,9 @@ func _on_mouse_popup_exited() -> void:
 
 func _on_scroll_offset_changed(ofs: Vector2) -> void:
 	_dialogue.scroll_offset = ofs
+
+func _on_node_selected(node: Node) -> void:
+	_selected_node = node
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -69,9 +85,9 @@ func _on_gui_input(event: InputEvent) -> void:
 			elif event.get_button_index() == BUTTON_LEFT and event.pressed:
 				if _popup_ui.visible and not _mouse_over_popup:
 					_popup_ui.hide()
-#		if event is InputEventKey and _selected_node:
-#			if event.scancode == KEY_DELETE and  event.pressed:
-#				_delete_selected_node()
+		if event is InputEventKey and _selected_node:
+			if event.scancode == KEY_DELETE and  event.pressed:
+				_dialogue.del_node(_selected_node.nodedata())
 
 func _show_popup() -> void:
 	_build_popup()
@@ -110,12 +126,12 @@ func _on_popup_item_selected(id: int):
 	var position = _calc_node_position()
 	if id == 1:
 		_dialogue.add_node_start(position)
-#	elif id == 2:
-#		_node_sentence_add()
-#	elif id == 3:
-#		_node_end_add()
-#	elif id == 4:
-#		_delete_nodes()
+	elif id == 2:
+		_dialogue.add_node_sentence(position)
+	elif id == 3:
+		_dialogue.add_node_end(position)
+	elif id == 4:
+		_dialogue.del_nodes()
 
 func _calc_node_position() -> Vector2:
 	var offset_x = (_graph_ui.scroll_offset.x + _mouse_position.x) / _graph_ui.get_zoom()
@@ -136,8 +152,28 @@ func _clear_view() -> void:
 func _draw_view() -> void:
 	_graph_ui.scroll_offset = _dialogue.scroll_offset
 	for node in _dialogue.nodes:
-		print(node)
-		if node.type == DialogueNode.START:
-			var node_start = NodeStart.instance()
-			node_start.set_nodedata(node)
-			_graph_ui.add_child(node_start)
+		_draw_node_by_type(node)
+
+func _draw_node_by_type(node: DialogueNode) -> void:
+	match node.type:
+		DialogueNode.START:
+			_draw_node_start(node)
+		DialogueNode.SENTENCE:
+			_draw_node_sentence(node)
+		DialogueNode.END:
+			_draw_node_end(node)
+
+func _draw_node_start(node: DialogueNode) -> void:
+	var node_start = NodeStart.instance()
+	node_start.set_nodedata(node)
+	_graph_ui.add_child(node_start)
+
+func _draw_node_sentence(node: DialogueNode) -> void:
+	var node_sentence = NodeSentence.instance()
+	node_sentence.set_nodedata(node)
+	_graph_ui.add_child(node_sentence)
+
+func _draw_node_end(node: DialogueNode) -> void:
+	var node_end = NodeEnd.instance()
+	node_end.set_nodedata(node)
+	_graph_ui.add_child(node_end)

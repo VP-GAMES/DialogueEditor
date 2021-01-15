@@ -3,6 +3,15 @@
 tool
 extends GraphNode
 
+var _nodedata
+
+func set_nodedata(nodedata: DialogueNode) -> void:
+	_nodedata = nodedata
+	offset = _nodedata.position
+
+func nodedata() -> DialogueNode:
+	return _nodedata
+
 func global_position() -> Vector2:
 	return _to_global_position(offset)
 

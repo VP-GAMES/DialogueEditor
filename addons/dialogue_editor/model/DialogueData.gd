@@ -14,6 +14,8 @@ func set_editor(editor: EditorPlugin) -> void:
 	_editor = editor
 	for actor in actors:
 		actor.set_editor(_editor)
+	for dialogue in dialogues:
+		dialogue.set_editor(_editor)
 	_undo_redo = _editor.get_undo_redo()
 
 const UUID = preload("res://addons/dialogue_editor/uuid/uuid.gd")
@@ -259,8 +261,8 @@ func init_data() -> void:
 			actors = resource.actors
 		if resource.scenes and not resource.scenes.empty():
 			scenes = resource.scenes
-#		if resource.dialogues and not resource.dialogues.empty():
-#			dialogues = resource.dialogues
+		if resource.dialogues and not resource.dialogues.empty():
+			dialogues = resource.dialogues
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)
