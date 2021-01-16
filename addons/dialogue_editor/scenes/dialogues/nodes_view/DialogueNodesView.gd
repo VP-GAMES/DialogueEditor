@@ -165,15 +165,16 @@ func _draw_node_by_type(node: DialogueNode) -> void:
 
 func _draw_node_start(node: DialogueNode) -> void:
 	var node_start = NodeStart.instance()
-	node_start.set_nodedata(node)
-	_graph_ui.add_child(node_start)
+	_draw_node(node, node_start)
 
 func _draw_node_sentence(node: DialogueNode) -> void:
 	var node_sentence = NodeSentence.instance()
-	node_sentence.set_nodedata(node)
-	_graph_ui.add_child(node_sentence)
+	_draw_node(node, node_sentence)
 
 func _draw_node_end(node: DialogueNode) -> void:
 	var node_end = NodeEnd.instance()
-	node_end.set_nodedata(node)
-	_graph_ui.add_child(node_end)
+	_draw_node(node, node_end)
+
+func _draw_node(node: DialogueNode, node_ui) -> void:
+	_graph_ui.add_child(node_ui)
+	node_ui.set_data(node, _dialogue, _data)

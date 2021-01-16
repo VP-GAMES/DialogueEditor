@@ -3,27 +3,131 @@
 tool
 extends "res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/NodeBase.gd"
 
-var uuid
+var _data: DialogueData
+var _node: DialogueNode
+var _dialogue: DialogueDialogue
 var _group = ButtonGroup.new()
-var Sentence = load("res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_sentence/PanelSentence.tscn")
 
 onready var _add_ui = $PanelActor/HBox/Add as Button
+onready var _actors_ui = $PanelActor/HBox/Actor as OptionButton
+onready var _view_ui = $PanelTexture/HBoxTexture/View as Button
+onready var _textures_ui = $PanelTexture/HBoxTexture/Texture as OptionButton
+onready var _texture_ui = $Center/Texture
 
-func _ready() -> void:
-	_group.resource_local_to_scene = false
-	set_slot(0, true, 0, Color.white, false, 0, Color.white)
-	_sentence_add()
+const PanelSentence = preload("res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_sentence/PanelSentence.tscn")
+
+func node() -> DialogueNode:
+	return _node
+
+func set_data(node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData) -> void:
+	_node = node
+	_dialogue = dialogue
+	_data = data
+	_check_ui()
 	_init_connections()
+	_update_view()
+
+func _check_ui() -> void:
+	offset = _node.position
+	_view_ui.set_pressed(_node.texture_view)
 
 func _init_connections() -> void:
-	_add_ui.connect("pressed", self, "_sentence_add")
-	connect("resize_request", self, "_on_resize_request")
+	if not _actors_ui.is_connected("item_selected", self, "_on_item_actor_selected"):
+		assert(_actors_ui.connect("item_selected", self, "_on_item_actor_selected") == OK)
+	if not _textures_ui.is_connected("item_selected", self, "_on_item_textures_selected"):
+		assert(_textures_ui.connect("item_selected", self, "_on_item_textures_selected") == OK)
+	if not _view_ui.is_connected("pressed", self, "_on_view_pressed"):
+		assert(_view_ui.connect("pressed", self, "_on_view_pressed") == OK)
+
+func _on_item_actor_selected(index: int) -> void:
+	if index > 0:
+		_node.actor = _data.actors[index - 1]
+	else:
+		_node.actor = null
+	_textures_ui_fill_and_draw()
+	_texture_ui_fill_and_draw()
+
+func _on_item_textures_selected(index: int) -> void:
+	if index > 0:
+		_node.texture_uuid = _node.actor.resources[index - 1].uuid
+	else:
+		_node.texture_uuid = null
+	_texture_ui_fill_and_draw()
+
+func _on_view_pressed() -> void:
+	_texture_ui_fill_and_draw()
+
+func _update_view() -> void:
+	_draw_view()
+
+func _draw_view() -> void:
+	_actors_ui_fill_and_draw()
+	_textures_ui_fill_and_draw()
+	_texture_ui_fill_and_draw()
+
+func _actors_ui_fill_and_draw() -> void:
+	_actors_ui.clear()
+	_actors_ui.disabled = true
+	var select = -1
+	if not _data.actors.empty():
+		_actors_ui.disabled = false
+		_actors_ui.add_item("None", 0)
+		select = 0
+		for index in range(_data.actors.size()):
+			var actor = _data.actors[index]
+			if _node.actor == actor:
+				select = index + 1
+			if not actor.resources.empty():
+				var image = load(actor.resources[0].path)
+				image = _data.resize_texture(image, Vector2(16, 16))
+				_actors_ui.add_icon_item(image, actor.name, index)
+			else:
+				_actors_ui.add_item(actor.name, index + 1)
+		_actors_ui.select(select)
+
+func _textures_ui_fill_and_draw() -> void:
+	_textures_ui.clear()
+	_textures_ui.disabled = true
+	var select = -1
+	if _node.actor:
+		if not _node.actor.resources.empty():
+			_textures_ui.disabled = false
+			_textures_ui.add_item("None", 0)
+			select = 0
+			for index in range(_node.actor.resources.size()):
+				var resource = _node.actor.resources[index]
+				if _node.texture_uuid == resource.uuid:
+					select = index + 1
+				_textures_ui.add_item(resource.name, index + 1)
+			_textures_ui.select(select)
+
+func _texture_ui_fill_and_draw() -> void:
+	var texture = null
+	if _node.actor:
+		texture = _node.actor.resource_by_uuid(_node.texture_uuid, false)
+	_texture_ui.texture = texture
+	_view_ui.set_disabled(texture == null)
+	_texture_ui.visible = texture != null and _view_ui.pressed
+	if not texture:
+		_view_ui.set_pressed(false)
+	_node.texture_view = _view_ui.pressed
+	rect_size = Vector2.ZERO
+
+#func _ready() -> void:
+#	_group.resource_local_to_scene = false
+#	set_slot(0, true, 0, Color.white, false, 0, Color.white)
+#	_sentence_add()
+#	_init_connections()
+
+#func _init_connections() -> void:
+#	_add_ui.connect("pressed", self, "_sentence_add")
+#	connect("resize_request", self, "_on_resize_request")
 	
 func _on_resize_request(new_minsize: Vector2):
 	print(new_minsize)
 
 func _sentence_add() -> void:
-	var sentence = Sentence.instance()
+	var sentence = PanelSentence.instance()
 	var select = sentence.get_node("HBox/Select") as CheckBox
 	select.set_button_group(_group)
 	select.connect("pressed", self, "_on_select_changed")

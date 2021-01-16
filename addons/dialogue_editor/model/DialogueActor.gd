@@ -114,10 +114,10 @@ func default_uuid() -> String:
 		uuid = resources[0].uuid
 	return uuid
 
-func resource_by_uuid(uuid = null) -> Resource:
+func resource_by_uuid(uuid = null, default_texture = true) -> Resource:
 	var texture = null
 	if not resources.empty():
-		if resources.size() == 1:
+		if resources.size() == 1 and default_texture:
 			texture = load(resources[0].path)
 		elif uuid and resources.size() > 1:
 			for res in resources:

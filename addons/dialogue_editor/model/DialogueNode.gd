@@ -12,4 +12,5 @@ export (String) var name
 export (Vector2) var position
 export (Resource) var actor # DialogueActor
 export (String) var texture_uuid
+export (bool) var texture_view = false
 export (Array) var subnodes = [] # {"text": "", "event": null, "node": null}

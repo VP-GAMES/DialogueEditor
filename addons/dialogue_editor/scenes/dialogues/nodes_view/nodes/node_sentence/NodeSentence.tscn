@@ -1,10 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_sentence/DragAndDrop.gd" type="Script" id=1]
 [ext_resource path="res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_sentence/NodeSentence.gd" type="Script" id=2]
 
 [node name="NodeSentence" type="GraphNode"]
-margin_right = 208.0
+margin_right = 300.0
 margin_bottom = 65.0
 title = "Sentence"
 resizable = true
@@ -20,6 +19,12 @@ slot/1/left_color = Color( 1, 1, 1, 1 )
 slot/1/right_enabled = false
 slot/1/right_type = 0
 slot/1/right_color = Color( 1, 1, 1, 1 )
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color( 1, 1, 1, 1 )
+slot/2/right_enabled = true
+slot/2/right_type = 0
+slot/2/right_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -28,71 +33,83 @@ __meta__ = {
 [node name="PanelActor" type="PanelContainer" parent="."]
 margin_left = 16.0
 margin_top = 24.0
-margin_right = 192.0
-margin_bottom = 58.0
-script = ExtResource( 1 )
+margin_right = 284.0
+margin_bottom = 62.0
 __meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 
 [node name="HBox" type="HBoxContainer" parent="PanelActor"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 169.0
-margin_bottom = 27.0
+margin_right = 261.0
+margin_bottom = 31.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Add" type="Button" parent="PanelActor/HBox"]
-margin_right = 20.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 20, 20 )
+margin_right = 24.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
 text = "+"
 
-[node name="View" type="CheckBox" parent="PanelActor/HBox"]
-visible = false
-margin_left = 24.0
-margin_right = 48.0
+[node name="Label" type="Label" parent="PanelActor/HBox"]
+margin_left = 28.0
+margin_top = 5.0
+margin_right = 88.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 60, 0 )
+text = "Actor"
+
+[node name="Actor" type="OptionButton" parent="PanelActor/HBox"]
+margin_left = 92.0
+margin_right = 254.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="PanelTexture" type="PanelContainer" parent="."]
+margin_left = 16.0
+margin_top = 63.0
+margin_right = 284.0
+margin_bottom = 101.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxTexture" type="HBoxContainer" parent="PanelTexture"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 261.0
+margin_bottom = 31.0
+
+[node name="View" type="CheckBox" parent="PanelTexture/HBoxTexture"]
+margin_right = 24.0
 margin_bottom = 24.0
 
-[node name="Label" type="Label" parent="PanelActor/HBox"]
-margin_left = 24.0
-margin_top = 3.0
-margin_right = 62.0
-margin_bottom = 17.0
-text = "Actor:"
+[node name="Label" type="Label" parent="PanelTexture/HBoxTexture"]
+margin_left = 28.0
+margin_top = 5.0
+margin_right = 88.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 60, 0 )
+text = "Texture"
 
-[node name="Texture" type="TextureRect" parent="PanelActor/HBox"]
-margin_left = 66.0
-margin_right = 66.0
-margin_bottom = 20.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Name" type="Label" parent="PanelActor/HBox"]
-margin_left = 70.0
-margin_top = 3.0
-margin_right = 162.0
-margin_bottom = 17.0
+[node name="Texture" type="OptionButton" parent="PanelTexture/HBoxTexture"]
+margin_left = 92.0
+margin_right = 254.0
+margin_bottom = 24.0
 size_flags_horizontal = 3
-text = "Name of Actor"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Center" type="CenterContainer" parent="."]
 margin_left = 16.0
-margin_top = 59.0
-margin_right = 192.0
-margin_bottom = 59.0
+margin_top = 102.0
+margin_right = 284.0
+margin_bottom = 102.0
 
 [node name="Texture" type="TextureRect" parent="Center"]
-margin_left = 88.0
-margin_right = 88.0
+margin_left = 134.0
+margin_right = 134.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

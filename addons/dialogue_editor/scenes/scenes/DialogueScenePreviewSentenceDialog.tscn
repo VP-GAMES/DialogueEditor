@@ -5,6 +5,7 @@
 [ext_resource path="res://addons/dialogue_editor/scenes/scenes/DialogueScenePreviewSentenceDialog.gd" type="Script" id=4]
 
 [node name="WindowDialog" type="WindowDialog"]
+visible = true
 rect_min_size = Vector2( 400, 210 )
 size_flags_horizontal = 0
 size_flags_vertical = 0

@@ -100,7 +100,11 @@ func _del_node(node, sendSignal = true) -> void:
 		if sendSignal:
 			emit_signal("node_removed", node)
 
-func del_nodes(nodes_to_delete = nodes) -> void:
+func del_nodes(nodes_to_delete = null) -> void:
+	if not nodes_to_delete:
+		nodes_to_delete = []
+		for node in nodes:
+			nodes_to_delete.append(node)
 	if _undo_redo != null:
 		_undo_redo.create_action("Del all nodes")
 		_undo_redo.add_do_method(self, "_del_nodes", nodes_to_delete)
