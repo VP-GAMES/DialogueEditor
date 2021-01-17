@@ -10,6 +10,8 @@ var _undo_redo: UndoRedo
 
 func set_editor(editor: EditorPlugin) -> void:
 	_editor = editor
+	for node in nodes:
+		node.set_editor(_editor)
 	_undo_redo = _editor.get_undo_redo()
 
 const UUID = preload("res://addons/dialogue_editor/uuid/uuid.gd")
