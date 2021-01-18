@@ -25,8 +25,7 @@ export (String) var scene = ""
 export (Resource) var actor = DialogueEmpty.new() # DialogueActor
 export (String) var texture_uuid = ""
 export (bool) var texture_view = false
-#export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event": "", "node": DialogueEmpty.new()}]
-export (Array) var sentences = [_create_sentence()]
+export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event": "", "node": DialogueEmpty.new()}]
 export (Dictionary) var sentence_selected = sentences[0]
 
 # ***** SCENES *****
@@ -166,7 +165,8 @@ func _del_sentence(sentence) -> void:
 		select_sentence(sentence_selected)
 
 func selected_sentence() -> Dictionary:
-	if not sentence_selected and not sentences.empty():
+	var selected_sentence_exists = sentences.has(sentence_selected)
+	if not selected_sentence_exists and not sentences.empty():
 		sentence_selected = sentences[0]
 	return sentence_selected
 

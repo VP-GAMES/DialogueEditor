@@ -11,7 +11,7 @@ var _sentence: Dictionary
 var _dialogue: DialogueDialogue
 
 onready var _remove_ui = $HBox/Remove as Button
-onready var _select_ui = $HBox/Remove as Button
+onready var _select_ui = $HBox/Select as Button
 onready var _text_ui = $HBox/Text as LineEdit
 
 func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData) -> void:
@@ -24,7 +24,9 @@ func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dial
 	_init_connections()
 
 func _check_ui() -> void:
+	_remove_ui.visible = _node.sentences.size() > 1
 	_select_ui.set_button_group(_group)
+	_select_ui.visible = _node.sentences.size() > 1
 	if _sentence == _node.selected_sentence():
 		_select_ui.set_pressed(true)
 
