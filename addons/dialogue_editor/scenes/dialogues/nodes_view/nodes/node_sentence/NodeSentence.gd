@@ -35,6 +35,8 @@ func _check_ui() -> void:
 	_view_ui.set_pressed(_node.texture_view)
 
 func _init_connections() -> void:
+	if not _scenes_ui.is_connected("item_selected", self, "_on_item_scene_selected"):
+		assert(_scenes_ui.connect("item_selected", self, "_on_item_scene_selected") == OK)
 	if not _actors_ui.is_connected("item_selected", self, "_on_item_actor_selected"):
 		assert(_actors_ui.connect("item_selected", self, "_on_item_actor_selected") == OK)
 	if not _node.is_connected("actor_selection_changed", self, "_on_actor_selection_changed"):
@@ -48,11 +50,17 @@ func _init_connections() -> void:
 	if not _node.is_connected("view_selection_changed", self, "_on_view_selection_changed"):
 		assert(_node.connect("view_selection_changed", self, "_on_view_selection_changed") == OK)
 
+func _on_item_scene_selected(index: int) -> void:
+	if index > 0:
+		_node.change_scene(_data.scenes[index - 1].resource)
+	else:
+		_node.change_scene()
+
 func _on_item_actor_selected(index: int) -> void:
 	if index > 0:
 		_node.change_actor(_data.actors[index - 1])
 	else:
-		_node.change_actor(Resource.new())
+		_node.change_actor()
 
 func _on_actor_selection_changed(actor: DialogueActor) -> void:
 	_update_view()
@@ -61,7 +69,7 @@ func _on_item_textures_selected(index: int) -> void:
 	if index > 0:
 		_node.change_texture_uuid(_node.actor.resources[index - 1].uuid)
 	else:
-		_node.change_texture_uuid("")
+		_node.change_texture_uuid()
 
 func _on_texture_selection_changed(texture_uuid) -> void:
 	_update_view()
@@ -120,7 +128,7 @@ func _textures_ui_fill_and_draw() -> void:
 	_textures_ui.clear()
 	_textures_ui.disabled = true
 	var select = -1
-	if not _node.actor_empty_object():
+	if not _node.is_actor_empty_object():
 		if not _node.actor.resources.empty():
 			_textures_ui.disabled = false
 			_textures_ui.add_item("None", 0)
@@ -138,7 +146,7 @@ func _view_ui_fill_and_draw() -> void:
 
 func _texture_ui_fill_and_draw() -> void:
 	var texture = null
-	if not _node.actor_empty_object():
+	if not _node.is_actor_empty_object():
 		texture = _node.actor.resource_by_uuid(_node.texture_uuid, false)
 	_texture_ui.texture = texture
 	_texture_ui.visible = _node.texture_view

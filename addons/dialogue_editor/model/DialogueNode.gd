@@ -4,10 +4,6 @@ tool
 extends Resource
 class_name DialogueNode, "res://addons/dialogue_editor/icons/Node.png"
 
-signal actor_selection_changed(actor)
-signal texture_selection_changed(texture_uuid)
-signal view_selection_changed(texture_view)
-
 # ***** EDITOR_PLUGIN BOILERPLATE *****
 var _editor: EditorPlugin
 var _undo_redo: UndoRedo
@@ -29,9 +25,41 @@ export (String) var scene = ""
 export (Resource) var actor = DialogueEmpty.new() # DialogueActor
 export (String) var texture_uuid = ""
 export (bool) var texture_view = false
-export (Array) var subnodes = [] # {"text": "", "event": null, "node": null}
+#export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event": "", "node": DialogueEmpty.new()}]
+export (Array) var sentences = [_create_sentence()]
+export (Dictionary) var sentence_selected = sentences[0]
 
-func change_actor(new_actor: DialogueActor) -> void:
+# ***** SCENES *****
+signal scene_selection_changed(scene)
+
+func change_scene(new_scene = "") -> void:
+	if _undo_redo != null:
+		var old_scene = new_scene
+		var old_actor = actor
+		var old_texture_uuid = texture_uuid
+		var old_texture_view = texture_view
+		_undo_redo.create_action("Node change scene")
+		_undo_redo.add_do_method(self, "_change_scene", new_scene, actor)
+		_undo_redo.add_undo_method(self, "_change_scene", old_scene, old_actor, old_texture_uuid, old_texture_view)
+		_undo_redo.commit_action()
+	else:
+		_change_scene(new_scene, actor)
+
+func _change_scene(new_scene: String, new_actor: Resource, new_texture_uuid = "", new_texture_view = false) -> void:
+	scene = new_scene
+	if scene.empty():
+		new_actor = DialogueEmpty.new()
+		new_texture_uuid = ""
+		new_texture_view = false
+	actor = new_actor
+	texture_uuid = new_texture_uuid
+	texture_view = new_texture_view
+	emit_signal("scene_selection_changed", scene)
+
+# ***** ACTORS *****
+signal actor_selection_changed(actor)
+
+func change_actor(new_actor = Resource.new()) -> void:
 	if _undo_redo != null:
 		var old_actor = new_actor
 		var old_texture_uuid = texture_uuid
@@ -49,7 +77,13 @@ func _change_actor(new_actor: DialogueActor, new_texture_uuid = "", new_texture_
 	texture_view = new_texture_view
 	emit_signal("actor_selection_changed", actor)
 
-func change_texture_uuid(new_texture_uuid) -> void:
+func is_actor_empty_object() -> bool:
+	return actor is DialogueEmpty
+
+# ***** TEXTURE_UUID *****
+signal texture_selection_changed(texture_uuid)
+
+func change_texture_uuid(new_texture_uuid = "") -> void:
 	if _undo_redo != null:
 		var old_texture_uuid = texture_uuid
 		var old_texture_view = texture_view
@@ -67,6 +101,9 @@ func _change_texture_uuid(new_texture_uuid: String, new_texture_view = texture_v
 		texture_view = false
 	emit_signal("texture_selection_changed", texture_uuid)
 
+# ***** TEXTURE_VIEW *****
+signal view_selection_changed(texture_view)
+
 func change_texture_view(new_texture_view) -> void:
 	if _undo_redo != null:
 		var old_texture_view = texture_view
@@ -83,5 +120,56 @@ func _change_texture_view(new_texture_view) -> void:
 		texture_view = false
 	emit_signal("view_selection_changed", texture_view)
 
-func actor_empty_object() -> bool:
-	return actor is DialogueEmpty
+# ***** SENTENCES *****
+signal sentence_added(sentence)
+signal sentence_removed(sentence)
+signal sentence_selection_changed(sentence)
+
+func add_sentence(sendSignal = true) -> void:
+		var sentence = _create_sentence()
+		if _undo_redo != null:
+			_undo_redo.create_action("Add sentence")
+			_undo_redo.add_do_method(self, "_add_sentence", sentence)
+			_undo_redo.add_undo_method(self, "_del_sentence", sentence)
+			_undo_redo.commit_action()
+		else:
+			_add_sentence(sentence, sendSignal)
+
+func _create_sentence() -> Dictionary:
+	var sentence = {}
+	sentence.uuid = UUID.v4()
+	sentence.text = ""
+	sentence.event = ""
+	sentence.node = DialogueEmpty.new()
+	return sentence
+
+func _add_sentence(sentence: Dictionary, sendSignal = true, position = sentences.size()) -> void:
+	sentences.insert(position, sentence)
+	emit_signal("sentence_added", sentence)
+
+func del_sentence(sentence) -> void:
+	if _undo_redo != null:
+		var index = sentences.find(sentence)
+		_undo_redo.create_action("Del sentence")
+		_undo_redo.add_do_method(self, "_del_sentence", sentence)
+		_undo_redo.add_undo_method(self, "_add_sentence", sentence, false, index)
+		_undo_redo.commit_action()
+	else:
+		_del_sentence(sentence)
+
+func _del_sentence(sentence) -> void:
+	var index = sentences.find(sentence)
+	if index > -1:
+		sentences.remove(index)
+		emit_signal("sentence_removed", sentence)
+		var sentence_selected = selected_sentence()
+		select_sentence(sentence_selected)
+
+func selected_sentence() -> Dictionary:
+	if not sentence_selected and not sentences.empty():
+		sentence_selected = sentences[0]
+	return sentence_selected
+
+func select_sentence(sentence: Dictionary) -> void:
+	sentence_selected = sentence
+	emit_signal("sentence_selection_changed", sentence_selected)
