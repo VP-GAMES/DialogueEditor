@@ -4,21 +4,41 @@ tool
 extends PanelContainer
 class_name DialoguePanelSentence
 
-var _group = ButtonGroup.new()
-
+var _group: ButtonGroup
 var _data: DialogueData
 var _node: DialogueNode
 var _sentence: Dictionary
 var _dialogue: DialogueDialogue
 
-func set_data(sentence: Dictionary, node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData) -> void:
+onready var _remove_ui = $HBox/Remove as Button
+onready var _select_ui = $HBox/Remove as Button
+onready var _text_ui = $HBox/Text as LineEdit
+
+func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData) -> void:
+	_group = group
 	_sentence = sentence
 	_node = node
 	_dialogue = dialogue
 	_data = data
+	_check_ui()
+	_init_connections()
 
+func _check_ui() -> void:
+	_select_ui.set_button_group(_group)
+	if _sentence == _node.selected_sentence():
+		_select_ui.set_pressed(true)
 
+func _init_connections() -> void:
+	if not _remove_ui.is_connected("pressed", self, "_on_remove_sentence_pressed"):
+		assert(_remove_ui.connect("pressed", self, "_on_remove_sentence_pressed") == OK)
+	if not _select_ui.is_connected("pressed", self, "_on_select_sentence_pressed"):
+		assert(_select_ui.connect("pressed", self, "_on_select_sentence_pressed") == OK)
 
+func _on_remove_sentence_pressed() -> void:
+	_node.del_sentence(_sentence)
+
+func _on_select_sentence_pressed() -> void:
+	_node.select_sentence(_sentence)
 
 #func _ready() -> void:
 #	_group.resource_local_to_scene = false

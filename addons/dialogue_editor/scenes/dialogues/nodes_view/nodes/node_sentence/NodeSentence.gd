@@ -5,6 +5,7 @@ extends "res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/NodeBase
 
 signal actor_added(actor)
 
+var _group = ButtonGroup.new()
 var _data: DialogueData
 var _node: DialogueNode
 var _dialogue: DialogueDialogue
@@ -46,6 +47,8 @@ func _init_connections() -> void:
 		assert(_add_ui.connect("pressed", self, "_on_add_sentence_pressed") == OK)
 	if not _node.is_connected("sentence_added", self, "_on_sentence_added"):
 		assert(_node.connect("sentence_added", self, "_on_sentence_added") == OK)
+	if not _node.is_connected("sentence_removed", self, "_on_sentence_removed"):
+		assert(_node.connect("sentence_removed", self, "_on_sentence_removed") == OK)
 	if not _textures_ui.is_connected("item_selected", self, "_on_item_textures_selected"):
 		assert(_textures_ui.connect("item_selected", self, "_on_item_textures_selected") == OK)
 	if not _node.is_connected("texture_selection_changed", self, "_on_texture_selection_changed"):
@@ -79,6 +82,9 @@ func _on_add_sentence_pressed() -> void:
 func _on_sentence_added(sentence) -> void:
 	_update_view()
 
+func _on_sentence_removed(sentence) -> void:
+	_update_view()
+
 func _on_item_textures_selected(index: int) -> void:
 	if index > 0:
 		_node.change_texture_uuid(_node.actor.resources[index - 1].uuid)
@@ -102,6 +108,7 @@ func _update_view() -> void:
 	_texture_ui_fill_and_draw()
 	_sentences_draw_view()
 	_slots_draw()
+	rect_size = Vector2.ZERO
 
 func _scenes_ui_fill_and_draw() -> void:
 	_scenes_ui.clear()
@@ -166,7 +173,6 @@ func _texture_ui_fill_and_draw() -> void:
 		texture = _node.actor.resource_by_uuid(_node.texture_uuid, false)
 	_texture_ui.texture = texture
 	_texture_ui.visible = _node.texture_view
-	rect_size = Vector2.ZERO
 
 func _sentences_draw_view() -> void:
 	_sentences_clear()
@@ -185,7 +191,7 @@ func _sentences_draw() -> void:
 func _sentence_draw(sentence: Dictionary) -> void:
 	var sentence_ui = PanelSentence.instance()
 	add_child(sentence_ui)
-	sentence_ui.set_data(sentence, _node, _dialogue, _data)
+	sentence_ui.set_data(_group, sentence, _node, _dialogue, _data)
 
 func _slots_draw() -> void:
 	var children = get_children()
