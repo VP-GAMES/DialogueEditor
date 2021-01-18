@@ -87,7 +87,7 @@ func _on_gui_input(event: InputEvent) -> void:
 					_popup_ui.hide()
 		if event is InputEventKey and _selected_node:
 			if event.scancode == KEY_DELETE and  event.pressed:
-				_dialogue.del_node(_selected_node.nodedata())
+				_dialogue.del_node(_selected_node.node())
 
 func _show_popup() -> void:
 	_build_popup()

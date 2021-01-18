@@ -8,7 +8,6 @@ signal actor_added(actor)
 var _data: DialogueData
 var _node: DialogueNode
 var _dialogue: DialogueDialogue
-var _group = ButtonGroup.new()
 
 onready var _scenes_ui = $PanelScene/HBox/Scene as OptionButton
 onready var _add_ui = $PanelActor/HBox/Add as Button
@@ -37,10 +36,16 @@ func _check_ui() -> void:
 func _init_connections() -> void:
 	if not _scenes_ui.is_connected("item_selected", self, "_on_item_scene_selected"):
 		assert(_scenes_ui.connect("item_selected", self, "_on_item_scene_selected") == OK)
+	if not _node.is_connected("scene_selection_changed", self, "_on_scene_selection_changed"):
+		assert(_node.connect("scene_selection_changed", self, "_on_scene_selection_changed") == OK)
 	if not _actors_ui.is_connected("item_selected", self, "_on_item_actor_selected"):
 		assert(_actors_ui.connect("item_selected", self, "_on_item_actor_selected") == OK)
 	if not _node.is_connected("actor_selection_changed", self, "_on_actor_selection_changed"):
 		assert(_node.connect("actor_selection_changed", self, "_on_actor_selection_changed") == OK)
+	if not _add_ui.is_connected("pressed", self, "_on_add_sentence_pressed"):
+		assert(_add_ui.connect("pressed", self, "_on_add_sentence_pressed") == OK)
+	if not _node.is_connected("sentence_added", self, "_on_sentence_added"):
+		assert(_node.connect("sentence_added", self, "_on_sentence_added") == OK)
 	if not _textures_ui.is_connected("item_selected", self, "_on_item_textures_selected"):
 		assert(_textures_ui.connect("item_selected", self, "_on_item_textures_selected") == OK)
 	if not _node.is_connected("texture_selection_changed", self, "_on_texture_selection_changed"):
@@ -56,6 +61,9 @@ func _on_item_scene_selected(index: int) -> void:
 	else:
 		_node.change_scene()
 
+func _on_scene_selection_changed(scene: String) -> void:
+	_update_view()
+
 func _on_item_actor_selected(index: int) -> void:
 	if index > 0:
 		_node.change_actor(_data.actors[index - 1])
@@ -63,6 +71,12 @@ func _on_item_actor_selected(index: int) -> void:
 		_node.change_actor()
 
 func _on_actor_selection_changed(actor: DialogueActor) -> void:
+	_update_view()
+
+func _on_add_sentence_pressed() -> void:
+	_node.add_sentence()
+
+func _on_sentence_added(sentence) -> void:
 	_update_view()
 
 func _on_item_textures_selected(index: int) -> void:
@@ -86,6 +100,8 @@ func _update_view() -> void:
 	_textures_ui_fill_and_draw()
 	_view_ui_fill_and_draw()
 	_texture_ui_fill_and_draw()
+	_sentences_draw_view()
+	_slots_draw()
 
 func _scenes_ui_fill_and_draw() -> void:
 	_scenes_ui.clear()
@@ -152,105 +168,32 @@ func _texture_ui_fill_and_draw() -> void:
 	_texture_ui.visible = _node.texture_view
 	rect_size = Vector2.ZERO
 
-#func _ready() -> void:
-#	_group.resource_local_to_scene = false
-#	set_slot(0, true, 0, Color.white, false, 0, Color.white)
-#	_sentence_add()
-#	_init_connections()
+func _sentences_draw_view() -> void:
+	_sentences_clear()
+	_sentences_draw()
 
-#func _init_connections() -> void:
-#	_add_ui.connect("pressed", self, "_sentence_add")
-#	connect("resize_request", self, "_on_resize_request")
+func _sentences_clear() -> void:
+	for child in get_children():
+		if child is DialoguePanelSentence:
+			remove_child(child)
+			child.queue_free()
 
-#func _on_resize_request(new_minsize: Vector2):
-#	print(new_minsize)
-#
-#func _sentence_add() -> void:
-#	var sentence = PanelSentence.instance()
-#	var select = sentence.get_node("HBox/Select") as CheckBox
-#	select.set_button_group(_group)
-#	select.connect("pressed", self, "_on_select_changed")
-#	var remove =  sentence.get_node("HBox/Remove") as Button
-#	add_child(sentence)
-#	remove.connect("pressed", self, "_sentence_remove", [sentence.get_instance_id()])
-#	set_slot(get_child_count() - 1, false, 0, Color.white, true, 0, Color.white)
-#	_check_first_sentence_view()
-#
-#func _sentence_remove(id: int) -> void:
-#	var children = get_children();
-#	for i in range(2, get_child_count()):
-#		if id == children[i].get_instance_id():
-#			if children[i].get_node("HBox/Select").is_pressed():
-#				_sentence_deselect(id)
-#			_sentence_remove_connection(i - 2)
-#			children[i].connect("tree_exited", self, "_sentence_remove_done", [i - 2])
-#			children[i].queue_free()
-#			break
-#	clear_slot(get_child_count() - 1)
-#
-#func _sentence_remove_connection(idx: int) -> void:
-#	var last_to
-#	var last_to_port
-#	for s in range(get_child_count(), idx - 1, -1):
-#		for i in get_parent().get_connection_list():
-#			if i.from == self.name and i.from_port == s:
-#				get_parent().disconnect_node(i.from, i.from_port, i.to, i.to_port)
-#				if last_to:
-#					get_parent().connect_node(i.from, i.from_port, last_to, last_to_port)
-#				last_to = i.to
-#				last_to_port = i.to_port
-#
-#func _sentence_deselect(id: int ) -> void:
-#	var children = get_children();
-#	for i in range(2, get_child_count()):
-#		if id != get_child(i).get_instance_id():
-#			get_child(i).get_node("HBox/Select").set_pressed(true)
-#			return
-#
-#func _sentence_remove_done(idx:int) -> void:
-#	rect_size = Vector2.ZERO
-#	_check_first_sentence_view()
-#
-#func _check_first_sentence_view() -> void:
-#	var sentence = get_children()[2] 
-#	if get_child_count() <= 3:
-#		sentence.get_node("HBox/Select").set_pressed(true)
-#		sentence.get_node("HBox/Remove").hide()
-#		sentence.get_node("HBox/Select").hide()
-#	elif get_child_count() == 4:
-#		sentence.get_node("HBox/Remove").show()
-#		sentence.get_node("HBox/Select").show()
-#
-#func selected_slot() -> Vector2:
-#	var count = 0
-#	for i in range(2, get_child_count()):
-#		if get_child(i).get_node("HBox/Select").is_pressed():
-#			return Vector2(count, i)
-#		count += 1
-#	return Vector2.ZERO
-#
-#func _on_select_changed() -> void:
-#	get_parent().get_parent().nodes_colors_update()
-#
-#func save_data():
-#	var sentences: Array
-#	var children = get_children();
-#	for i in range(2, get_child_count()):
-#		var text = children[i].get_node("HBox/LineEdit").text
-#		sentences.append(text)
-#	var dict = {
-#		"filename" : get_filename(),
-#		"name" : name,
-#		"editor_position": global_position(),
-#		"sentences": sentences
-#		}
-#	return dict
-#
-#func load_data(dict):
-#	if dict.sentences.size() > 1:
-#		for i in range(1, dict.sentences.size()):
-#			_sentence_add()
-#	var count = 0
-#	var children = get_children();
-#	for i in range(2, get_child_count()):
-#		children[i].get_node("HBox/LineEdit").text = dict.sentences[count]
+func _sentences_draw() -> void:
+	for index in range(_node.sentences.size()):
+		_sentence_draw(_node.sentences[index])
+
+func _sentence_draw(sentence: Dictionary) -> void:
+	var sentence_ui = PanelSentence.instance()
+	add_child(sentence_ui)
+	sentence_ui.set_data(sentence, _node, _dialogue, _data)
+
+func _slots_draw() -> void:
+	var children = get_children()
+	for index in range(children.size()):
+		var child = children[index]
+		if index == 0:
+			set_slot(child.get_index(), true, 0, Color.white, false, 0, Color.white)
+		elif child is DialoguePanelSentence:
+			set_slot(child.get_index(), false, 0, Color.white, true, 0, Color.white)
+		else:
+			set_slot(child.get_index(), false, 0, Color.white, false, 0, Color.white)
