@@ -6,31 +6,61 @@
 resource_local_to_scene = false
 
 [node name="PanelSentence" type="PanelContainer"]
+margin_right = 237.0
+margin_bottom = 38.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBox" type="HBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="."]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 121.0
-margin_bottom = 31.0
+margin_right = 230.0
+margin_bottom = 59.0
 
-[node name="Remove" type="Button" parent="HBox"]
+[node name="HBox" type="HBoxContainer" parent="VBox"]
+margin_right = 223.0
+margin_bottom = 24.0
+
+[node name="Remove" type="Button" parent="VBox/HBox"]
 margin_right = 24.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 24, 24 )
 text = "-"
 
-[node name="Select" type="CheckBox" parent="HBox"]
+[node name="Event" type="Button" parent="VBox/HBox"]
 margin_left = 28.0
 margin_right = 52.0
 margin_bottom = 24.0
+rect_min_size = Vector2( 24, 24 )
+toggle_mode = true
+
+[node name="Select" type="CheckBox" parent="VBox/HBox"]
+margin_left = 56.0
+margin_right = 80.0
+margin_bottom = 24.0
 group = SubResource( 1 )
 
-[node name="Text" type="LineEdit" parent="HBox"]
+[node name="Text" type="LineEdit" parent="VBox/HBox"]
+margin_left = 84.0
+margin_right = 223.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="HBoxEvent" type="HBoxContainer" parent="VBox"]
+margin_top = 28.0
+margin_right = 223.0
+margin_bottom = 52.0
+
+[node name="Label" type="Label" parent="VBox/HBoxEvent"]
+margin_top = 5.0
+margin_right = 52.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 52, 0 )
+
+[node name="EventText" type="LineEdit" parent="VBox/HBoxEvent"]
 margin_left = 56.0
-margin_right = 114.0
+margin_right = 223.0
 margin_bottom = 24.0
 size_flags_horizontal = 3

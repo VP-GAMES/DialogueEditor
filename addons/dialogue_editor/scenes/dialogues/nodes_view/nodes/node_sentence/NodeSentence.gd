@@ -26,13 +26,8 @@ func set_data(node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData
 	_node = node
 	_dialogue = dialogue
 	_data = data
-	_check_ui()
 	_init_connections()
 	_update_view()
-
-func _check_ui() -> void:
-	offset = _node.position
-	_view_ui.set_pressed(_node.texture_view)
 
 func _init_connections() -> void:
 	if not _scenes_ui.is_connected("item_selected", self, "_on_item_scene_selected"):
@@ -57,6 +52,10 @@ func _init_connections() -> void:
 		assert(_view_ui.connect("pressed", self, "_on_view_pressed") == OK)
 	if not _node.is_connected("view_selection_changed", self, "_on_view_selection_changed"):
 		assert(_node.connect("view_selection_changed", self, "_on_view_selection_changed") == OK)
+	if not _node.is_connected("sentence_event_visibility_changed", self, "_on_sentence_event_visibility_changed"):
+		assert(_node.connect("sentence_event_visibility_changed", self, "_on_sentence_event_visibility_changed") == OK)
+	if not _node.is_connected("sentence_selection_changed", self, "_on_sentence_selection_changed"):
+		assert(_node.connect("sentence_selection_changed", self, "_on_sentence_selection_changed") == OK)
 
 func _on_item_scene_selected(index: int) -> void:
 	if index > 0:
@@ -100,6 +99,12 @@ func _on_view_pressed() -> void:
 func _on_view_selection_changed(texture_view) -> void:
 	_update_view()
 
+func _on_sentence_event_visibility_changed(sentence) -> void:
+	_update_view()
+
+func _on_sentence_selection_changed(sentence) -> void:
+	_update_view()
+
 func _update_view() -> void:
 	_scenes_ui_fill_and_draw()
 	_actors_ui_fill_and_draw()
@@ -108,6 +113,7 @@ func _update_view() -> void:
 	_texture_ui_fill_and_draw()
 	_sentences_draw_view()
 	_slots_draw()
+	offset = _node.position
 	rect_size = Vector2.ZERO
 
 func _scenes_ui_fill_and_draw() -> void:

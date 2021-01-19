@@ -25,7 +25,7 @@ export (String) var scene = ""
 export (Resource) var actor = DialogueEmpty.new() # DialogueActor
 export (String) var texture_uuid = ""
 export (bool) var texture_view = false
-export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event": "", "node": DialogueEmpty.new()}]
+export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event_visible": false, "event": "", "node": DialogueEmpty.new()}]
 export (Dictionary) var sentence_selected = sentences[0]
 
 # ***** SCENES *****
@@ -123,6 +123,7 @@ func _change_texture_view(new_texture_view) -> void:
 signal sentence_added(sentence)
 signal sentence_removed(sentence)
 signal sentence_selection_changed(sentence)
+signal sentence_event_visibility_changed(sentence)
 
 func add_sentence(sendSignal = true) -> void:
 		var sentence = _create_sentence()
@@ -162,7 +163,22 @@ func _del_sentence(sentence) -> void:
 		sentences.remove(index)
 		emit_signal("sentence_removed", sentence)
 		var sentence_selected = selected_sentence()
-		select_sentence(sentence_selected)
+		_select_sentence(sentence_selected)
+
+func select_sentence_event_visibility(sentence: Dictionary, visibility: bool) -> void:
+	if _undo_redo != null:
+		var old_sentence = sentence
+		var old_visibility = visibility
+		_undo_redo.create_action("Select sentence event visibility")
+		_undo_redo.add_do_method(self, "_select_sentence_event_visibility", sentence, visibility)
+		_undo_redo.add_undo_method(self, "_select_sentence_event_visibility", old_sentence, old_visibility)
+		_undo_redo.commit_action()
+	else:
+		_select_sentence_event_visibility(sentence, visibility)
+
+func _select_sentence_event_visibility(sentence: Dictionary, visibility: bool) -> void:
+	sentence.event_visible = visibility
+	emit_signal("sentence_event_visibility_changed", sentence)
 
 func selected_sentence() -> Dictionary:
 	var selected_sentence_exists = sentences.has(sentence_selected)
@@ -170,6 +186,17 @@ func selected_sentence() -> Dictionary:
 		sentence_selected = sentences[0]
 	return sentence_selected
 
-func select_sentence(sentence: Dictionary) -> void:
+func select_sentence(sentence: Dictionary, sendSignal = true) -> void:
+	if _undo_redo != null:
+		var old_sentence = sentence_selected
+		_undo_redo.create_action("Select sentence")
+		_undo_redo.add_do_method(self, "_select_sentence", sentence)
+		_undo_redo.add_undo_method(self, "_select_sentence", old_sentence)
+		_undo_redo.commit_action()
+	else:
+		_select_sentence(sentence)
+
+func _select_sentence(sentence: Dictionary, sendSignal = true) -> void:
 	sentence_selected = sentence
-	emit_signal("sentence_selection_changed", sentence_selected)
+	if sendSignal:
+		emit_signal("sentence_selection_changed", sentence_selected)

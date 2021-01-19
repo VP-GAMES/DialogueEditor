@@ -12,6 +12,15 @@ onready var _actors_ui = $VBox/Tabs/Actors as VBoxContainer
 onready var _scenes_ui = $VBox/Tabs/Scenes as HBoxContainer
 onready var _dialogues_ui = $VBox/Tabs/Dialogues as HBoxContainer
 
+const IconResourceActor = preload("res://addons/dialogue_editor/icons/Actor.png")
+const IconResourceScene = preload("res://addons/dialogue_editor/icons/Scene.png")
+const IconResourceDialogue = preload("res://addons/dialogue_editor/icons/Dialogue.png")
+
+func _ready() -> void:
+	_tabs_ui.set_tab_icon(0, IconResourceActor)
+	_tabs_ui.set_tab_icon(1, IconResourceScene)
+	_tabs_ui.set_tab_icon(2, IconResourceDialogue)
+
 func set_editor(editor: EditorPlugin) -> void:
 	_editor = editor
 	_init_connections()

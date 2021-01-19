@@ -10,9 +10,15 @@ var _node: DialogueNode
 var _sentence: Dictionary
 var _dialogue: DialogueDialogue
 
-onready var _remove_ui = $HBox/Remove as Button
-onready var _select_ui = $HBox/Select as Button
-onready var _text_ui = $HBox/Text as LineEdit
+onready var _remove_ui = $VBox/HBox/Remove as Button
+onready var _event_ui = $VBox/HBox/Event as Button
+onready var _select_ui = $VBox/HBox/Select as Button
+onready var _text_ui = $VBox/HBox/Text as LineEdit
+onready var _event_box_ui = $VBox/HBoxEvent as HBoxContainer
+onready var _event_text_ui = $VBox/HBoxEvent/EventText as LineEdit
+
+const IconResourceEvent = preload("res://addons/dialogue_editor/icons/Event.png")
+const IconResourceEventEmpty = preload("res://addons/dialogue_editor/icons/EventEmpty.png")
 
 func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData) -> void:
 	_group = group
@@ -20,27 +26,65 @@ func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dial
 	_node = node
 	_dialogue = dialogue
 	_data = data
-	_check_ui()
 	_init_connections()
-
-func _check_ui() -> void:
-	_remove_ui.visible = _node.sentences.size() > 1
-	_select_ui.set_button_group(_group)
-	_select_ui.visible = _node.sentences.size() > 1
-	if _sentence == _node.selected_sentence():
-		_select_ui.set_pressed(true)
+	_update_view()
 
 func _init_connections() -> void:
 	if not _remove_ui.is_connected("pressed", self, "_on_remove_sentence_pressed"):
 		assert(_remove_ui.connect("pressed", self, "_on_remove_sentence_pressed") == OK)
+	if not _event_ui.is_connected("pressed", self, "_on_select_event_pressed"):
+		assert(_event_ui.connect("pressed", self, "_on_select_event_pressed") == OK)
 	if not _select_ui.is_connected("pressed", self, "_on_select_sentence_pressed"):
 		assert(_select_ui.connect("pressed", self, "_on_select_sentence_pressed") == OK)
 
 func _on_remove_sentence_pressed() -> void:
 	_node.del_sentence(_sentence)
 
+func _on_select_event_pressed() -> void:
+	_node.select_sentence_event_visibility(_sentence, _event_ui.is_pressed())
+
+func _on_sentence_event_visibility_changed(sentence) -> void:
+	if _sentence == sentence:
+		_update_view()
+
 func _on_select_sentence_pressed() -> void:
 	_node.select_sentence(_sentence)
+
+func _update_view() -> void:
+	_remove_ui_draw()
+	_event_ui_draw()
+	_select_ui_draw()
+	_event_text_ui_draw()
+	rect_size = Vector2.ZERO
+
+func _remove_ui_draw() -> void:
+	_remove_ui.visible = _node.sentences.size() > 1
+
+func _event_ui_draw() -> void:
+	_event_ui.set_pressed(_sentence.has("event_visible") and _sentence.event_visible)
+	if _sentence.event.empty():
+		_event_ui.set_button_icon(IconResourceEventEmpty)
+	else:
+		_event_ui.set_button_icon(IconResourceEvent)
+
+func _select_ui_draw() -> void:
+	_select_ui.set_button_group(_group)
+	_select_ui.visible = _node.sentences.size() > 1
+	if _sentence == _node.selected_sentence():
+		_select_ui.set_pressed(true)
+
+func _event_text_ui_draw() -> void:
+	_event_box_ui.visible = _sentence.has("event_visible") and _sentence.event_visible
+
+func _draw():
+	if _sentence.has("event_visible") and _sentence.event_visible:
+		var stylebox = get_stylebox("panel", "PanelContainer")
+		var x = _event_ui.rect_position.x + _event_ui.rect_size.x / 2 + stylebox.content_margin_left
+		var y = _event_ui.rect_position.y +_remove_ui.rect_size.y / 2 + stylebox.content_margin_top
+		var x_end = _remove_ui.rect_size.x + _event_ui.rect_position.x + stylebox.content_margin_left * 2
+		var y_end = _remove_ui.rect_size.y +  _event_text_ui.rect_size.y / 2 + stylebox.content_margin_top * 2
+		draw_line(Vector2(x, y), Vector2(x, y_end), Color.white, 2)
+		draw_line(Vector2(x, y_end), Vector2(x_end, y_end), Color.white, 2)
 
 #func _ready() -> void:
 #	_group.resource_local_to_scene = false
