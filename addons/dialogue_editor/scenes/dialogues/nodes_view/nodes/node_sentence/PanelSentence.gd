@@ -36,6 +36,12 @@ func _init_connections() -> void:
 		assert(_event_ui.connect("pressed", self, "_on_select_event_pressed") == OK)
 	if not _select_ui.is_connected("pressed", self, "_on_select_sentence_pressed"):
 		assert(_select_ui.connect("pressed", self, "_on_select_sentence_pressed") == OK)
+	if not _text_ui.is_connected("text_changed", self, "_on_text_changed"):
+		assert(_text_ui.connect("text_changed", self, "_on_text_changed") == OK)
+	if not _event_text_ui.is_connected("text_changed", self, "_on_event_text_changed"):
+		assert(_event_text_ui.connect("text_changed", self, "_on_event_text_changed") == OK)
+	if not _node.is_connected("sentence_event_changed", self, "_on_sentence_event_changed"):
+		assert(_node.connect("sentence_event_changed", self, "_on_sentence_event_changed") == OK)
 
 func _on_remove_sentence_pressed() -> void:
 	_node.del_sentence(_sentence)
@@ -50,10 +56,21 @@ func _on_sentence_event_visibility_changed(sentence) -> void:
 func _on_select_sentence_pressed() -> void:
 	_node.select_sentence(_sentence)
 
+func _on_text_changed(new_text: String) -> void:
+	_node.change_sentence_text(_sentence, new_text)
+
+func _on_event_text_changed(new_text: String) -> void:
+	_node.change_sentence_event(_sentence, new_text)
+
+func _on_sentence_event_changed(sentence) -> void:
+	_event_ui_draw()
+
 func _update_view() -> void:
 	_remove_ui_draw()
 	_event_ui_draw()
 	_select_ui_draw()
+	_text_ui_draw()
+	_event_box_ui_draw()
 	_event_text_ui_draw()
 	rect_size = Vector2.ZERO
 
@@ -73,8 +90,14 @@ func _select_ui_draw() -> void:
 	if _sentence == _node.selected_sentence():
 		_select_ui.set_pressed(true)
 
-func _event_text_ui_draw() -> void:
+func _text_ui_draw() -> void:
+	_text_ui.text = _sentence.text
+
+func _event_box_ui_draw() -> void:
 	_event_box_ui.visible = _sentence.has("event_visible") and _sentence.event_visible
+
+func _event_text_ui_draw() -> void:
+	_event_text_ui.text = _sentence.event
 
 func _draw():
 	if _sentence.has("event_visible") and _sentence.event_visible:

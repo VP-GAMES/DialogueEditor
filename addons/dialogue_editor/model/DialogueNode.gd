@@ -124,6 +124,8 @@ signal sentence_added(sentence)
 signal sentence_removed(sentence)
 signal sentence_selection_changed(sentence)
 signal sentence_event_visibility_changed(sentence)
+signal sentence_text_changed(sentence)
+signal sentence_event_changed(sentence)
 
 func add_sentence(sendSignal = true) -> void:
 		var sentence = _create_sentence()
@@ -143,16 +145,18 @@ func _create_sentence() -> Dictionary:
 	sentence.node = DialogueEmpty.new()
 	return sentence
 
-func _add_sentence(sentence: Dictionary, sendSignal = true, position = sentences.size()) -> void:
+func _add_sentence(sentence: Dictionary, sendSignal = true, position = sentences.size(), select_sentence = false) -> void:
 	sentences.insert(position, sentence)
 	emit_signal("sentence_added", sentence)
+	if select_sentence:
+		_select_sentence(sentence)
 
 func del_sentence(sentence) -> void:
 	if _undo_redo != null:
 		var index = sentences.find(sentence)
 		_undo_redo.create_action("Del sentence")
 		_undo_redo.add_do_method(self, "_del_sentence", sentence)
-		_undo_redo.add_undo_method(self, "_add_sentence", sentence, false, index)
+		_undo_redo.add_undo_method(self, "_add_sentence", sentence, false, index, true)
 		_undo_redo.commit_action()
 	else:
 		_del_sentence(sentence)
@@ -164,21 +168,6 @@ func _del_sentence(sentence) -> void:
 		emit_signal("sentence_removed", sentence)
 		var sentence_selected = selected_sentence()
 		_select_sentence(sentence_selected)
-
-func select_sentence_event_visibility(sentence: Dictionary, visibility: bool) -> void:
-	if _undo_redo != null:
-		var old_sentence = sentence
-		var old_visibility = visibility
-		_undo_redo.create_action("Select sentence event visibility")
-		_undo_redo.add_do_method(self, "_select_sentence_event_visibility", sentence, visibility)
-		_undo_redo.add_undo_method(self, "_select_sentence_event_visibility", old_sentence, old_visibility)
-		_undo_redo.commit_action()
-	else:
-		_select_sentence_event_visibility(sentence, visibility)
-
-func _select_sentence_event_visibility(sentence: Dictionary, visibility: bool) -> void:
-	sentence.event_visible = visibility
-	emit_signal("sentence_event_visibility_changed", sentence)
 
 func selected_sentence() -> Dictionary:
 	var selected_sentence_exists = sentences.has(sentence_selected)
@@ -200,3 +189,48 @@ func _select_sentence(sentence: Dictionary, sendSignal = true) -> void:
 	sentence_selected = sentence
 	if sendSignal:
 		emit_signal("sentence_selection_changed", sentence_selected)
+
+func select_sentence_event_visibility(sentence: Dictionary, visibility: bool) -> void:
+	if _undo_redo != null:
+		var old_sentence = sentence
+		var old_visibility = visibility
+		_undo_redo.create_action("Select sentence event visibility")
+		_undo_redo.add_do_method(self, "_select_sentence_event_visibility", sentence, visibility)
+		_undo_redo.add_undo_method(self, "_select_sentence_event_visibility", old_sentence, old_visibility)
+		_undo_redo.commit_action()
+	else:
+		_select_sentence_event_visibility(sentence, visibility)
+
+func _select_sentence_event_visibility(sentence: Dictionary, visibility: bool) -> void:
+	sentence.event_visible = visibility
+	emit_signal("sentence_event_visibility_changed", sentence)
+
+func change_sentence_text(sentence: Dictionary, text: String) -> void:
+	if _undo_redo != null:
+		var old_sentence = sentence
+		var old_text = text
+		_undo_redo.create_action("Sentence change text")
+		_undo_redo.add_do_method(self, "_change_sentence_text", sentence, text)
+		_undo_redo.add_undo_method(self, "_change_sentence_text", old_sentence, old_text)
+		_undo_redo.commit_action()
+	else:
+		_change_sentence_text(sentence, text)
+
+func _change_sentence_text(sentence: Dictionary, text) -> void:
+	sentence.text = text
+	emit_signal("sentence_text_changed", sentence)
+
+func change_sentence_event(sentence: Dictionary, event: String) -> void:
+	if _undo_redo != null:
+		var old_sentence = sentence
+		var old_event = event
+		_undo_redo.create_action("Sentence change event")
+		_undo_redo.add_do_method(self, "_change_sentence_event", sentence, event)
+		_undo_redo.add_undo_method(self, "_change_sentence_event", old_sentence, old_event)
+		_undo_redo.commit_action()
+	else:
+		_change_sentence_event(sentence, event)
+
+func _change_sentence_event(sentence: Dictionary, event) -> void:
+	sentence.event = event
+	emit_signal("sentence_event_changed", sentence)
