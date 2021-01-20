@@ -46,7 +46,7 @@ func _position_draw() -> void:
 	offset = _node.position
 
 func _slots_draw() -> void:
-	set_slot(0, true, 0, Color(1, 1, 1), false, 0, Color(1, 1, 1))
+	set_slot(0, false, 0, Color(1, 1, 1), false, 0, Color(1, 1, 1))
 
 func selected_slot() -> Vector2:
 	return Vector2.ZERO
