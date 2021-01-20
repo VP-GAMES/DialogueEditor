@@ -37,12 +37,17 @@ func add_node_start(position: Vector2, sendSignal = true) -> void:
 			_add_node(node, sendSignal)
 
 func _create_node_start(position: Vector2) -> DialogueNode:
-	var node_start = DialogueNode.new()
-	node_start.uuid = UUID.v4()
+	var node_start = _create_node(position)
 	node_start.type = DialogueNode.START
 	node_start.name = "Start"
-	node_start.position = position
 	return node_start
+
+func _create_node(position: Vector2) -> DialogueNode:
+	var node = DialogueNode.new()
+	node.set_editor(_editor)
+	node.uuid = UUID.v4()
+	node.position = position
+	return node
 
 func add_node_sentence(position: Vector2, sendSignal = true) -> void:
 		var node = _create_node_sentence(position)
@@ -55,11 +60,9 @@ func add_node_sentence(position: Vector2, sendSignal = true) -> void:
 			_add_node(node, sendSignal)
 
 func _create_node_sentence(position: Vector2) -> DialogueNode:
-	var node_sentence = DialogueNode.new()
-	node_sentence.uuid = UUID.v4()
+	var node_sentence = _create_node(position)
 	node_sentence.type = DialogueNode.SENTENCE
 	node_sentence.name = "Sentence"
-	node_sentence.position = position
 	return node_sentence
 
 func add_node_end(position: Vector2, sendSignal = true) -> void:
@@ -73,11 +76,9 @@ func add_node_end(position: Vector2, sendSignal = true) -> void:
 			_add_node(node, sendSignal)
 
 func _create_node_end(position: Vector2) -> DialogueNode:
-	var node_end = DialogueNode.new()
-	node_end.uuid = UUID.v4()
+	var node_end = _create_node(position)
 	node_end.type = DialogueNode.END
 	node_end.name = "End"
-	node_end.position = position
 	return node_end
 
 func _add_node(node: DialogueNode, sendSignal = true) -> void:

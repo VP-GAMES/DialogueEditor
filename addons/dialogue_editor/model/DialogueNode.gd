@@ -28,6 +28,24 @@ export (bool) var texture_view = false
 export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event_visible": false, "event": "", "node": DialogueEmpty.new()}]
 export (Dictionary) var sentence_selected = sentences[0]
 
+
+# ***** NODE *****
+signal node_position_changed(node)
+
+func change_position(from: Vector2, to: Vector2) -> void:
+	if _undo_redo != null:
+		_undo_redo.create_action("Node change position")
+		_undo_redo.add_do_method(self, "_change_position", to, false)
+		_undo_redo.add_undo_method(self, "_change_position", from, true)
+		_undo_redo.commit_action()
+	else:
+		_change_position(position, false)
+
+func _change_position(new_position: Vector2, emitSignal = true) -> void:
+	position = new_position
+	if emitSignal:
+		emit_signal("node_position_changed", self)
+
 # ***** SCENES *****
 signal scene_selection_changed(scene)
 
