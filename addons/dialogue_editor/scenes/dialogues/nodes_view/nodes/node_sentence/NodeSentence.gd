@@ -3,12 +3,7 @@
 tool
 extends "res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/NodeBase.gd"
 
-signal actor_added(actor)
-
 var _group = ButtonGroup.new()
-var _data: DialogueData
-var _node: DialogueNode
-var _dialogue: DialogueDialogue
 
 onready var _scenes_ui = $PanelScene/HBox/Scene as OptionButton
 onready var _add_ui = $PanelActor/HBox/Add as Button
@@ -19,14 +14,13 @@ onready var _texture_ui = $Center/Texture
 
 const PanelSentence = preload("res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_sentence/PanelSentence.tscn")
 
-func node() -> DialogueNode:
-	return _node
-
 func set_data(node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData) -> void:
 	_node = node
 	_dialogue = dialogue
 	_data = data
+	._init_connections()
 	_init_connections()
+	._update_view()
 	_update_view()
 
 func _init_connections() -> void:
