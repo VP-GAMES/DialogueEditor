@@ -14,8 +14,12 @@ func set_data(node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData
 	_node = node
 	_dialogue = dialogue
 	_data = data
+	_change_name()
 	_init_connections()
 	_update_view()
+
+func _change_name() -> void:
+	name = _node.uuid
 
 func _init_connections() -> void:
 	if not is_connected("dragged", self, "_on_node_dragged"):
@@ -31,8 +35,12 @@ func _on_node_position_changed(node: DialogueNode) -> void:
 		_position_draw()
 
 func _update_view() -> void:
+	_title_draw()
 	_slots_draw()
 	_position_draw()
+
+func _title_draw() -> void:
+	title = _node.title
 
 func _position_draw() -> void:
 	offset = _node.position

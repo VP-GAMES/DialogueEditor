@@ -43,6 +43,14 @@ func _init_connections() -> void:
 		assert(_graph_ui.connect("node_selected", self, "_on_node_selected") == OK)
 	if not _graph_ui.is_connected("gui_input", self, "_on_gui_input"):
 		assert(_graph_ui.connect("gui_input", self, "_on_gui_input") == OK)
+	if not _graph_ui.is_connected("connection_request", self, "_node_connection_request"):
+		assert(_graph_ui.connect("connection_request", self, "_node_connection_request") == OK)
+	if not _graph_ui.is_connected("disconnection_request", self, "_node_disconnection_request"):
+		assert(_graph_ui.connect("disconnection_request", self, "_node_disconnection_request") == OK)
+	if not _dialogue.is_connected("nodes_connected", self, "_on_nodes_connected"):
+		assert(_dialogue.connect("nodes_connected", self, "_on_nodes_connected") == OK)
+	if not _dialogue.is_connected("nodes_disconnected", self, "_on_nodes_disconnected"):
+		assert(_dialogue.connect("nodes_disconnected", self, "_on_nodes_disconnected") == OK)
 	if not _popup_ui.is_connected("id_pressed", self, "_on_popup_item_selected"):
 		assert(_popup_ui.connect("id_pressed", self, "_on_popup_item_selected") == OK)
 
@@ -138,6 +146,18 @@ func _calc_node_position() -> Vector2:
 	var offset_y = (_graph_ui.scroll_offset.y + _mouse_position.y) / _graph_ui.get_zoom()
 	return Vector2(offset_x, offset_y)
 
+func _node_connection_request(from, from_slot, to, to_slot):
+	_dialogue.node_connection_request(from, from_slot, to, to_slot)
+
+func _node_disconnection_request(from, from_slot, to, to_slot):
+	_dialogue.node_disconnection_request(from, from_slot, to, to_slot)
+
+func _on_nodes_connected(from, to) -> void:
+	_update_view()
+
+func _on_nodes_disconnected(from, to) -> void:
+	_update_view()
+
 func _update_view() -> void:
 	_clear_view()
 	_draw_view()
@@ -153,6 +173,7 @@ func _draw_view() -> void:
 	_graph_ui.scroll_offset = _dialogue.scroll_offset
 	for node in _dialogue.nodes:
 		_draw_node_by_type(node)
+	_draw_connections()
 
 func _draw_node_by_type(node: DialogueNode) -> void:
 	match node.type:
@@ -178,3 +199,7 @@ func _draw_node_end(node: DialogueNode) -> void:
 func _draw_node(node: DialogueNode, node_ui) -> void:
 	_graph_ui.add_child(node_ui)
 	node_ui.set_data(node, _dialogue, _data)
+
+func _draw_connections() -> void:
+	for con in _dialogue.connections():
+		_graph_ui.connect_node(con.from, con.from_port, con.to, con.to_port)

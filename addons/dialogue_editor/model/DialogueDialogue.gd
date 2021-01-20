@@ -20,6 +20,8 @@ signal node_added(node)
 signal node_removed(node)
 signal nodes_added(nodes)
 signal nodes_removed(nodes)
+signal nodes_connected(from, to)
+signal nodes_disconnected(from, to)
 
 export (String) var uuid
 export (String) var name = ""
@@ -39,7 +41,7 @@ func add_node_start(position: Vector2, sendSignal = true) -> void:
 func _create_node_start(position: Vector2) -> DialogueNode:
 	var node_start = _create_node(position)
 	node_start.type = DialogueNode.START
-	node_start.name = "Start"
+	node_start.title = "Start"
 	return node_start
 
 func _create_node(position: Vector2) -> DialogueNode:
@@ -62,7 +64,7 @@ func add_node_sentence(position: Vector2, sendSignal = true) -> void:
 func _create_node_sentence(position: Vector2) -> DialogueNode:
 	var node_sentence = _create_node(position)
 	node_sentence.type = DialogueNode.SENTENCE
-	node_sentence.name = "Sentence"
+	node_sentence.title = "Sentence"
 	return node_sentence
 
 func add_node_end(position: Vector2, sendSignal = true) -> void:
@@ -78,7 +80,7 @@ func add_node_end(position: Vector2, sendSignal = true) -> void:
 func _create_node_end(position: Vector2) -> DialogueNode:
 	var node_end = _create_node(position)
 	node_end.type = DialogueNode.END
-	node_end.name = "End"
+	node_end.title = "End"
 	return node_end
 
 func _add_node(node: DialogueNode, sendSignal = true) -> void:
@@ -125,3 +127,76 @@ func _add_nodes(nodes_to_add: Array) -> void:
 	for node in nodes_to_add:
 		_add_node(node, false)
 	emit_signal("nodes_added", nodes_to_add)
+
+func node_connection_request(from, from_slot, to, to_slot):
+	if from == to: 
+		return
+	var from_node = _node_by_uuid(from) as DialogueNode
+	var to_node = _node_by_uuid(to) as DialogueNode
+	if from_node.type == from_node.START and to_node.type == to_node.END: 
+		return
+	var sentence
+	if from_node.type == from_node.START:
+		sentence = sentence_has_connection(to_node)
+	if _undo_redo != null:
+		_undo_redo.create_action("Connect nodes")
+		_undo_redo.add_do_method(self, "_node_connection_request", from_node, from_slot, to_node, to_slot, sentence)
+		_undo_redo.add_undo_method(self, "_node_disconnection_request", from_node, from_slot, to_node, to_slot, sentence)
+		_undo_redo.commit_action()
+	else:
+		_node_connection_request(from_node, from_slot, to_node, to_slot, sentence)
+
+func _node_connection_request(from_node, from_slot, to_node, to_slot, sentence = null):
+	if sentence:
+		 sentence.node = DialogueEmpty.new()
+	from_node.sentences[from_slot].node = to_node
+	emit_signal("nodes_connected", from_node, to_node)
+
+func node_disconnection_request(from, from_slot, to, to_slot):
+	var from_node = _node_by_uuid(from) as DialogueNode
+	var to_node = _node_by_uuid(to) as DialogueNode
+	if _undo_redo != null:
+		_undo_redo.create_action("Disconnect nodes")
+		_undo_redo.add_do_method(self, "_node_disconnection_request", from_node, from_slot, to_node, to_slot)
+		_undo_redo.add_undo_method(self, "_node_connection_request", from_node, from_slot, to_node, to_slot)
+		_undo_redo.commit_action()
+	else:
+		_node_disconnection_request(from_node, from_slot, to_node, to_slot)
+
+func _node_disconnection_request(from_node, from_slot, to_node, to_slot, sentence = null):
+	if sentence:
+		 sentence.node = to_node
+	from_node.sentences[from_slot].node = DialogueEmpty.new()
+	emit_signal("nodes_disconnected", from_node, to_node)
+
+func _node_by_uuid(uuid: String) -> DialogueNode:
+	for node in nodes:
+		if node.uuid == uuid:
+			return node
+	return null
+
+func connections() -> Array:
+	var all_connections = []
+	for node_index in range(nodes.size()):
+		var node = nodes[node_index] as DialogueNode
+		for sentence_index in range(node.sentences.size()):
+			var sentence = node.sentences[sentence_index]
+			if not sentence.node is DialogueEmpty:
+				var connection = {
+					"from": node.uuid, 
+					"from_port": sentence_index,
+					"to": sentence.node.uuid,
+					"to_port": 0
+				}
+				all_connections.append(connection)
+	return all_connections
+
+func sentence_has_connection(to_node):
+	for node_index in range(nodes.size()):
+		var node = nodes[node_index] as DialogueNode
+		for sentence_index in range(node.sentences.size()):
+			var sentence = node.sentences[sentence_index]
+			if not sentence.node is DialogueEmpty:
+				if sentence.node == to_node:
+					return sentence
+	return null

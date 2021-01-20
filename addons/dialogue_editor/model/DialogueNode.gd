@@ -19,7 +19,7 @@ enum { START, END, SENTENCE }
 
 export (String) var uuid
 export (int) var type
-export (String) var name
+export (String) var title = ""
 export (Vector2) var position
 export (String) var scene = ""
 export (Resource) var actor = DialogueEmpty.new() # DialogueActor

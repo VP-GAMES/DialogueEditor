@@ -18,6 +18,7 @@ func set_data(node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData
 	_node = node
 	_dialogue = dialogue
 	_data = data
+	._change_name()
 	._init_connections()
 	_init_connections()
 	._update_view()
