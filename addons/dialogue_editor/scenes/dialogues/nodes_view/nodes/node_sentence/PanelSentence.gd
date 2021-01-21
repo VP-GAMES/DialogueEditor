@@ -1,4 +1,4 @@
-# Node panel for DialogueEditor: MIT License
+# Node sentence panel for DialogueEditor: MIT License
 # @author Vladimir Petrenko
 tool
 extends PanelContainer

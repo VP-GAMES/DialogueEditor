@@ -5,7 +5,6 @@
 [node name="NodeSentence" type="GraphNode"]
 margin_right = 350.0
 margin_bottom = 300.0
-resizable = true
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color( 1, 1, 1, 1 )
