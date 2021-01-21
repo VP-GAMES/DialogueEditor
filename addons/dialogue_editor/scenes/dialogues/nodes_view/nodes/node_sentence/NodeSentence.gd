@@ -204,3 +204,11 @@ func _slots_draw() -> void:
 			set_slot(child.get_index(), false, 0, Color.white, true, 0, Color.white)
 		else:
 			set_slot(child.get_index(), false, 0, Color.white, false, 0, Color.white)
+
+func slot_index_of_selected_sentence() -> int:
+	var sentence = _node.selected_sentence()
+	for child in get_children():
+		if child is DialoguePanelSentence:
+			if sentence == child.sentence():
+				return child.get_index()
+	return -1

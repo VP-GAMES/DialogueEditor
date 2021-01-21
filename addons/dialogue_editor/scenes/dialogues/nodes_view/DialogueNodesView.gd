@@ -174,6 +174,7 @@ func _draw_view() -> void:
 	for node in _dialogue.nodes:
 		_draw_node_by_type(node)
 	_draw_connections()
+	_draw_connections_colors()
 
 func _draw_node_by_type(node: DialogueNode) -> void:
 	match node.type:
@@ -203,3 +204,16 @@ func _draw_node(node: DialogueNode, node_ui) -> void:
 func _draw_connections() -> void:
 	for con in _dialogue.connections():
 		_graph_ui.connect_node(con.from, con.from_port, con.to, con.to_port)
+
+func _draw_connections_colors() -> void:
+	var node = _dialogue.node_start()
+	if node:
+		var node_start_ui = _graph_ui.get_node(node.uuid)
+		node_start_ui.set_slot(0, false, 0, _data.SLOT_COLOR_DEFAULT, true, 0, _data.SLOT_COLOR_PATH)
+		while(not(node.selected_sentence().node is DialogueEmpty)):
+			var node_ui = _graph_ui.get_node(node.selected_sentence().node.uuid)
+			node_ui.set_slot(0, true, 0, _data.SLOT_COLOR_PATH, false, 0, _data.SLOT_COLOR_DEFAULT)
+			if node_ui.has_method("slot_index_of_selected_sentence"):
+				var slot_index = node_ui.slot_index_of_selected_sentence()
+				node_ui.set_slot(slot_index, false, 0, _data.SLOT_COLOR_DEFAULT, true, 0, _data.SLOT_COLOR_PATH)
+			node = node.selected_sentence().node

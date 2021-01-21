@@ -20,6 +20,9 @@ onready var _event_text_ui = $VBox/HBoxEvent/EventText as LineEdit
 const IconResourceEvent = preload("res://addons/dialogue_editor/icons/Event.png")
 const IconResourceEventEmpty = preload("res://addons/dialogue_editor/icons/EventEmpty.png")
 
+func sentence() -> Dictionary:
+	return _sentence
+
 func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dialogue: DialogueDialogue, data: DialogueData) -> void:
 	_group = group
 	_sentence = sentence

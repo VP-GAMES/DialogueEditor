@@ -269,6 +269,8 @@ func save() -> void:
 
 # ***** EDITOR SETTINGS *****
 const BACKGROUND_COLOR_SELECTED = Color("#868991")
+const SLOT_COLOR_DEFAULT = Color(1, 1, 1)
+const SLOT_COLOR_PATH = Color(0.4, 0.78, 0.945)
 
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"

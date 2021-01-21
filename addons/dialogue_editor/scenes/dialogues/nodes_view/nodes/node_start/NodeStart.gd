@@ -4,4 +4,4 @@ tool
 extends "res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/NodeBase.gd"
 
 func _slots_draw() -> void:
-	set_slot(0, false, 0, Color(1, 1, 1), true, 0, Color(0.4, 0.78, 0.945))
+	set_slot(0, false, 0, Color(1, 1, 1), true, 0, Color(1, 1, 1))

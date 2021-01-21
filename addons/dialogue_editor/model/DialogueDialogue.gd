@@ -175,6 +175,13 @@ func _node_by_uuid(uuid: String) -> DialogueNode:
 			return node
 	return null
 
+func node_start() -> DialogueNode:
+	for node_index in range(nodes.size()):
+		var node = nodes[node_index] as DialogueNode
+		if node.type == node.START:
+			return node
+	return null
+
 func connections() -> Array:
 	var all_connections = []
 	for node_index in range(nodes.size()):

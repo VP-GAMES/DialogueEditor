@@ -26,7 +26,7 @@ export (Resource) var actor = DialogueEmpty.new() # DialogueActor
 export (String) var texture_uuid = ""
 export (bool) var texture_view = false
 export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event_visible": false, "event": "", "node": DialogueEmpty.new()}]
-export (Dictionary) var sentence_selected = sentences[0]
+export (Dictionary) var sentence_selected
 
 
 # ***** NODE *****
