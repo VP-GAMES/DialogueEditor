@@ -83,24 +83,29 @@ func _create_node_end(position: Vector2) -> DialogueNode:
 	node_end.title = "End"
 	return node_end
 
-func _add_node(node: DialogueNode, sendSignal = true) -> void:
+func _add_node(node: DialogueNode, sendSignal = true, sentences_to_connect = []) -> void:
 	nodes.append(node)
+	for sentence in sentences_to_connect:
+		sentence.node = node
 	if sendSignal:
 		emit_signal("node_added", node)
 
 func del_node(node: DialogueNode) -> void:
+	var connected_to_sentences = sentences_has_connection(node)
 	if _undo_redo != null:
 		var index = nodes.find(node)
 		_undo_redo.create_action("Del node")
-		_undo_redo.add_do_method(self, "_del_node", node)
-		_undo_redo.add_undo_method(self, "_add_node", node)
+		_undo_redo.add_do_method(self, "_del_node", node, connected_to_sentences)
+		_undo_redo.add_undo_method(self, "_add_node", node, connected_to_sentences)
 		_undo_redo.commit_action()
 	else:
 		_del_node(node)
 
-func _del_node(node, sendSignal = true) -> void:
+func _del_node(node, sendSignal = true, sentences_to_disconnect = []) -> void:
 	var index = nodes.find(node)
 	if index > -1:
+		for sentence in sentences_to_disconnect:
+			sentence.node = DialogueEmpty.new()
 		nodes.remove(index)
 		if sendSignal:
 			emit_signal("node_removed", node)
@@ -182,6 +187,13 @@ func node_start() -> DialogueNode:
 			return node
 	return null
 
+func node_end() -> DialogueNode:
+	for node_index in range(nodes.size()):
+		var node = nodes[node_index] as DialogueNode
+		if node.type == node.END:
+			return node
+	return null
+
 func connections() -> Array:
 	var all_connections = []
 	for node_index in range(nodes.size()):
@@ -207,3 +219,14 @@ func sentence_has_connection(to_node):
 				if sentence.node == to_node:
 					return sentence
 	return null
+
+func sentences_has_connection(to_node) -> Array:
+	var sentences = []
+	for node_index in range(nodes.size()):
+		var node = nodes[node_index] as DialogueNode
+		for sentence_index in range(node.sentences.size()):
+			var sentence = node.sentences[sentence_index]
+			if not sentence.node is DialogueEmpty:
+				if sentence.node == to_node:
+					sentences.append(sentence)
+	return sentences
