@@ -110,6 +110,7 @@ func _update_view() -> void:
 	_slots_draw()
 	offset = _node.position
 	rect_size = Vector2.ZERO
+	_dialogue.emit_signal_update_connections_colors()
 
 func _scenes_ui_fill_and_draw() -> void:
 	_scenes_ui.clear()
@@ -193,6 +194,9 @@ func _sentence_draw(sentence: Dictionary) -> void:
 	var sentence_ui = PanelSentence.instance()
 	add_child(sentence_ui)
 	sentence_ui.set_data(_group, sentence, _node, _dialogue, _data)
+
+func update_slots_draw() -> void:
+	_slots_draw()
 
 func _slots_draw() -> void:
 	var children = get_children()

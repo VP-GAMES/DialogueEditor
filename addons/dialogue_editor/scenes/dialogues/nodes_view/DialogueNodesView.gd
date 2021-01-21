@@ -51,6 +51,8 @@ func _init_connections() -> void:
 		assert(_dialogue.connect("nodes_connected", self, "_on_nodes_connected") == OK)
 	if not _dialogue.is_connected("nodes_disconnected", self, "_on_nodes_disconnected"):
 		assert(_dialogue.connect("nodes_disconnected", self, "_on_nodes_disconnected") == OK)
+	if not _dialogue.is_connected("update_connections_colors", self, "_on_update_connections_colors"):
+		assert(_dialogue.connect("update_connections_colors", self, "_on_update_connections_colors") == OK)
 	if not _popup_ui.is_connected("id_pressed", self, "_on_popup_item_selected"):
 		assert(_popup_ui.connect("id_pressed", self, "_on_popup_item_selected") == OK)
 
@@ -158,6 +160,9 @@ func _on_nodes_connected(from, to) -> void:
 func _on_nodes_disconnected(from, to) -> void:
 	_update_view()
 
+func _on_update_connections_colors() -> void:
+	_draw_connections_colors()
+
 func _update_view() -> void:
 	_clear_view()
 	_draw_view()
@@ -207,6 +212,16 @@ func _draw_connections() -> void:
 			_graph_ui.connect_node(con.from, con.from_port, con.to, con.to_port)
 
 func _draw_connections_colors() -> void:
+	_draw_connections_colors_default()
+	_draw_connections_colors_path()
+
+func _draw_connections_colors_default() -> void:
+	for node in _dialogue.nodes:
+		var node_ui = _graph_ui.get_node(node.uuid)
+		if node_ui and node_ui.has_method("update_slots_draw"):
+			node_ui.update_slots_draw()
+
+func _draw_connections_colors_path() -> void:
 	var node = _dialogue.node_start()
 	if node:
 		var node_start_ui = _graph_ui.get_node(node.uuid)

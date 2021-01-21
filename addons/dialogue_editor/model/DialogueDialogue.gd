@@ -23,6 +23,11 @@ signal nodes_removed(nodes)
 signal nodes_connected(from, to)
 signal nodes_disconnected(from, to)
 
+signal update_connections_colors()
+
+func emit_signal_update_connections_colors() -> void:
+	emit_signal("update_connections_colors")
+
 export (String) var uuid
 export (String) var name = ""
 export (Vector2) var scroll_offset = Vector2.ZERO
