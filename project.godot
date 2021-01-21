@@ -29,6 +29,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/dialogue_editor/model/DialogueEmpty.gd"
 }, {
+"base": "Reference",
+"class": "DialogueMangerDialogues",
+"language": "GDScript",
+"path": "res://addons/dialogue_editor/DialogueMangerDialogues.gd"
+}, {
+"base": "Reference",
+"class": "DialogueMangerEvents",
+"language": "GDScript",
+"path": "res://addons/dialogue_editor/DialogueMangerEvents.gd"
+}, {
 "base": "Resource",
 "class": "DialogueNode",
 "language": "GDScript",
@@ -49,6 +59,8 @@ _global_script_class_icons={
 "DialogueData": "",
 "DialogueDialogue": "res://addons/dialogue_editor/icons/Dialogue.png",
 "DialogueEmpty": "",
+"DialogueMangerDialogues": "",
+"DialogueMangerEvents": "",
 "DialogueNode": "res://addons/dialogue_editor/icons/Node.png",
 "DialoguePanelSentence": "",
 "DialogueSentence": "res://addons/dialogue_editor/icons/Sentence.png"

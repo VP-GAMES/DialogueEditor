@@ -230,3 +230,11 @@ func sentences_has_connection(to_node) -> Array:
 				if sentence.node == to_node:
 					sentences.append(sentence)
 	return sentences
+
+func events() -> PoolStringArray:
+	var events = []
+	for node in nodes:
+		for sentence in node.sentences:
+			if not sentence.event.empty():
+				events.append(sentence.event)
+	return events

@@ -194,7 +194,7 @@ func add_dialogue(sendSignal = true) -> void:
 
 func _create_dialogue() -> DialogueDialogue:
 	var dialogue = DialogueDialogue.new()
-	dialogue.name = _next_dialogue_name()
+	dialogue.name = _next_dialogue_name() 
 	return dialogue
 
 func _next_dialogue_name() -> String:
@@ -266,6 +266,36 @@ func init_data() -> void:
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)
+	_save_data_dialogue_names()
+	_save_data_dialogue_events()
+	_editor.get_editor_interface().get_resource_filesystem().scan()
+
+func _save_data_dialogue_names() -> void:
+	var file = File.new()
+	file.open("res://addons/dialogue_editor/DialogueMangerDialogues.gd", File.WRITE)
+	var source_code = "# Names for DialogueManger to use in source code: MIT License\n"
+	source_code += AUTHOR
+	source_code += "tool\n"
+	source_code += "class_name DialogueMangerDialogues\n\n"
+	for dialogue in dialogues:
+		source_code += "const " + dialogue.name.to_upper() + " = \"" + dialogue.name +"\"\n"
+	file.store_string(source_code)
+	file.close()
+
+func _save_data_dialogue_events() -> void:
+	var file = File.new()
+	file.open("res://addons/dialogue_editor/DialogueMangerEvents.gd", File.WRITE)
+	var source_code = "# Events for DialogueManger to use in source code: MIT License\n"
+	source_code += AUTHOR
+	source_code += "tool\n"
+	source_code += "class_name DialogueMangerEvents\n\n"
+	for dialogue in dialogues:
+		for event in dialogue.events():
+			source_code += "const " + dialogue.name.to_upper() + "_EVENT_" + event.to_upper()
+			source_code += " = \"" + event +"\"\n"
+		source_code += "\n"
+	file.store_string(source_code)
+	file.close()
 
 # ***** EDITOR SETTINGS *****
 const BACKGROUND_COLOR_SELECTED = Color("#868991")
@@ -273,6 +303,7 @@ const SLOT_COLOR_DEFAULT = Color(1, 1, 1)
 const SLOT_COLOR_PATH = Color(0.4, 0.78, 0.945)
 
 const PATH_TO_SAVE = "res://addons/dialogue_editor/DialogueSave.res"
+const AUTHOR = "# @author Vladimir Petrenko\n"
 const SETTINGS_ACTORS_SPLIT_OFFSET = "dialogue_editor/actors_split_offset"
 const SETTINGS_ACTORS_SPLIT_OFFSET_DEFAULT = 215
 const SUPPORTED_ACTOR_RESOURCES = ["bmp", "jpg", "jpeg", "png", "svg", "svgz", "tres"]
