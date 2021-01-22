@@ -212,14 +212,16 @@ func _draw_connections() -> void:
 			_graph_ui.connect_node(con.from, con.from_port, con.to, con.to_port)
 
 func _draw_connections_colors() -> void:
+	pass
 	_draw_connections_colors_default()
 	_draw_connections_colors_path()
 
 func _draw_connections_colors_default() -> void:
 	for node in _dialogue.nodes:
-		var node_ui = _graph_ui.get_node(node.uuid)
-		if node_ui and node_ui.has_method("update_slots_draw"):
-			node_ui.update_slots_draw()
+		if _graph_ui.has_node(node.uuid):
+			var node_ui = _graph_ui.get_node(node.uuid)
+			if node_ui.has_method("update_slots_draw"):
+				node_ui.update_slots_draw()
 
 func _draw_connections_colors_path() -> void:
 	var node = _dialogue.node_start()
