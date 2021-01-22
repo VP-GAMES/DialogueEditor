@@ -297,6 +297,18 @@ func _save_data_dialogue_events() -> void:
 	file.store_string(source_code)
 	file.close()
 
+func dialogue_exists(dialogue_name: String) -> bool:
+	for dialogue in dialogues:
+		if dialogue.name == dialogue_name:
+			return true
+	return false
+
+func dialogue_by_name(dialogue_name: String) -> DialogueDialogue:
+	for dialogue in dialogues:
+		if dialogue.name == dialogue_name:
+			return dialogue
+	return null
+
 # ***** EDITOR SETTINGS *****
 const BACKGROUND_COLOR_SELECTED = Color("#868991")
 const SLOT_COLOR_DEFAULT = Color(1, 1, 1)

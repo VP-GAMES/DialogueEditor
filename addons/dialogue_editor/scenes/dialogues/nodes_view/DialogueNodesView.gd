@@ -83,7 +83,7 @@ func _on_node_selected(node: Node) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.get_button_index() == BUTTON_LEFT and event.pressed:
-			if _popup_ui.visible and not _mouse_over_popup:
+			if _popup_ui and _popup_ui.visible and not _mouse_over_popup:
 				_popup_ui.hide()
 
 func _on_gui_input(event: InputEvent) -> void:
@@ -212,7 +212,6 @@ func _draw_connections() -> void:
 			_graph_ui.connect_node(con.from, con.from_port, con.to, con.to_port)
 
 func _draw_connections_colors() -> void:
-	pass
 	_draw_connections_colors_default()
 	_draw_connections_colors_path()
 
