@@ -16,24 +16,22 @@ func set_editor(editor: EditorPlugin) -> void:
 
 const UUID = preload("res://addons/dialogue_editor/uuid/uuid.gd")
 # ***** EDITOR_PLUGIN_END *****
-signal node_added(node)
-signal node_removed(node)
-signal nodes_added(nodes)
-signal nodes_removed(nodes)
-signal nodes_connected(from, to)
-signal nodes_disconnected(from, to)
 
-signal update_connections_colors()
+# ***** IMPLEMENTATION *****
+signal update_view()
 
-func emit_signal_update_connections_colors() -> void:
-	emit_signal("update_connections_colors")
+func emit_signal_update_view() -> void:
+	emit_signal("update_view")
 
 export (String) var uuid
 export (String) var name = ""
 export (Vector2) var scroll_offset = Vector2.ZERO
 export (Array) var nodes
 
-func add_node_start(position: Vector2, sendSignal = true) -> void:
+# ***** ADD NODE *****
+signal node_added(node)
+
+func add_node_start(position: Vector2) -> void:
 		var node = _create_node_start(position)
 		if _undo_redo != null:
 			_undo_redo.create_action("Add node start")
@@ -41,13 +39,45 @@ func add_node_start(position: Vector2, sendSignal = true) -> void:
 			_undo_redo.add_undo_method(self, "_del_node", node)
 			_undo_redo.commit_action()
 		else:
-			_add_node(node, sendSignal)
+			_add_node(node)
 
 func _create_node_start(position: Vector2) -> DialogueNode:
 	var node_start = _create_node(position)
 	node_start.type = DialogueNode.START
 	node_start.title = "Start"
 	return node_start
+
+func add_node_sentence(position: Vector2) -> void:
+		var node = _create_node_sentence(position)
+		if _undo_redo != null:
+			_undo_redo.create_action("Add node sentence")
+			_undo_redo.add_do_method(self, "_add_node", node)
+			_undo_redo.add_undo_method(self, "_del_node", node)
+			_undo_redo.commit_action()
+		else:
+			_add_node(node)
+
+func _create_node_sentence(position: Vector2) -> DialogueNode:
+	var node_sentence = _create_node(position)
+	node_sentence.type = DialogueNode.SENTENCE
+	node_sentence.title = "Sentence"
+	return node_sentence
+
+func add_node_end(position: Vector2) -> void:
+		var node = _create_node_end(position)
+		if _undo_redo != null:
+			_undo_redo.create_action("Add node end")
+			_undo_redo.add_do_method(self, "_add_node", node)
+			_undo_redo.add_undo_method(self, "_del_node", node)
+			_undo_redo.commit_action()
+		else:
+			_add_node(node)
+
+func _create_node_end(position: Vector2) -> DialogueNode:
+	var node_end = _create_node(position)
+	node_end.type = DialogueNode.END
+	node_end.title = "End"
+	return node_end
 
 func _create_node(position: Vector2) -> DialogueNode:
 	var node = DialogueNode.new()
@@ -56,44 +86,16 @@ func _create_node(position: Vector2) -> DialogueNode:
 	node.position = position
 	return node
 
-func add_node_sentence(position: Vector2, sendSignal = true) -> void:
-		var node = _create_node_sentence(position)
-		if _undo_redo != null:
-			_undo_redo.create_action("Add node sentence")
-			_undo_redo.add_do_method(self, "_add_node", node)
-			_undo_redo.add_undo_method(self, "_del_node", node)
-			_undo_redo.commit_action()
-		else:
-			_add_node(node, sendSignal)
-
-func _create_node_sentence(position: Vector2) -> DialogueNode:
-	var node_sentence = _create_node(position)
-	node_sentence.type = DialogueNode.SENTENCE
-	node_sentence.title = "Sentence"
-	return node_sentence
-
-func add_node_end(position: Vector2, sendSignal = true) -> void:
-		var node = _create_node_end(position)
-		if _undo_redo != null:
-			_undo_redo.create_action("Add node end")
-			_undo_redo.add_do_method(self, "_add_node", node)
-			_undo_redo.add_undo_method(self, "_del_node", node)
-			_undo_redo.commit_action()
-		else:
-			_add_node(node, sendSignal)
-
-func _create_node_end(position: Vector2) -> DialogueNode:
-	var node_end = _create_node(position)
-	node_end.type = DialogueNode.END
-	node_end.title = "End"
-	return node_end
-
-func _add_node(node: DialogueNode, sendSignal = true, sentences_to_connect = []) -> void:
+func _add_node(node: DialogueNode, emitSignal = true, sentences_to_connect = []) -> void:
 	nodes.append(node)
 	for sentence in sentences_to_connect:
 		sentence.node = node
-	if sendSignal:
+	if emitSignal:
 		emit_signal("node_added", node)
+		emit_signal("update_view")
+
+# ***** DEL NODE *****
+signal node_removed(node)
 
 func del_node(node: DialogueNode) -> void:
 	var connected_to_sentences = sentences_has_connection(node)
@@ -106,14 +108,18 @@ func del_node(node: DialogueNode) -> void:
 	else:
 		_del_node(node)
 
-func _del_node(node, sendSignal = true, sentences_to_disconnect = []) -> void:
+func _del_node(node, emitSignal = true, sentences_to_disconnect = []) -> void:
 	var index = nodes.find(node)
 	if index > -1:
 		for sentence in sentences_to_disconnect:
 			sentence.node = DialogueEmpty.new()
 		nodes.remove(index)
-		if sendSignal:
+		if emitSignal:
 			emit_signal("node_removed", node)
+			emit_signal("update_view")
+
+# ***** DEL LIST OF NODES *****
+signal nodes_removed(nodes)
 
 func del_nodes(nodes_to_delete = null) -> void:
 	if not nodes_to_delete:
@@ -132,11 +138,19 @@ func _del_nodes(nodes_to_delete: Array) -> void:
 	for node in nodes_to_delete:
 		_del_node(node, false)
 	emit_signal("nodes_removed", nodes_to_delete)
-	
+	emit_signal("update_view")
+
+# ***** ADD LIST OF NODES *****
+signal nodes_added(nodes)
+
 func _add_nodes(nodes_to_add: Array) -> void:
 	for node in nodes_to_add:
 		_add_node(node, false)
 	emit_signal("nodes_added", nodes_to_add)
+	emit_signal("update_view")
+
+# ***** CONNECTION REQUEST *****
+signal nodes_connected(from, to)
 
 func node_connection_request(from, from_slot, to, to_slot):
 	if from == to: 
@@ -161,6 +175,10 @@ func _node_connection_request(from_node, from_slot, to_node, to_slot, sentence =
 		 sentence.node = DialogueEmpty.new()
 	from_node.sentences[from_slot].node = to_node
 	emit_signal("nodes_connected", from_node, to_node)
+	emit_signal("update_view")
+
+# ***** DISCONNECTION REQUEST *****
+signal nodes_disconnected(from, to)
 
 func node_disconnection_request(from, from_slot, to, to_slot):
 	var from_node = _node_by_uuid(from) as DialogueNode
@@ -178,13 +196,9 @@ func _node_disconnection_request(from_node, from_slot, to_node, to_slot, sentenc
 		 sentence.node = to_node
 	from_node.sentences[from_slot].node = DialogueEmpty.new()
 	emit_signal("nodes_disconnected", from_node, to_node)
+	emit_signal("update_view")
 
-func _node_by_uuid(uuid: String) -> DialogueNode:
-	for node in nodes:
-		if node.uuid == uuid:
-			return node
-	return null
-
+# ***** HELPER *****
 func node_start() -> DialogueNode:
 	for node_index in range(nodes.size()):
 		var node = nodes[node_index] as DialogueNode
@@ -196,6 +210,12 @@ func node_end() -> DialogueNode:
 	for node_index in range(nodes.size()):
 		var node = nodes[node_index] as DialogueNode
 		if node.type == node.END:
+			return node
+	return null
+
+func _node_by_uuid(uuid: String) -> DialogueNode:
+	for node in nodes:
+		if node.uuid == uuid:
 			return node
 	return null
 

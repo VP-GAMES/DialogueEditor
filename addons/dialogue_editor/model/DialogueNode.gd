@@ -28,7 +28,6 @@ export (bool) var texture_view = false
 export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event_visible": false, "event": "", "node": DialogueEmpty.new()}]
 export (Dictionary) var sentence_selected
 
-
 # ***** NODE *****
 signal node_position_changed(node)
 
@@ -165,9 +164,9 @@ func _create_sentence() -> Dictionary:
 
 func _add_sentence(sentence: Dictionary, sendSignal = true, position = sentences.size(), select_sentence = false) -> void:
 	sentences.insert(position, sentence)
-	emit_signal("sentence_added", sentence)
 	if select_sentence:
 		_select_sentence(sentence)
+	emit_signal("sentence_added", sentence)
 
 func del_sentence(sentence) -> void:
 	if _undo_redo != null:
@@ -183,9 +182,9 @@ func _del_sentence(sentence) -> void:
 	var index = sentences.find(sentence)
 	if index > -1:
 		sentences.remove(index)
-		emit_signal("sentence_removed", sentence)
 		var sentence_selected = selected_sentence()
 		_select_sentence(sentence_selected)
+		emit_signal("sentence_removed", sentence)
 
 func selected_sentence() -> Dictionary:
 	var selected_sentence_exists = sentences.has(sentence_selected)

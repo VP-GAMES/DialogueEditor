@@ -35,14 +35,14 @@ func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dial
 func _init_connections() -> void:
 	if not _remove_ui.is_connected("pressed", self, "_on_remove_sentence_pressed"):
 		assert(_remove_ui.connect("pressed", self, "_on_remove_sentence_pressed") == OK)
-	if not _event_ui.is_connected("pressed", self, "_on_select_event_pressed"):
-		assert(_event_ui.connect("pressed", self, "_on_select_event_pressed") == OK)
 	if not _select_ui.is_connected("pressed", self, "_on_select_sentence_pressed"):
 		assert(_select_ui.connect("pressed", self, "_on_select_sentence_pressed") == OK)
 	if not _text_ui.is_connected("text_changed", self, "_on_text_changed"):
 		assert(_text_ui.connect("text_changed", self, "_on_text_changed") == OK)
 	if not _event_text_ui.is_connected("text_changed", self, "_on_event_text_changed"):
 		assert(_event_text_ui.connect("text_changed", self, "_on_event_text_changed") == OK)
+	if not _event_ui.is_connected("pressed", self, "_on_select_event_pressed"):
+		assert(_event_ui.connect("pressed", self, "_on_select_event_pressed") == OK)
 	if not _node.is_connected("sentence_event_changed", self, "_on_sentence_event_changed"):
 		assert(_node.connect("sentence_event_changed", self, "_on_sentence_event_changed") == OK)
 
@@ -52,18 +52,18 @@ func _on_remove_sentence_pressed() -> void:
 func _on_select_event_pressed() -> void:
 	_node.select_sentence_event_visibility(_sentence, _event_ui.is_pressed())
 
+func _on_text_changed(new_text: String) -> void:
+	_node.change_sentence_text(_sentence, new_text)
+
+func _on_event_text_changed(new_text: String) -> void:
+	_node.change_sentence_event(_sentence, new_text)
+
 func _on_sentence_event_visibility_changed(sentence) -> void:
 	if _sentence == sentence:
 		_update_view()
 
 func _on_select_sentence_pressed() -> void:
 	_node.select_sentence(_sentence)
-
-func _on_text_changed(new_text: String) -> void:
-	_node.change_sentence_text(_sentence, new_text)
-
-func _on_event_text_changed(new_text: String) -> void:
-	_node.change_sentence_event(_sentence, new_text)
 
 func _on_sentence_event_changed(sentence) -> void:
 	_event_ui_draw()
