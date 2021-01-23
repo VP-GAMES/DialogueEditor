@@ -41,9 +41,6 @@ func _on_dialogue_action(dialogue: DialogueDialogue) -> void:
 
 func _on_play_pressed() -> void:
 	#https://docs.godotengine.org/de/stable/classes/class_packedscene.html
-	var b = Button.new()
-	b.text = "Hallo"
-	DialogueDialoguesPlayer.get_tree().add_child(b)
 	_data.editor().get_editor_interface().play_custom_scene(DialogueDialoguesPlayer.get_path())
 
 func _update_view() -> void:
