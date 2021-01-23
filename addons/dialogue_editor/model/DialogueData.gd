@@ -278,7 +278,9 @@ func _save_data_dialogue_names() -> void:
 	source_code += "tool\n"
 	source_code += "class_name DialogueMangerDialogues\n\n"
 	for dialogue in dialogues:
-		source_code += "const " + dialogue.name.to_upper() + " = \"" + dialogue.name +"\"\n"
+		var namePrepared = dialogue.name.replace(" ", "")
+		namePrepared = namePrepared.to_upper()
+		source_code += "const " + namePrepared + " = \"" + dialogue.name +"\"\n"
 	file.store_string(source_code)
 	file.close()
 

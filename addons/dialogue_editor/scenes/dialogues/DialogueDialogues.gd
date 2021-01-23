@@ -7,10 +7,12 @@ var _data: DialogueData
 
 onready var _add_ui = $Margin/VBox/HBox/Add as Button
 onready var _dialogues_ui = $Margin/VBox/Scroll/Dialogues
+onready var _play_ui = $Margin/VBox/HBox/Play as Button
 onready var _nodes_ui = $Margin/VBox/HBox/Nodes as Button
 onready var _bricks_ui = $Margin/VBox/HBox/Bricks as Button
 
 const DialogueDialogueUI = preload("res://addons/dialogue_editor/scenes/dialogues/DialogueDialogueUI.tscn")
+const DialogueDialoguesPlayer = preload("res://addons/dialogue_editor/scenes/dialogues/DialogueDialoguesPlayer.tscn")
 
 func set_data(data: DialogueData) -> void:
 	_data = data
@@ -24,13 +26,25 @@ func _init_connections() -> void:
 		assert(_data.connect("dialogue_added", self, "_on_dialogue_action") == OK)
 	if not _data.is_connected("dialogue_removed", self, "_on_dialogue_action"):
 		assert(_data.connect("dialogue_removed", self, "_on_dialogue_action") == OK)
+	if not _play_ui.is_connected("pressed", self, "_on_play_pressed"):
+		assert(_play_ui.connect("pressed", self, "_on_play_pressed") == OK)
 	if not _nodes_ui.is_connected("pressed", self, "_on_type_pressed"):
 		assert(_nodes_ui.connect("pressed", self, "_on_type_pressed", ["NODES"]) == OK)
 	if not _bricks_ui.is_connected("pressed", self, "_on_type_pressed"):
 		assert(_bricks_ui.connect("pressed", self, "_on_type_pressed", ["BRICKS"]) == OK)
 
+func _add_pressed() -> void:
+	_data.add_dialogue()
+
 func _on_dialogue_action(dialogue: DialogueDialogue) -> void:
 	_update_view()
+
+func _on_play_pressed() -> void:
+	#https://docs.godotengine.org/de/stable/classes/class_packedscene.html
+	var b = Button.new()
+	b.text = "Hallo"
+	DialogueDialoguesPlayer.get_tree().add_child(b)
+	_data.editor().get_editor_interface().play_custom_scene(DialogueDialoguesPlayer.get_path())
 
 func _update_view() -> void:
 	_draw_editor_type()
@@ -64,6 +78,3 @@ func _draw_dialogue(dialogue: DialogueDialogue) -> void:
 	var dialogue_ui = DialogueDialogueUI.instance()
 	_dialogues_ui.add_child(dialogue_ui)
 	dialogue_ui.set_data(dialogue, _data)
-
-func _add_pressed() -> void:
-	_data.add_dialogue()
