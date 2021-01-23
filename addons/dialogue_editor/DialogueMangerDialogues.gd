@@ -3,4 +3,4 @@
 tool
 class_name DialogueMangerDialogues
 
-const DIALOGUE = "Dialogue"
+const DIALOGUEWITHLORA = "DialogueWithLora"

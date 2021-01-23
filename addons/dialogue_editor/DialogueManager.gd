@@ -38,4 +38,3 @@ func _node_to_dialogue_sentence(node: DialogueNode) -> DialogueSentence:
 			text_event.next = sentence.node.uuid
 		dialogueSentence.texte_events.append(text_event)
 	return dialogueSentence
-

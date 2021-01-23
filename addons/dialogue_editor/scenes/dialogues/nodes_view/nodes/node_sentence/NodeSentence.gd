@@ -58,7 +58,7 @@ func _on_item_scene_selected(index: int) -> void:
 		_node.change_scene()
 
 func _on_scene_selection_changed(scene: String) -> void:
-	_update_view()
+	_dialogue.emit_signal_update_view()
 
 func _on_item_actor_selected(index: int) -> void:
 	if index > 0:
@@ -67,7 +67,7 @@ func _on_item_actor_selected(index: int) -> void:
 		_node.change_actor()
 
 func _on_actor_selection_changed(actor: DialogueActor) -> void:
-	_update_view()
+	_dialogue.emit_signal_update_view()
 
 func _on_add_sentence_pressed() -> void:
 	_node.add_sentence()
@@ -85,16 +85,16 @@ func _on_item_textures_selected(index: int) -> void:
 		_node.change_texture_uuid()
 
 func _on_texture_selection_changed(texture_uuid) -> void:
-	_update_view()
+	_dialogue.emit_signal_update_view()
 
 func _on_view_pressed() -> void:
 	_node.change_texture_view(_view_ui.pressed)
 
 func _on_view_selection_changed(texture_view) -> void:
-	_update_view()
+	_dialogue.emit_signal_update_view()
 
 func _on_sentence_event_visibility_changed(sentence) -> void:
-	_update_view()
+	_dialogue.emit_signal_update_view()
 
 func _on_sentence_selection_changed(sentence) -> void:
 	_dialogue.emit_signal_update_view()
