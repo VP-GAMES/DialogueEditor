@@ -14,6 +14,9 @@ onready var _button_ui = $Button
 func sentence() -> DialogueSentence:
 	return _sentence
 
+func buttons() -> Array:
+	return _buttons_array
+
 func sentence_set(sentence: DialogueSentence) -> void:
 	_sentence = sentence
 	_texture()
@@ -71,14 +74,9 @@ func _buttons_generate() -> void:
 		button_ui.anchor_top = _button_ui.anchor_top - offset * index
 		button_ui.anchor_bottom = _button_ui.anchor_bottom - offset * index
 		button_ui.text = _sentence.texte_events[index_reverse].text
-		if _sentence.texte_events[index_reverse].event:
-			button_ui.connect("pressed", self, "_on_button_pressed", [_sentence.texte_events[index_reverse].event])
 	for child in get_children():
 		for button_ui in _buttons_array:
 			if child == button_ui:
 				remove_child(button_ui)
 	for button_ui in _buttons_array:
 		add_child(button_ui)
-
-func _on_button_pressed(event_name: String) -> void:
-	print("TODO DialogueManager emit_signal for button -> " + event_name)
