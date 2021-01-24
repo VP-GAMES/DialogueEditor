@@ -15,3 +15,8 @@ func _process(delta):
 		if get_tree().get_root().has_node(dialogueManager.name):
 			dialogueManagerAdded = true
 			dialogueManager.start_dialogue("DialogueWithLora")
+			if not dialogueManager.is_connected("dialogue_ended", self, "_on_dialogue_ended"):
+				assert(dialogueManager.connect("dialogue_ended", self, "_on_dialogue_ended") == OK)
+
+func _on_dialogue_ended(dialogue) -> void:
+	get_tree().quit()

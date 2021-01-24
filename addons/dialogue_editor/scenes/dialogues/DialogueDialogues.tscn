@@ -61,7 +61,6 @@ margin_left = 938.0
 margin_right = 960.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 20, 20 )
-toggle_mode = true
 icon = ExtResource( 5 )
 
 [node name="Nodes" type="Button" parent="Margin/VBox/HBox"]
