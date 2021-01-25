@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Noah_mound_open.png-dbb4106bc75f5a3f751cea64037a9f38.stex"
+path="res://.import/Boy_eys_closed.png-893adf50ebc7b578da932be4aca1969b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/dialogue_example/textures/Noah_mound_open.png"
-dest_files=[ "res://.import/Noah_mound_open.png-dbb4106bc75f5a3f751cea64037a9f38.stex" ]
+source_file="res://addons/dialogue_example/textures/Boy_eys_closed.png"
+dest_files=[ "res://.import/Boy_eys_closed.png-893adf50ebc7b578da932be4aca1969b.stex" ]
 
 [params]
 

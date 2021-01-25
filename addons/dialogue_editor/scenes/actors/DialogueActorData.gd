@@ -29,7 +29,6 @@ func _on_add_pressed() -> void:
 
 func _on_actor_selection_changed(actor: DialogueActor) -> void:
 	_actor = actor
-	_init_actor_connections()
 	_update_view()
 
 func _init_actor_connections() -> void:
@@ -48,6 +47,7 @@ func _on_resource_removed(resource) -> void:
 func _update_view() -> void:
 	_actor = _data.selected_actor()
 	if _actor:
+		_init_actor_connections()
 		_clear_view()
 		_draw_view()
 	else:

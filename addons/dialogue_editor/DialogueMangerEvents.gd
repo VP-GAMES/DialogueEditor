@@ -3,5 +3,4 @@
 tool
 class_name DialogueMangerEvents
 
-const DIALOGUEWITHLORA_EVENT_STARTQUEST = "StartQuest"
 

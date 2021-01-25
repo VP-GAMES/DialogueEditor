@@ -87,16 +87,21 @@ func _change_resource_name(resource: Dictionary, name: String) -> void:
 
 func change_resource_path(resource: Dictionary, path: String) -> void:
 	var old_path = resource.path
+	var old_name = resource.name
+	var new_name = resource.name
+	if resource.name.empty():
+		new_name = _filename_only(path)
 	if _undo_redo != null:
 		_undo_redo.create_action("Change actor resource path")
-		_undo_redo.add_do_method(self, "_resource_path_change", resource, path)
-		_undo_redo.add_undo_method(self, "_resource_path_change", resource, old_path)
+		_undo_redo.add_do_method(self, "_resource_path_change", resource, path, new_name)
+		_undo_redo.add_undo_method(self, "_resource_path_change", resource, old_path, old_name)
 		_undo_redo.commit_action()
 	else:
-		_resource_path_change(resource, path)
+		_resource_path_change(resource, path, new_name)
 
-func _resource_path_change(resource: Dictionary, path: String) -> void:
+func _resource_path_change(resource: Dictionary, path: String, name: String) -> void:
 	resource.path = path
+	resource.name = name
 	emit_signal("changed")
 	emit_signal("resource_path_changed", resource)
 
@@ -125,3 +130,8 @@ func resource_by_uuid(uuid = null, default_texture = true) -> Resource:
 					texture = load(res.path)
 					break
 	return texture
+
+func _filename_only(value: String) -> String:
+	var first = value.find_last("/")
+	var second = value.find_last(".")
+	return value.substr(first + 1, second - first - 1)

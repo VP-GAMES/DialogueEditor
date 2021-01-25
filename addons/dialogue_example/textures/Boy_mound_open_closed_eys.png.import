@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Noah_wife.png-af7008eca6f62050963e0ff3c85aab9f.stex"
+path="res://.import/Boy_mound_open_closed_eys.png-768be15fc401836cd4653395884793dc.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/dialogue_example/textures/Noah_wife.png"
-dest_files=[ "res://.import/Noah_wife.png-af7008eca6f62050963e0ff3c85aab9f.stex" ]
+source_file="res://addons/dialogue_example/textures/Boy_mound_open_closed_eys.png"
+dest_files=[ "res://.import/Boy_mound_open_closed_eys.png-768be15fc401836cd4653395884793dc.stex" ]
 
 [params]
 
