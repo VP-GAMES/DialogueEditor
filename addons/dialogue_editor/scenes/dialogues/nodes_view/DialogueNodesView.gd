@@ -21,6 +21,7 @@ func set_data(dialogue: DialogueDialogue, data: DialogueData) -> void:
 	if dialogue:
 		_dialogue = dialogue
 		_data = data
+		_graph_ui.scroll_offset = _dialogue.scroll_offset
 		_init_connections()
 		_update_view()
 
@@ -145,7 +146,6 @@ func _clear_view() -> void:
 			node.queue_free()
 
 func _draw_view() -> void:
-	_graph_ui.scroll_offset = _dialogue.scroll_offset
 	for node in _dialogue.nodes:
 		_draw_node_by_type(node)
 	_draw_connections()

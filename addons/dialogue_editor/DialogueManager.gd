@@ -39,8 +39,11 @@ func start_dialogue(dialogue_name: String) -> void:
 		_next_sentence(0)
 		emit_signal("dialogue_started", _dialogue.name)
 
-func _input(event):
+func _input(event: InputEvent):
 	if event.is_action_released("ui_accept"):
+		_next_sentence_action()
+
+func _next_sentence_action() -> void:
 		var index = -1
 		if started_from_editor:
 			index = _node.selected_sentence_index()
@@ -98,6 +101,7 @@ func _draw_sentence() -> void:
 		_scene = SentenceScene.instance()
 		_scene.name = _data.filename_only(scenePath)
 		get_tree().get_root().add_child(_scene)
+		_connect_gui_input()
 		_scene.sentence_set(_sentence)
 		if _sentence.texte_events.size() == 1:
 			var event_name = _sentence.texte_events[0].event
@@ -105,6 +109,16 @@ func _draw_sentence() -> void:
 				emit_signal("dialogue_event", event_name)
 		elif _sentence.texte_events.size() > 1:
 			_connect_buttons()
+
+func _connect_gui_input() -> void:
+	if not _scene.is_connected("gui_input", self, "_on_gui_input"):
+		_scene.connect("gui_input", self, "_on_gui_input")
+
+func _on_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index == BUTTON_LEFT:
+			if started_from_editor:
+				_next_sentence_action()
 
 func _connect_buttons() -> void:
 	var buttons_array = _scene.buttons()

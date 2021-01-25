@@ -29,3 +29,4 @@ func _process(delta):
 
 func _on_dialogue_ended(dialogue) -> void:
 	get_tree().quit()
+
