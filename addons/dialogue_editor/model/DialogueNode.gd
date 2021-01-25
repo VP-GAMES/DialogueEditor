@@ -26,7 +26,7 @@ export (Resource) var actor = DialogueEmpty.new() # DialogueActor
 export (String) var texture_uuid = ""
 export (bool) var texture_view = false
 export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event_visible": false, "event": "", "node": DialogueEmpty.new()}]
-export (Dictionary) var sentence_selected
+export (String) var sentence_selected_uuid = ""
 
 # ***** NODE *****
 signal node_position_changed(node)
@@ -187,14 +187,23 @@ func _del_sentence(sentence) -> void:
 		emit_signal("sentence_removed", sentence)
 
 func selected_sentence() -> Dictionary:
-	var selected_sentence_exists = sentences.has(sentence_selected)
-	if not selected_sentence_exists and not sentences.empty():
-		sentence_selected = sentences[0]
-	return sentence_selected
+	if sentence_selected_uuid.empty():
+		sentence_selected_uuid = sentences[0].uuid
+	return sentence_by_uuid(sentence_selected_uuid)
+
+func sentence_by_uuid(uuid: String):
+	for sentence in sentences:
+		if sentence.uuid == uuid:
+			return sentence
+	return null
+
+func selected_sentence_index() -> int:
+	var selected_sentence = selected_sentence()
+	return sentences.find(selected_sentence)
 
 func select_sentence(sentence: Dictionary, sendSignal = true) -> void:
 	if _undo_redo != null:
-		var old_sentence = sentence_selected
+		var old_sentence = sentence_by_uuid(sentence_selected_uuid)
 		_undo_redo.create_action("Select sentence")
 		_undo_redo.add_do_method(self, "_select_sentence", sentence)
 		_undo_redo.add_undo_method(self, "_select_sentence", old_sentence)
@@ -203,9 +212,9 @@ func select_sentence(sentence: Dictionary, sendSignal = true) -> void:
 		_select_sentence(sentence)
 
 func _select_sentence(sentence: Dictionary, sendSignal = true) -> void:
-	sentence_selected = sentence
+	sentence_selected_uuid = sentence.uuid
 	if sendSignal:
-		emit_signal("sentence_selection_changed", sentence_selected)
+		emit_signal("sentence_selection_changed", sentence_selected_uuid)
 
 func select_sentence_event_visibility(sentence: Dictionary, visibility: bool) -> void:
 	if _undo_redo != null:

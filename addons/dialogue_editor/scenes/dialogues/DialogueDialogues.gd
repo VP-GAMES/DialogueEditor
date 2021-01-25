@@ -40,7 +40,6 @@ func _on_dialogue_action(dialogue: DialogueDialogue) -> void:
 	_update_view()
 
 func _on_play_pressed() -> void:
-	#https://docs.godotengine.org/de/stable/classes/class_packedscene.html
 	_data.editor().get_editor_interface().play_custom_scene(DialogueDialoguesPlayer.get_path())
 
 func _update_view() -> void:

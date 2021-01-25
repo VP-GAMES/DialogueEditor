@@ -8,9 +8,16 @@ var dialogueManager
 func _ready():
 	if not get_tree().get_root().has_node(DialogueManagerName):
 		dialogueManager = DialogueManager.new()
-		dialogueManager.load_data()
-		dialogueManager.name = DialogueManagerName
-		get_tree().get_root().call_deferred("add_child", dialogueManager)
+		_init_dialogue_manager()
+	else:
+		dialogueManager = get_tree().get_root().has_node(DialogueManagerName)
+		_init_dialogue_manager()
+
+func _init_dialogue_manager() -> void:
+	dialogueManager.started_from_editor = true
+	dialogueManager.load_data()
+	dialogueManager.name = DialogueManagerName
+	get_tree().get_root().call_deferred("add_child", dialogueManager)
 
 func _process(delta):
 	if not dialogueManagerAdded:

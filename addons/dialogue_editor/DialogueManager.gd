@@ -6,6 +6,8 @@ signal dialogue_started(dialogue)
 signal dialogue_event(event)
 signal dialogue_ended(dialogue)
 
+var started_from_editor = false
+
 var _data: = DialogueData.new()
 var _data_loaded = false
 var _dialogue
@@ -25,7 +27,6 @@ func actual_dialogue() -> String:
 	return _dialogue.name
 
 func start_dialogue(dialogue_name: String) -> void:
-	print(_data.dialogues)
 	if not _data.dialogue_exists(dialogue_name):
 		printerr("Dialogue ", dialogue_name,  " doesn't exists")
 		_dialogue = null
@@ -35,14 +36,20 @@ func start_dialogue(dialogue_name: String) -> void:
 	_dialogue = _data.dialogue_by_name(dialogue_name) as DialogueDialogue
 	_node = _dialogue.node_start() as DialogueNode
 	if _node:
-		_next_sentence()
+		_next_sentence(0)
 		emit_signal("dialogue_started", _dialogue.name)
 
 func _input(event):
 	if event.is_action_released("ui_accept"):
-		_next_sentence()
+		var index = -1
+		if started_from_editor:
+			index = _node.selected_sentence_index()
+		if _node.sentences.size() == 1:
+			index = 0
+		if index != -1:
+			_next_sentence(index)
 
-func _next_sentence(index = 0) -> void:
+func _next_sentence(index) -> void:
 	if _node and not _node.sentences[index].node is DialogueEmpty:
 		_sentence = _node_to_dialogue_sentence(_node.sentences[index].node)
 		if _sentence.scene:
