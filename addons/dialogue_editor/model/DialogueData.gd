@@ -263,6 +263,7 @@ func init_data() -> void:
 			scenes = resource.scenes
 		if resource.dialogues and not resource.dialogues.empty():
 			dialogues = resource.dialogues
+			print(dialogues)
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)

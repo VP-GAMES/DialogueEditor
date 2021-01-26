@@ -101,9 +101,14 @@ func change_resource_path(resource: Dictionary, path: String) -> void:
 
 func _resource_path_change(resource: Dictionary, path: String, name: String) -> void:
 	resource.path = path
+	var name_changed = resource.name != name
+	if name_changed:
+		resource.name = name
 	resource.name = name
 	emit_signal("changed")
 	emit_signal("resource_path_changed", resource)
+	if name_changed:
+		emit_signal("resource_name_changed", resource)
 
 func selected_resource():
 	if not _resource_selected and not resources.empty():
