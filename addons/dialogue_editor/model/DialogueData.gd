@@ -26,7 +26,7 @@ signal actor_added(actor)
 signal actor_removed(actor)
 signal actor_selection_changed(actor)
 
-export(Array) var actors = []
+export(Array) var actors
 var _actor_selected: DialogueActor
 
 func add_actor(sendSignal = true) -> void:
@@ -178,7 +178,7 @@ signal dialogue_removed(dialogue)
 signal dialogue_selection_changed(dialogue)
 signal dialogue_view_selection_changed
 
-export(Array) var dialogues = []
+export(Array) var dialogues
 
 var _dialogue_selected: DialogueDialogue
 
@@ -263,7 +263,6 @@ func init_data() -> void:
 			scenes = resource.scenes
 		if resource.dialogues and not resource.dialogues.empty():
 			dialogues = resource.dialogues
-			print(dialogues)
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)

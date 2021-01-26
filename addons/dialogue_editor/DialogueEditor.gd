@@ -43,7 +43,9 @@ func _on_tab_changed(tab: int) -> void:
 func _data_to_childs() -> void:
 	_actors_ui.set_data(_data)
 	_scenes_ui.set_data(_data)
-    _dialogues_ui.set_data(_data)
+	if not _data.dialogues.empty():
+		print(_data.dialogues[0])
+	#_dialogues_ui.set_data(_data)
 
 func save_data() -> void:
 	_data.save()
