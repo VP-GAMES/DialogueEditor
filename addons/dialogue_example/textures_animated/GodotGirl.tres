@@ -1,0 +1,22 @@
+[gd_resource type="AnimatedTexture" load_steps=4 format=2]
+
+[ext_resource path="res://addons/dialogue_example/textures/Girl_eys_closed.png" type="Texture" id=1]
+[ext_resource path="res://addons/dialogue_example/textures/Girl_eys_open.png" type="Texture" id=2]
+[ext_resource path="res://addons/dialogue_example/textures/Girl_mound_open.png" type="Texture" id=3]
+
+[resource]
+flags = 4
+frames = 6
+fps = 8.0
+frame_0/texture = ExtResource( 2 )
+frame_0/delay_sec = 0.1
+frame_1/texture = ExtResource( 3 )
+frame_1/delay_sec = 0.1
+frame_2/texture = ExtResource( 2 )
+frame_2/delay_sec = 0.1
+frame_3/texture = ExtResource( 3 )
+frame_3/delay_sec = 0.1
+frame_4/texture = ExtResource( 1 )
+frame_4/delay_sec = 0.1
+frame_5/texture = ExtResource( 3 )
+frame_5/delay_sec = 0.0
