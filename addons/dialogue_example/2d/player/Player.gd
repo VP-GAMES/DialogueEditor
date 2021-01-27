@@ -2,12 +2,13 @@ extends KinematicBody2D
 
 const FLOOR_NORMAL: = Vector2.UP
 export var speed: = Vector2(400.0, 500.0)
-export var gravity: = 3500.0
+export var gravity: = 1000.0
 
 var _velocity: = Vector2.ZERO
 
 func _physics_process(delta: float) -> void:
-	var is_jump_interrupted: = Input.is_action_just_released("jump") and _velocity.y < 0.0
+	_velocity.y += gravity * delta
+	var is_jump_interrupted: = Input.is_action_just_released("ui_up") and _velocity.y < 0.0
 	var direction: = get_direction()
 	_velocity = calculate_move_velocity(_velocity, direction, speed, is_jump_interrupted)
 	var snap: Vector2 = Vector2.DOWN * 60.0 if direction.y == 0.0 else Vector2.ZERO
@@ -17,8 +18,8 @@ func _physics_process(delta: float) -> void:
 
 func get_direction() -> Vector2:
 	return Vector2(
-		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-		-Input.get_action_strength("jump") if is_on_floor() and Input.is_action_just_pressed("jump") else 0.0
+		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		-Input.get_action_strength("ui_up") if is_on_floor() and Input.is_action_just_pressed("ui_up") else 0.0
 	)
 
 func calculate_move_velocity(

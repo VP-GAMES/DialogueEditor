@@ -9,6 +9,11 @@ extents = Vector2( 200.474, 199.131 )
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 2 )
 
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 0, -700 )
+current = true
+limit_smoothed = true
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -200 )
 shape = SubResource( 1 )
