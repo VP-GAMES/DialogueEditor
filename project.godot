@@ -69,7 +69,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Dialogue Editor"
-run/main_scene="res://addons/dialogue_example/2d/scenes/Level1.tscn"
+run/main_scene="res://addons/dialogue_example/2d/Level1.tscn"
 config/icon="res://icon.png"
 
 [dialogue_editor]
@@ -77,6 +77,7 @@ config/icon="res://icon.png"
 actors_split_offset=213
 scenes_split_offset=245
 dialogues_editor_type="NODES"
+dialogues_selected_dialogue="Simple"
 
 [display]
 

@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/dialogue_example/textures/Background.png" type="Texture" id=1]
 [ext_resource path="res://addons/dialogue_example/2d/player/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://addons/dialogue_example/2d/npc/Girl.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/dialogue_example/textures/BackgroundSide.png" type="Texture" id=4]
+[ext_resource path="res://addons/dialogue_example/2d/Level.gd" type="Script" id=5]
+[ext_resource path="res://addons/dialogue_editor/default/fonts/Pangolin-Regular.ttf" type="DynamicFontData" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 958.173, 30.1941 )
@@ -11,7 +13,12 @@ extents = Vector2( 958.173, 30.1941 )
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 10, 341.202 )
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="DynamicFont" id=3]
+size = 80
+font_data = ExtResource( 6 )
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 5 )
 
 [node name="Background" type="Sprite" parent="."]
 position = Vector2( 920, 235 )
@@ -55,3 +62,18 @@ scale = Vector2( 0.26, 0.26 )
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 220, 540 )
 scale = Vector2( 0.3, 0.3 )
+
+[node name="CanvasError" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasError"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0.823529, 0.533333, 0.121569, 1 )
+text = "To support dialogues you have to autoload res://addons/dialogue_editor/DialogueManager.gd"
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

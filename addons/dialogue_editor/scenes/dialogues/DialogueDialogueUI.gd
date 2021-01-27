@@ -63,6 +63,10 @@ func _on_gui_input(event: InputEvent) -> void:
 					_del_ui.grab_focus()
 				else:
 					_name_ui.set("custom_styles/normal", null)
+	if event is InputEventKey and event.pressed:
+		if event.scancode == KEY_ENTER or event.scancode == KEY_KP_ENTER:
+			if _name_ui.has_focus():
+				_del_ui.grab_focus()
 
 func _on_text_changed(new_text: String) -> void:
 	_dialogue.name = new_text

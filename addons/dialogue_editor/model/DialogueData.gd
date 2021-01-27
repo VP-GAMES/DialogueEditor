@@ -1,5 +1,6 @@
 # Dialogue data for DialogueEditor : MIT License
 # @author Vladimir Petrenko
+tool
 extends Resource
 class_name DialogueData
 
@@ -69,6 +70,8 @@ func _next_actor_name() -> String:
 	return next_name
 
 func _add_actor(actor: DialogueActor, sendSignal = true, position = actors.size()) -> void:
+	if not actors:
+		actors = []
 	actors.insert(position, actor)
 	emit_signal("actor_added", actor)
 	select_actor(actor)
@@ -220,6 +223,8 @@ func _next_dialogue_name() -> String:
 	return next_name
 
 func _add_dialogue(dialogue: DialogueDialogue, sendSignal = true, position = dialogues.size()) -> void:
+	if not dialogues:
+		dialogues = []
 	dialogues.insert(position, dialogue)
 	emit_signal("dialogue_added", dialogue)
 	select_dialogue(dialogue)
@@ -245,12 +250,14 @@ func _del_dialogue(dialogue) -> void:
 
 func selected_dialogue() -> DialogueDialogue:
 	if not _dialogue_selected and not dialogues.empty():
-		_dialogue_selected = dialogues[0]
+		select_dialogue(dialogues[0])
 	return _dialogue_selected
 
-func select_dialogue(dialogue: DialogueDialogue) -> void:
+func select_dialogue(dialogue: DialogueDialogue, emitSignal = true) -> void:
 	_dialogue_selected = dialogue
-	emit_signal("dialogue_selection_changed", _dialogue_selected)
+	setting_dialogues_selected_dialogue_put(_dialogue_selected.name)
+	if emitSignal:
+		emit_signal("dialogue_selection_changed", _dialogue_selected)
 
 # ***** LOAD SAVE *****
 func init_data() -> void:
@@ -325,6 +332,7 @@ const SETTINGS_SCENES_SPLIT_OFFSET = "dialogue_editor/scenes_split_offset"
 const SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT = 215
 const SETTINGS_DIALOGUES_SPLIT_OFFSET = "dialogue_editor/dialogues_split_offset"
 const SETTINGS_DIALOGUES_SPLIT_OFFSET_DEFAULT = 215
+const SETTINGS_DIALOGUES_SELECTED_DIALOGUE = "dialogue_editor/dialogues_selected_dialogue"
 const SETTINGS_DIALOGUES_EDITOR_TYPE = "dialogue_editor/dialogues_editor_type"
 const SETTINGS_DIALOGUES_EDITOR_TYPE_DEFAULT = "NODES"
 const SETTINGS_DISPLAY_WIDTH = "display/window/size/width"
@@ -356,6 +364,15 @@ func setting_dialogues_split_offset() -> int:
 
 func setting_dialogues_split_offset_put(offset: int) -> void:
 	ProjectSettings.set_setting(SETTINGS_DIALOGUES_SPLIT_OFFSET, offset)
+
+func setting_dialogues_selected_dialogue() -> String:
+	var dialogue_name
+	if ProjectSettings.has_setting(SETTINGS_DIALOGUES_SELECTED_DIALOGUE):
+		dialogue_name = ProjectSettings.get_setting(SETTINGS_DIALOGUES_SELECTED_DIALOGUE)
+	return dialogue_name
+
+func setting_dialogues_selected_dialogue_put(dialogue_name: String) -> void:
+	ProjectSettings.set_setting(SETTINGS_DIALOGUES_SELECTED_DIALOGUE, dialogue_name)
 
 func setting_dialogues_editor_type() -> String:
 	var type = SETTINGS_DIALOGUES_EDITOR_TYPE_DEFAULT

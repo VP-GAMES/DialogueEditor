@@ -26,6 +26,9 @@ func load_data() -> void:
 func actual_dialogue() -> String:
 	return _dialogue.name
 
+func is_started() -> bool:
+	return _dialogue
+
 func start_dialogue(dialogue_name: String) -> void:
 	if not _data.dialogue_exists(dialogue_name):
 		printerr("Dialogue ", dialogue_name,  " doesn't exists")
@@ -41,7 +44,8 @@ func start_dialogue(dialogue_name: String) -> void:
 
 func _input(event: InputEvent):
 	if event.is_action_released("ui_accept"):
-		_next_sentence_action()
+		if is_started():
+			_next_sentence_action()
 
 func _next_sentence_action() -> void:
 		var index = -1
