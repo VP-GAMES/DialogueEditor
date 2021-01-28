@@ -198,6 +198,7 @@ func add_dialogue(sendSignal = true) -> void:
 func _create_dialogue() -> DialogueDialogue:
 	var dialogue = DialogueDialogue.new()
 	dialogue.name = _next_dialogue_name() 
+	dialogue.set_editor(_editor)
 	return dialogue
 
 func _next_dialogue_name() -> String:
