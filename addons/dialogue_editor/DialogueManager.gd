@@ -4,16 +4,25 @@ extends Node
 
 signal dialogue_started(dialogue)
 signal dialogue_event(event)
+signal dialogue_canceled(dialogue)
 signal dialogue_ended(dialogue)
 
 var started_from_editor = false
 
 var _data: = DialogueData.new()
 var _data_loaded = false
+var _layer: CanvasLayer
+
 var _dialogue
 var _sentence
 var _scene
 var _node
+
+func _reset() -> void:
+	_dialogue = null
+	_sentence = null
+	_scene = null
+	_node = null
 
 func _ready() -> void:
 	if not _data_loaded:
@@ -32,9 +41,7 @@ func is_started() -> bool:
 func start_dialogue(dialogue_name: String) -> void:
 	if not _data.dialogue_exists(dialogue_name):
 		printerr("Dialogue ", dialogue_name,  " doesn't exists")
-		_dialogue = null
-		_scene = null
-		_node = null
+		_reset()
 		return
 	_dialogue = _data.dialogue_by_name(dialogue_name) as DialogueDialogue
 	_node = _dialogue.node_start() as DialogueNode
@@ -43,9 +50,21 @@ func start_dialogue(dialogue_name: String) -> void:
 		emit_signal("dialogue_started", _dialogue.name)
 
 func _input(event: InputEvent):
+#	if started_from_editor:
 	if event.is_action_released("ui_accept"):
-		if is_started():
-			_next_sentence_action()
+		next_sentence()
+	if event.is_action_released("ui_cancel"):
+		cancel_dialogue()
+
+func next_sentence() -> void:
+	if is_started():
+		_next_sentence_action()
+
+func cancel_dialogue() -> void:
+	if is_started():
+		_clear_sentences()
+		_reset()
+		emit_signal("dialogue_canceled", _dialogue)
 
 func _next_sentence_action() -> void:
 		var index = -1
@@ -65,9 +84,7 @@ func _next_sentence(index) -> void:
 		else:
 			_clear_sentences()
 			emit_signal("dialogue_ended", _dialogue.name)
-			_dialogue = null
-			_scene = null
-			_node = null
+			_reset()
 
 func _node_to_dialogue_sentence(node: DialogueNode):
 	var dialogueSentence = DialogueSentence.new()
@@ -90,13 +107,9 @@ func _draw_view() -> void:
 	_draw_sentence()
 
 func _clear_sentences() -> void:
-	for scene in _data.scenes:
-		var scenePath = scene.resource
-		var sceneName = _data.filename_only(scenePath)
-		if get_tree().get_root().has_node(sceneName):
-			var node = get_tree().get_root().get_node(sceneName)
-			get_tree().get_root().remove_child(node)
-			node.queue_free()
+	if _layer:
+		get_tree().get_root().remove_child(_layer)
+		_layer.queue_free()
 
 func _draw_sentence() -> void:
 	if _sentence.scene:
@@ -104,7 +117,9 @@ func _draw_sentence() -> void:
 		var SentenceScene = load(scenePath)
 		_scene = SentenceScene.instance()
 		_scene.name = _data.filename_only(scenePath)
-		get_tree().get_root().add_child(_scene)
+		_layer = CanvasLayer.new()
+		_layer.add_child(_scene)
+		get_tree().get_root().add_child(_layer)
 		_connect_gui_input()
 		_scene.sentence_set(_sentence)
 		if _sentence.texte_events.size() == 1:

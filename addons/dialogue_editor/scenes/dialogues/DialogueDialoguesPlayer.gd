@@ -11,15 +11,15 @@ func _ready():
 	if not get_tree().get_root().has_node(DialogueManagerName):
 		dialogueManager = DialogueManager.new()
 		_init_dialogue_manager()
+		get_tree().get_root().call_deferred("add_child", dialogueManager)
 	else:
-		dialogueManager = get_tree().get_root().has_node(DialogueManagerName)
+		dialogueManager = get_tree().get_root().get_node(DialogueManagerName)
 		_init_dialogue_manager()
 
 func _init_dialogue_manager() -> void:
 	dialogueManager.started_from_editor = true
 	dialogueManager.load_data()
 	dialogueManager.name = DialogueManagerName
-	get_tree().get_root().call_deferred("add_child", dialogueManager)
 
 func _process(delta):
 	if not dialogueManagerAdded and ProjectSettings.has_setting(SETTINGS_DIALOGUES_SELECTED_DIALOGUE):
@@ -27,9 +27,11 @@ func _process(delta):
 			dialogueManagerAdded = true
 			var dialogue_name = ProjectSettings.get_setting(SETTINGS_DIALOGUES_SELECTED_DIALOGUE)
 			dialogueManager.start_dialogue(dialogue_name)
-			if not dialogueManager.is_connected("dialogue_ended", self, "_on_dialogue_ended"):
-				assert(dialogueManager.connect("dialogue_ended", self, "_on_dialogue_ended") == OK)
+			if not dialogueManager.is_connected("dialogue_ended", self, "_on_dialogue_ended_canceled"):
+				assert(dialogueManager.connect("dialogue_ended", self, "_on_dialogue_ended_canceled") == OK)
+			if not dialogueManager.is_connected("dialogue_canceled", self, "_on_dialogue_ended_canceled"):
+				assert(dialogueManager.connect("dialogue_canceled", self, "_on_dialogue_ended_canceled") == OK)
 
-func _on_dialogue_ended(dialogue) -> void:
+func _on_dialogue_ended_canceled(dialogue) -> void:
 	get_tree().quit()
 
