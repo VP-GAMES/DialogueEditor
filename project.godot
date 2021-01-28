@@ -79,11 +79,6 @@ scenes_split_offset=245
 dialogues_editor_type="NODES"
 dialogues_selected_dialogue="Simple"
 
-[display]
-
-window/size/width=1920
-window/size/height=1080
-
 [editor_plugins]
 
 enabled=PoolStringArray( "dialogue_editor" )
