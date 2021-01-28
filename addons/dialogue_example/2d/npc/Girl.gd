@@ -4,7 +4,7 @@ var inside
 var dialogueManager
 const DialogueManagerName = "DialogueManager"
 
-export(String) var dialogue_name = DialogueMangerDialogues.SIMPLE
+export(String) var dialogue_name = "Simple"
 
 func _ready() -> void:
 	if get_tree().get_root().has_node(DialogueManagerName):

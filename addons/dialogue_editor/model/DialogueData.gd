@@ -250,7 +250,10 @@ func _del_dialogue(dialogue) -> void:
 
 func selected_dialogue() -> DialogueDialogue:
 	if not _dialogue_selected and not dialogues.empty():
-		select_dialogue(dialogues[0])
+		var selected_name = setting_dialogues_selected_dialogue()
+		_dialogue_selected = dialogue_by_name(selected_name)
+		if not _dialogue_selected:
+			select_dialogue(dialogues[0])
 	return _dialogue_selected
 
 func select_dialogue(dialogue: DialogueDialogue, emitSignal = true) -> void:

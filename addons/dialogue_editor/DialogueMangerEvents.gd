@@ -4,4 +4,6 @@ tool
 class_name DialogueMangerEvents
 
 
+const QUESTION_EVENT_RIGHT = "RIGHT"
+const QUESTION_EVENT_WRONG = "WRONG"
 

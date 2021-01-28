@@ -43,7 +43,6 @@ func _on_dialogue_ended_canceled(dialogue) -> void:
 func _on_dialogue_event(event: String) -> void:
 	_event_ui.text = event
 	_event_ui.visible = true
-	_timer_ui.stop()
 	_timer_ui.start()
 	if not _timer_ui.is_connected("timeout", self, "_on_timeout"):
 		assert(_timer_ui.connect("timeout", self, "_on_timeout") == OK)
