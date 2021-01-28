@@ -7,6 +7,9 @@ const DialogueManagerName = "DialogueManager"
 var dialogueManagerAdded  = false
 var dialogueManager
 
+onready var _timer_ui = $Timer
+onready var _event_ui = $Event
+
 func _ready():
 	if not get_tree().get_root().has_node(DialogueManagerName):
 		dialogueManager = DialogueManager.new()
@@ -31,7 +34,19 @@ func _process(delta):
 				assert(dialogueManager.connect("dialogue_ended", self, "_on_dialogue_ended_canceled") == OK)
 			if not dialogueManager.is_connected("dialogue_canceled", self, "_on_dialogue_ended_canceled"):
 				assert(dialogueManager.connect("dialogue_canceled", self, "_on_dialogue_ended_canceled") == OK)
+			if not dialogueManager.is_connected("dialogue_event", self, "_on_dialogue_event"):
+				assert(dialogueManager.connect("dialogue_event", self, "_on_dialogue_event") == OK)
 
 func _on_dialogue_ended_canceled(dialogue) -> void:
 	get_tree().quit()
 
+func _on_dialogue_event(event: String) -> void:
+	_event_ui.text = event
+	_event_ui.visible = true
+	_timer_ui.stop()
+	_timer_ui.start()
+	if not _timer_ui.is_connected("timeout", self, "_on_timeout"):
+		assert(_timer_ui.connect("timeout", self, "_on_timeout") == OK)
+
+func _on_timeout() -> void:
+	_event_ui.visible = false
