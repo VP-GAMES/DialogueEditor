@@ -41,8 +41,6 @@ func _text() -> void:
 	if _sentence.text_exists():
 		_text_ui.visible = true
 		_text_ui.text = _sentence.texte_events[0].text
-		if _sentence.texte_events[0].event:
-			print("TODO DialogueManager emit_signal for single text")
 	else:
 		_text_ui.visible = false
 

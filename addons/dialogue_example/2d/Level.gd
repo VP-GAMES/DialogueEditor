@@ -10,7 +10,6 @@ onready var _flag_yellow_ui = $FlagYellow as Sprite
 func _ready() -> void:
 	if get_tree().get_root().has_node("DialogueManager"):
 		_error_ui.queue_free()
-	else:
 		dialogueManager = get_tree().get_root().get_node("DialogueManager")
 		if not dialogueManager.is_connected("dialogue_event", self, "_on_dialogue_event"):
 				assert(dialogueManager.connect("dialogue_event", self, "_on_dialogue_event") == OK)
