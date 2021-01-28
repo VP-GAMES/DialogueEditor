@@ -58,6 +58,7 @@ flip_h = true
 [node name="Girl" parent="." instance=ExtResource( 3 )]
 position = Vector2( 1350, 550 )
 scale = Vector2( 0.19, 0.19 )
+dialogue_name = "Question"
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 220, 540 )

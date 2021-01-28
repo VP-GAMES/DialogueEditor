@@ -24,7 +24,11 @@ func _on_body_exited(body: Node) -> void:
 			dialogueManager.cancel_dialogue()
 
 func _input(event: InputEvent):
-	if event.is_action_released("ui_accept"):
-		if inside and dialogueManager:
+	if inside and dialogueManager:
+		if event.is_action_released("action"):
 			if not dialogueManager.is_started():
 				dialogueManager.start_dialogue(dialogue_name)
+		if event.is_action_released("action"):
+			dialogueManager.next_sentence()
+		if event.is_action_released("cancel"):
+			dialogueManager.cancel_dialogue()

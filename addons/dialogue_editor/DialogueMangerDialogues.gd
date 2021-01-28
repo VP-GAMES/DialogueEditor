@@ -4,3 +4,4 @@ tool
 class_name DialogueMangerDialogues
 
 const SIMPLE = "Simple"
+const QUESTION = "Question"

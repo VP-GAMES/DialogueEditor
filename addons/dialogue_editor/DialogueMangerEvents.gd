@@ -4,3 +4,4 @@ tool
 class_name DialogueMangerEvents
 
 
+

@@ -36,7 +36,7 @@ func actual_dialogue() -> String:
 	return _dialogue.name
 
 func is_started() -> bool:
-	return _dialogue
+	return _dialogue != null
 
 func start_dialogue(dialogue_name: String) -> void:
 	if not _data.dialogue_exists(dialogue_name):
@@ -45,16 +45,16 @@ func start_dialogue(dialogue_name: String) -> void:
 		return
 	_dialogue = _data.dialogue_by_name(dialogue_name) as DialogueDialogue
 	_node = _dialogue.node_start() as DialogueNode
-	if _node:
+	if _node and started_from_editor:
 		_next_sentence(0)
-		emit_signal("dialogue_started", _dialogue.name)
+	emit_signal("dialogue_started", _dialogue.name)
 
 func _input(event: InputEvent):
-#	if started_from_editor:
-	if event.is_action_released("ui_accept"):
-		next_sentence()
-	if event.is_action_released("ui_cancel"):
-		cancel_dialogue()
+	if started_from_editor:
+		if event.is_action_released("ui_accept"):
+			next_sentence()
+		if event.is_action_released("ui_cancel"):
+			cancel_dialogue()
 
 func next_sentence() -> void:
 	if is_started():
