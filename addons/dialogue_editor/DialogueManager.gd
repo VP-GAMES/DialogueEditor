@@ -76,11 +76,13 @@ func _next_sentence_action() -> void:
 			_next_sentence(index)
 
 func _next_sentence(index) -> void:
-	if _node and not _node.sentences[index].node is DialogueEmpty:
-		_sentence = _node_to_dialogue_sentence(_node.sentences[index].node)
+	var sentence_node_uuid = _node.sentences[index].node_uuid
+	if _node and not sentence_node_uuid.empty():
+		var sentence_node = _dialogue.node_by_uuid(sentence_node_uuid)
+		_sentence = _node_to_dialogue_sentence(sentence_node)
 		if _sentence.scene:
 			_draw_view()
-			_node = _node.sentences[index].node
+			_node = sentence_node
 		else:
 			_clear_sentences()
 			emit_signal("dialogue_ended", _dialogue.name)
@@ -97,8 +99,8 @@ func _node_to_dialogue_sentence(node: DialogueNode):
 		text_event.text = sentence.text
 		if not sentence.event.empty():
 			text_event.event = sentence.event
-		if not sentence.node is DialogueEmpty:
-			text_event.next = sentence.node.uuid
+		if not sentence.node_uuid.empty():
+			text_event.next = sentence.node_uuid
 		dialogueSentence.texte_events.append(text_event)
 	return dialogueSentence
 

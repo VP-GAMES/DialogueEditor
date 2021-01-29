@@ -213,6 +213,9 @@ func node_end() -> DialogueNode:
 			return node
 	return null
 
+func node_by_uuid(uuid: String) -> DialogueNode:
+	return _node_by_uuid(uuid)
+
 func _node_by_uuid(uuid: String) -> DialogueNode:
 	for node in nodes:
 		if node.uuid == uuid:

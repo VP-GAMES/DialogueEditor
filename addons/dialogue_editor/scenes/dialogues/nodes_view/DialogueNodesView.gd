@@ -197,11 +197,11 @@ func _draw_connections_colors_path() -> void:
 	if node:
 		var node_start_ui = _graph_ui.get_node(node.uuid)
 		node_start_ui.set_slot(0, false, 0, _data.SLOT_COLOR_DEFAULT, true, 0, _data.SLOT_COLOR_PATH)
-		while(not(node.selected_sentence().node is DialogueEmpty)):
-			if _graph_ui.has_node(node.selected_sentence().node.uuid):
-				var node_ui = _graph_ui.get_node(node.selected_sentence().node.uuid)
+		while(not(node.selected_sentence().node_uuid.empty())):
+			if _graph_ui.has_node(node.selected_sentence().node_uuid):
+				var node_ui = _graph_ui.get_node(node.selected_sentence().node_uuid)
 				node_ui.set_slot(0, true, 0, _data.SLOT_COLOR_PATH, false, 0, _data.SLOT_COLOR_DEFAULT)
 				if node_ui.has_method("slot_index_of_selected_sentence"):
 					var slot_index = node_ui.slot_index_of_selected_sentence()
 					node_ui.set_slot(slot_index, false, 0, _data.SLOT_COLOR_DEFAULT, true, 0, _data.SLOT_COLOR_PATH)
-			node = node.selected_sentence().node
+			node = _dialogue.node_by_uuid(node.selected_sentence().node_uuid)
