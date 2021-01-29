@@ -89,7 +89,7 @@ func _create_node(position: Vector2) -> DialogueNode:
 func _add_node(node: DialogueNode, emitSignal = true, sentences_to_connect = []) -> void:
 	nodes.append(node)
 	for sentence in sentences_to_connect:
-		sentence.node = node
+		sentence.node_uuid = node.uuid
 	if emitSignal:
 		emit_signal("node_added", node)
 		emit_signal("update_view")
@@ -112,7 +112,7 @@ func _del_node(node, emitSignal = true, sentences_to_disconnect = []) -> void:
 	var index = nodes.find(node)
 	if index > -1:
 		for sentence in sentences_to_disconnect:
-			sentence.node = DialogueEmpty.new()
+			sentence.node_uuid = ""
 		nodes.remove(index)
 		if emitSignal:
 			emit_signal("node_removed", node)
@@ -172,8 +172,8 @@ func node_connection_request(from, from_slot, to, to_slot):
 
 func _node_connection_request(from_node, from_slot, to_node, to_slot, sentence = null):
 	if sentence:
-		 sentence.node = DialogueEmpty.new()
-	from_node.sentences[from_slot].node = to_node
+		 sentence.node_uuid = ""
+	from_node.sentences[from_slot].node_uuid = to_node.uuid
 	emit_signal("nodes_connected", from_node, to_node)
 	emit_signal("update_view")
 
@@ -193,8 +193,8 @@ func node_disconnection_request(from, from_slot, to, to_slot):
 
 func _node_disconnection_request(from_node, from_slot, to_node, to_slot, sentence = null):
 	if sentence:
-		 sentence.node = to_node
-	from_node.sentences[from_slot].node = DialogueEmpty.new()
+		 sentence.node_uuid = to_node.uuid
+	from_node.sentences[from_slot].node_uuid = ""
 	emit_signal("nodes_disconnected", from_node, to_node)
 	emit_signal("update_view")
 
@@ -225,11 +225,11 @@ func connections() -> Array:
 		var node = nodes[node_index] as DialogueNode
 		for sentence_index in range(node.sentences.size()):
 			var sentence = node.sentences[sentence_index]
-			if not sentence.node is DialogueEmpty:
+			if not sentence.node_uuid.empty():
 				var connection = {
 					"from": node.uuid, 
 					"from_port": sentence_index,
-					"to": sentence.node.uuid,
+					"to": sentence.node_uuid,
 					"to_port": 0
 				}
 				all_connections.append(connection)
@@ -240,8 +240,8 @@ func sentence_has_connection(to_node):
 		var node = nodes[node_index] as DialogueNode
 		for sentence_index in range(node.sentences.size()):
 			var sentence = node.sentences[sentence_index]
-			if not sentence.node is DialogueEmpty:
-				if sentence.node == to_node:
+			if not sentence.node_uuid.empty():
+				if sentence.node_uuid == to_node.uuid:
 					return sentence
 	return null
 
@@ -251,8 +251,8 @@ func sentences_has_connection(to_node) -> Array:
 		var node = nodes[node_index] as DialogueNode
 		for sentence_index in range(node.sentences.size()):
 			var sentence = node.sentences[sentence_index]
-			if not sentence.node is DialogueEmpty:
-				if sentence.node == to_node:
+			if not sentence.node_uuid.empty():
+				if sentence.node_uuid == to_node.uuid:
 					sentences.append(sentence)
 	return sentences
 

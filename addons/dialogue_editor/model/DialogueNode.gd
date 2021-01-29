@@ -25,7 +25,7 @@ export (String) var scene = ""
 export (Resource) var actor = DialogueEmpty.new() # DialogueActor
 export (String) var texture_uuid = ""
 export (bool) var texture_view = false
-export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event_visible": false, "event": "", "node": DialogueEmpty.new()}]
+export (Array) var sentences = [{"uuid": UUID.v4(), "text": "", "event_visible": false, "event": "", "node_uuid": ""}]
 export (String) var sentence_selected_uuid = ""
 
 # ***** NODE *****
@@ -159,7 +159,7 @@ func _create_sentence() -> Dictionary:
 	sentence.uuid = UUID.v4()
 	sentence.text = ""
 	sentence.event = ""
-	sentence.node = DialogueEmpty.new()
+	sentence.node_uuid = ""
 	return sentence
 
 func _add_sentence(sentence: Dictionary, sendSignal = true, position = sentences.size(), select_sentence = false) -> void:
