@@ -292,6 +292,12 @@ func _save_data_dialogue_names() -> void:
 		var namePrepared = dialogue.name.replace(" ", "")
 		namePrepared = namePrepared.to_upper()
 		source_code += "const " + namePrepared + " = \"" + dialogue.name +"\"\n"
+	source_code += "\nconst DIALOGUES = [\n"
+	for index in range(dialogues.size()):
+		source_code += " \"" + dialogues[index].name + "\""
+		if index != dialogues.size() - 1:
+			source_code += ",\n"
+	source_code += "\n]"
 	file.store_string(source_code)
 	file.close()
 

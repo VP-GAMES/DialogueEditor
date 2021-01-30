@@ -7,7 +7,7 @@ const IconResource = preload("res://addons/dialogue_editor/icons/Dialogue.png")
 const DialogueMain = preload("res://addons/dialogue_editor/DialogueEditor.tscn")
 
 # New Types
-const DialogueDialogue = preload("res://addons/dialogue_editor/DialogueDialogue.gd")
+const DialogueDialogue2D = preload("res://addons/dialogue_editor/DialogueDialogue2D.gd")
 const DialogueIcon = preload("res://addons/dialogue_editor/icons/Dialogue.png")
 
 var _dialogue_main
@@ -17,7 +17,7 @@ func _enter_tree():
 	get_editor_interface().get_editor_viewport().add_child(_dialogue_main)
 	_dialogue_main.set_editor(self)
 	make_visible(false)
-	add_custom_type("Dialogue", "Area2D", DialogueDialogue, DialogueIcon)
+	add_custom_type("Dialogue2D", "Area2D", DialogueDialogue2D, DialogueIcon)
 
 func _exit_tree():
 	if _dialogue_main:
@@ -32,7 +32,7 @@ func make_visible(visible):
 		_dialogue_main.visible = visible
 
 func get_plugin_name():
-	return "Dialogue"
+	return "Dialogue2D"
 
 func get_plugin_icon():
 	return IconResource

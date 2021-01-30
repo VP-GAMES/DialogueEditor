@@ -3,3 +3,8 @@
 tool
 class_name DialogueMangerDialogues
 
+const SIMPLE = "Simple"
+
+const DIALOGUES = [
+ "Simple"
+]
