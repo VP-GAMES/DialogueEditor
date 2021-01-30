@@ -1,5 +1,6 @@
 # DialogueEditor : MIT License
 # @author Vladimir Petrenko
+tool
 extends Area2D
 
 var inside

@@ -6,6 +6,10 @@ extends EditorPlugin
 const IconResource = preload("res://addons/dialogue_editor/icons/Dialogue.png")
 const DialogueMain = preload("res://addons/dialogue_editor/DialogueEditor.tscn")
 
+# New Types
+const DialogueDialogue = preload("res://addons/dialogue_editor/DialogueDialogue.gd")
+const DialogueIcon = preload("res://addons/dialogue_editor/icons/Dialogue.png")
+
 var _dialogue_main
 
 func _enter_tree():
@@ -13,10 +17,12 @@ func _enter_tree():
 	get_editor_interface().get_editor_viewport().add_child(_dialogue_main)
 	_dialogue_main.set_editor(self)
 	make_visible(false)
+	add_custom_type("Dialogue", "Area2D", DialogueDialogue, DialogueIcon)
 
 func _exit_tree():
 	if _dialogue_main:
 		_dialogue_main.queue_free()
+	remove_custom_type("Dialogue")
 
 func has_main_screen():
 	return true

@@ -1,3 +1,5 @@
+# DialogueEditor example of Dialogues usage: MIT License
+# @author Vladimir Petrenko
 extends Node2D
 
 var dialogueManager

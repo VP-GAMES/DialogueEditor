@@ -1,3 +1,5 @@
+# Dialogue sentence for DialogueEditor: MIT License
+# @author Vladimir Petrenko
 tool
 extends Control
 
