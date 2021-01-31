@@ -110,7 +110,7 @@ func _draw_view() -> void:
 
 func _clear_sentences() -> void:
 	if _layer:
-		get_tree().get_root().remove_child(_layer)
+		get_tree().get_root().call_deferred("remove_child", _layer)
 		_layer.queue_free()
 
 func _draw_sentence() -> void:

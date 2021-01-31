@@ -8,6 +8,7 @@ const DialogueMain = preload("res://addons/dialogue_editor/DialogueEditor.tscn")
 
 # New Types
 const DialogueDialogue2D = preload("res://addons/dialogue_editor/DialogueDialogue2D.gd")
+const DialogueDialogue3D = preload("res://addons/dialogue_editor/DialogueDialogue3D.gd")
 const DialogueIcon = preload("res://addons/dialogue_editor/icons/Dialogue.png")
 
 var _dialogue_main
@@ -18,11 +19,13 @@ func _enter_tree():
 	_dialogue_main.set_editor(self)
 	make_visible(false)
 	add_custom_type("Dialogue2D", "Area2D", DialogueDialogue2D, DialogueIcon)
+	add_custom_type("Dialogue3D", "Area", DialogueDialogue3D, DialogueIcon)
 
 func _exit_tree():
 	if _dialogue_main:
 		_dialogue_main.queue_free()
-	remove_custom_type("Dialogue")
+	remove_custom_type("Dialogue2D")
+	remove_custom_type("Dialogue3D")
 
 func has_main_screen():
 	return true
@@ -32,7 +35,7 @@ func make_visible(visible):
 		_dialogue_main.visible = visible
 
 func get_plugin_name():
-	return "Dialogue2D"
+	return "Dialogue"
 
 func get_plugin_icon():
 	return IconResource

@@ -81,7 +81,7 @@ DialogueManager="*res://addons/dialogue_editor/DialogueManager.gd"
 actors_split_offset=213
 scenes_split_offset=245
 dialogues_editor_type="NODES"
-dialogues_selected_dialogue="Dialogue"
+dialogues_selected_dialogue="Simple"
 
 [editor_plugins]
 
@@ -99,9 +99,14 @@ move_right={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
  ]
 }
-jump={
+move_up={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"unicode":0,"echo":false,"script":null)
+ ]
+}
+move_bottom={
+"deadzone": 0.52,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"unicode":0,"echo":false,"script":null)
  ]
 }
 action={
