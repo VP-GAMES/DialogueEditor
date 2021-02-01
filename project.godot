@@ -99,7 +99,7 @@ DialogueManager="*res://addons/dialogue_editor/DialogueManager.gd"
 actors_split_offset=213
 scenes_split_offset=245
 dialogues_editor_type="NODES"
-dialogues_selected_dialogue="Simple"
+dialogues_selected_dialogue="Recursion"
 dialogues_split_offset=192
 
 [editor_plugins]

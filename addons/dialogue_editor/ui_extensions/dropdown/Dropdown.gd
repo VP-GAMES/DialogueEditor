@@ -4,6 +4,7 @@ tool
 extends LineEdit
 
 signal selection_changed
+signal selection_changed_value(value)
 
 var selected = -1
 export var popup_maxheight = 0
@@ -91,4 +92,5 @@ func _on_selection_changed(index: int) -> void:
 		_filter = _items[selected]
 		text = _filter
 		emit_signal("selection_changed")
+		emit_signal("selection_changed_value", text)
 	_popup_panel.hide()
