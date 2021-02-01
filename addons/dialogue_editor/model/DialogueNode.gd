@@ -183,11 +183,11 @@ func _del_sentence(sentence) -> void:
 	if index > -1:
 		sentences.remove(index)
 		var sentence_selected = selected_sentence()
-		_select_sentence(sentence_selected)
+		select_sentence(sentence_selected)
 		emit_signal("sentence_removed", sentence)
 
 func selected_sentence() -> Dictionary:
-	if sentence_selected_uuid.empty():
+	if sentence_selected_uuid.empty() or not sentence_by_uuid(sentence_selected_uuid):
 		sentence_selected_uuid = sentences[0].uuid
 	return sentence_by_uuid(sentence_selected_uuid)
 

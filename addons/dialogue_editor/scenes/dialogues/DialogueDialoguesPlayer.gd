@@ -41,7 +41,7 @@ func _on_dialogue_ended_canceled(dialogue) -> void:
 	get_tree().quit()
 
 func _on_dialogue_event(event: String) -> void:
-	_event_ui.text = event
+	_event_ui.text = "EVENT: -> " +  event
 	_event_ui.visible = true
 	_timer_ui.start()
 	if not _timer_ui.is_connected("timeout", self, "_on_timeout"):
