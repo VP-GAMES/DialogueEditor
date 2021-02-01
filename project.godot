@@ -9,6 +9,16 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Area2D",
+"class": "Dialogue2D",
+"language": "GDScript",
+"path": "res://addons/dialogue_editor/DialogueDialogue2D.gd"
+}, {
+"base": "Area",
+"class": "Dialogue3D",
+"language": "GDScript",
+"path": "res://addons/dialogue_editor/DialogueDialogue3D.gd"
+}, {
 "base": "Resource",
 "class": "DialogueActor",
 "language": "GDScript",
@@ -23,6 +33,11 @@ _global_script_classes=[ {
 "class": "DialogueDialogue",
 "language": "GDScript",
 "path": "res://addons/dialogue_editor/model/DialogueDialogue.gd"
+}, {
+"base": "EditorProperty",
+"class": "DialogueDialogueInspectorEditor",
+"language": "GDScript",
+"path": "res://addons/dialogue_editor/inspectors/DialogueMangerDialoguesInspectorPluginEditor.gd"
 }, {
 "base": "Resource",
 "class": "DialogueEmpty",
@@ -55,9 +70,12 @@ _global_script_classes=[ {
 "path": "res://addons/dialogue_editor/model/DialogueSentence.gd"
 } ]
 _global_script_class_icons={
+"Dialogue2D": "",
+"Dialogue3D": "",
 "DialogueActor": "res://addons/dialogue_editor/icons/Actor.png",
 "DialogueData": "",
 "DialogueDialogue": "res://addons/dialogue_editor/icons/Dialogue.png",
+"DialogueDialogueInspectorEditor": "",
 "DialogueEmpty": "",
 "DialogueMangerDialogues": "",
 "DialogueMangerEvents": "",
@@ -81,7 +99,7 @@ DialogueManager="*res://addons/dialogue_editor/DialogueManager.gd"
 actors_split_offset=213
 scenes_split_offset=245
 dialogues_editor_type="NODES"
-dialogues_selected_dialogue="Question"
+dialogues_selected_dialogue="Simple"
 dialogues_split_offset=192
 
 [editor_plugins]

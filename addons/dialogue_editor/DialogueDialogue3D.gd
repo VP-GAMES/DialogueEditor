@@ -1,7 +1,8 @@
-# DialogueEditor : MIT License
+# Dialogue3D as custom type for DialogueEditor : MIT License
 # @author Vladimir Petrenko
 tool
 extends Area
+class_name Dialogue3D
 
 var inside
 var dialogueManager

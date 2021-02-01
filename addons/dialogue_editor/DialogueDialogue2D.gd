@@ -1,7 +1,8 @@
-# DialogueEditor : MIT License
+# Dialogue2D as custom type for DialogueEditor : MIT License
 # @author Vladimir Petrenko
 tool
 extends Area2D
+class_name Dialogue2D
 
 var inside
 var dialogueManager
