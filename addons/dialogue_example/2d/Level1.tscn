@@ -76,7 +76,9 @@ texture = ExtResource( 3 )
 
 [node name="Dialogue2D" type="Area2D" parent="Girl"]
 script = ExtResource( 9 )
-dialogue_name = "Simple"
+dialogue_name = "Question"
+activate = "action"
+cancel = "cancel"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Girl/Dialogue2D"]
 shape = SubResource( 3 )
