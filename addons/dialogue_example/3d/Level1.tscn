@@ -19,7 +19,7 @@ albedo_color = Color( 0.133333, 0.823529, 0.0745098, 1 )
 extents = Vector3( 0.0194099, 3.9239, 1 )
 
 [sub_resource type="BoxShape" id=5]
-extents = Vector3( 2.1551, 2.03138, 3.68139 )
+extents = Vector3( 2.1551, 2.03138, 2.27096 )
 
 [sub_resource type="CapsuleShape" id=6]
 radius = 2.1986
@@ -86,11 +86,10 @@ transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107,
 transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0 )
 script = ExtResource( 3 )
 dialogue_name = "Simple"
-activate = "action"
-cancel = "cancel"
+autostart = true
 
 [node name="CollisionShape" type="CollisionShape" parent="Girl/Dialogue3D"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.67572e-06, 2.13258, 2 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.58307e-06, 2.26772, 4.57073 )
 shape = SubResource( 5 )
 
 [node name="StaticBody" type="StaticBody" parent="Girl"]

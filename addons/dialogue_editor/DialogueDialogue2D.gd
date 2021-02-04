@@ -9,6 +9,7 @@ var dialogueManager
 const DialogueManagerName = "DialogueManager"
 
 export(String) var dialogue_name
+export(bool) var autostart = false
 export(String) var activate = "action"
 export(String) var cancel = "cancel"
 
@@ -22,6 +23,8 @@ func _ready() -> void:
 
 func _on_body_entered(body: Node) -> void:
 	inside = true
+	if autostart:
+		_start_dialogue()
 
 func _on_body_exited(body: Node) -> void:
 	inside = false
@@ -32,9 +35,14 @@ func _on_body_exited(body: Node) -> void:
 func _input(event: InputEvent):
 	if inside and dialogueManager:
 		if event.is_action_released(activate):
-			if not dialogueManager.is_started():
-				dialogueManager.start_dialogue(dialogue_name)
+			_start_dialogue()
 		if event.is_action_released(activate):
 			dialogueManager.next_sentence()
 		if event.is_action_released(cancel):
 			dialogueManager.cancel_dialogue()
+
+func _start_dialogue() -> void:
+	if not dialogueManager.is_started():
+		dialogueManager.start_dialogue(dialogue_name)
+		if autostart:
+			dialogueManager.next_sentence()
