@@ -77,8 +77,9 @@ func _clear_view() -> void:
 		child_ui.queue_free()
 
 func _draw_sentence() -> void:
-	var sentence = _build_dialogue_sentence()
-	_loaded_scene.sentence_set(sentence)
+	if _scene:
+		var sentence = _build_dialogue_sentence()
+		_loaded_scene.sentence_set(sentence)
 
 func _build_dialogue_sentence() -> DialogueSentence:
 	var sentence = DialogueSentence.new()

@@ -97,9 +97,9 @@ DialogueManager="*res://addons/dialogue_editor/DialogueManager.gd"
 [dialogue_editor]
 
 actors_split_offset=213
-scenes_split_offset=245
+scenes_split_offset=273
 dialogues_editor_type="NODES"
-dialogues_selected_dialogue="Question"
+dialogues_selected_dialogue="Simple"
 dialogues_split_offset=192
 
 [editor_plugins]

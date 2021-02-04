@@ -208,7 +208,7 @@ func _next_dialogue_name() -> String:
 		var name = dialogue.name
 		if name.begins_with("Dialogue"):
 			dialogue_found = true
-			var behind = dialogue.name.substr(5)
+			var behind = dialogue.name.substr(8)
 			var regex = RegEx.new()
 			regex.compile("^[0-9]+$")
 			var result = regex.search(behind)
@@ -259,7 +259,8 @@ func selected_dialogue() -> DialogueDialogue:
 
 func select_dialogue(dialogue: DialogueDialogue, emitSignal = true) -> void:
 	_dialogue_selected = dialogue
-	setting_dialogues_selected_dialogue_put(_dialogue_selected.name)
+	if _dialogue_selected:
+		setting_dialogues_selected_dialogue_put(_dialogue_selected.name)
 	if emitSignal:
 		emit_signal("dialogue_selection_changed", _dialogue_selected)
 

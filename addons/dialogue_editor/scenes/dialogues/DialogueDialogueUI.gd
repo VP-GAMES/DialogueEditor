@@ -70,6 +70,7 @@ func _on_gui_input(event: InputEvent) -> void:
 
 func _on_text_changed(new_text: String) -> void:
 	_dialogue.name = new_text
+	_data.select_dialogue(_dialogue, false)
 
 func _del_pressed() -> void:
 	_data.del_dialogue(_dialogue)
