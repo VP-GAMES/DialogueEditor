@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/dialogue_editor/scenes/dialogues/nodes_view/nodes/node_sentence/PanelSentence.gd" type="Script" id=1]
+[ext_resource path="res://addons/dialogue_editor/ui_extensions/dropdown/Dropdown.tscn" type="PackedScene" id=2]
 
 [sub_resource type="ButtonGroup" id=1]
 resource_local_to_scene = false
@@ -44,9 +45,16 @@ group = SubResource( 1 )
 
 [node name="Text" type="LineEdit" parent="VBox/HBox"]
 margin_left = 84.0
-margin_right = 223.0
+margin_right = 151.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
+
+[node name="Dropdown" parent="VBox/HBox" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 155.0
+margin_right = 223.0
+margin_bottom = 24.0
 
 [node name="HBoxEvent" type="HBoxContainer" parent="VBox"]
 margin_top = 28.0

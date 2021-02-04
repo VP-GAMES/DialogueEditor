@@ -6,6 +6,8 @@ extends LineEdit
 signal selection_changed
 signal selection_changed_value(value)
 
+var _data: DialogueData
+
 var selected = -1
 export var popup_maxheight = 0
 
@@ -18,17 +20,37 @@ onready var _popup_panel_vbox: VBoxContainer= $PopupPanel/Scroll/VBox
 
 const DropdownCheckBox = preload("DropdownCheckBox.tscn")
 
+func set_data(data: DialogueData) -> void:
+	_data = data
+	if not _data.is_connected("locale_changed", self, "_on_locale_changed"):
+		_data.connect("locale_changed", self, "_on_locale_changed")
+	_update_hint_tooltip()
+
+func _on_locale_changed(locale: String) -> void:
+	_update_hint_tooltip()
+
 func clear() -> void:
 	_items.clear()
 
 func items() -> PoolStringArray:
 	return _items
 
+func set_items(items: Array) -> void:
+	_items = PoolStringArray(items)
+
 func add_item(value: String) -> void:
 	_items.append(value)
 
 func get_selected() -> int:
 	return selected
+
+func set_selected_by_value(new_text: String) -> void:
+	text = new_text
+	_filter = text
+	for index in range(_items.size()):
+		if _items[index] == text:
+			selected = index
+			break
 
 func _ready() -> void:
 	_group.resource_local_to_scene = false
@@ -44,10 +66,8 @@ func _popup_panel_focus_entered() -> void:
 	grab_focus()
 
 func _popup_panel_index_pressed(index: int) -> void:
-	var text = _popup_panel.get_item_text(index)
-	text = text
-	_filter = text
-	selected = _items.find(text)
+	var new_text = _popup_panel.get_item_text(index)
+	set_selected_by_value(new_text)
 
 func _line_edit_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -91,6 +111,11 @@ func _on_selection_changed(index: int) -> void:
 		selected = index
 		_filter = _items[selected]
 		text = _filter
+		_update_hint_tooltip()
 		emit_signal("selection_changed")
 		emit_signal("selection_changed_value", text)
 	_popup_panel.hide()
+
+func _update_hint_tooltip() -> void:
+	if _data.setting_localization_editor_enabled():
+		hint_tooltip = _data.tr(text)

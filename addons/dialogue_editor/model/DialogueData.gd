@@ -264,6 +264,39 @@ func select_dialogue(dialogue: DialogueDialogue, emitSignal = true) -> void:
 	if emitSignal:
 		emit_signal("dialogue_selection_changed", _dialogue_selected)
 
+# ***** LOCALIZATION *****
+var _locale
+var _translation
+var _translations
+
+signal locale_changed(locale)
+
+func locales() -> Array:
+	var locales = []
+	for translation in _translations:
+		locales.append(translation.locale)
+	return locales()
+
+func get_locale() -> String:
+	return _locale
+
+func set_locale(locale: String) -> void:
+	_locale = locale
+	_translation_by_locale()
+	emit_signal("locale_changed", _locale)
+
+func _translation_by_locale() -> void:
+	for translation in _translations:
+		if translation.locale == _locale:
+			_translation = translation
+			break
+
+func tr(key: String) -> String:
+	var text = ""
+	if _translation:
+		text = _translation.get_message(key)
+	return text
+
 # ***** LOAD SAVE *****
 func init_data() -> void:
 	var file = File.new()
@@ -275,6 +308,20 @@ func init_data() -> void:
 			scenes = resource.scenes
 		if resource.dialogues and not resource.dialogues.empty():
 			dialogues = resource.dialogues
+	_init_localizations()
+
+func _init_localizations() -> void:
+	if setting_localization_editor_enabled():
+		var LocalizationData = load("res://addons/localization_editor/model/LocalizationData.gd")
+		var localizationData = LocalizationData.new()
+		localizationData.init_data_translations()
+		_translations = localizationData.get_translations()
+		var locale = setting_dialogue_editor_locale()
+		if locale:
+			_locale = locale
+		else:
+			_locale = _translations[0].locale
+		_translation_by_locale()
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)
@@ -345,6 +392,7 @@ const SETTINGS_DIALOGUES_SPLIT_OFFSET = "dialogue_editor/dialogues_split_offset"
 const SETTINGS_DIALOGUES_SPLIT_OFFSET_DEFAULT = 215
 const SETTINGS_DIALOGUES_SELECTED_DIALOGUE = "dialogue_editor/dialogues_selected_dialogue"
 const SETTINGS_DIALOGUES_EDITOR_TYPE = "dialogue_editor/dialogues_editor_type"
+const SETTINGS_DIALOGUES_EDITOR_LOCALE = "dialogue_editor/dialogues_editor_locale"
 const SETTINGS_DIALOGUES_EDITOR_TYPE_DEFAULT = "NODES"
 const SETTINGS_DISPLAY_WIDTH = "display/window/size/width"
 const SETTINGS_DISPLAY_HEIGHT = "display/window/size/height"
@@ -399,6 +447,20 @@ func setting_display_size() -> Vector2:
 	var width = ProjectSettings.get_setting(SETTINGS_DISPLAY_WIDTH)
 	var height = ProjectSettings.get_setting(SETTINGS_DISPLAY_HEIGHT)
 	return Vector2(width, height)
+
+func setting_dialogue_editor_locale():
+	if ProjectSettings.has_setting(SETTINGS_DIALOGUES_EDITOR_LOCALE):
+		return ProjectSettings.get_setting(SETTINGS_DIALOGUES_EDITOR_LOCALE)
+	return null
+
+func setting_dialogue_editor_locale_put(locale: String) -> void:
+	ProjectSettings.set_setting(SETTINGS_DIALOGUES_EDITOR_LOCALE, locale)
+
+func setting_localization_editor_enabled() -> bool:
+	if ProjectSettings.has_setting("editor_plugins/enabled"):
+		var enabled_plugins = ProjectSettings.get_setting("editor_plugins/enabled") as Array
+		return enabled_plugins.has("localization_editor")
+	return false
 
 # ***** UTILS *****
 func filename(value: String) -> String:

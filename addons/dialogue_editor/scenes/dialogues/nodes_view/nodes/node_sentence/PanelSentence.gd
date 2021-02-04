@@ -14,6 +14,7 @@ onready var _remove_ui = $VBox/HBox/Remove as Button
 onready var _event_ui = $VBox/HBox/Event as Button
 onready var _select_ui = $VBox/HBox/Select as Button
 onready var _text_ui = $VBox/HBox/Text as LineEdit
+onready var _dropdown_ui = $VBox/HBox/Dropdown
 onready var _event_box_ui = $VBox/HBoxEvent as HBoxContainer
 onready var _event_text_ui = $VBox/HBoxEvent/EventText as LineEdit
 
@@ -29,8 +30,18 @@ func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dial
 	_node = node
 	_dialogue = dialogue
 	_data = data
+	_dropdown_ui_init()
 	_init_connections()
 	_update_view()
+	_dropdown_ui.set_data(_data)
+
+func _dropdown_ui_init() -> void:
+	if _data.setting_localization_editor_enabled():
+		var LocalizationManagerKeys = load("res://addons/localization_editor/LocalizationManagerKeys.gd")
+		var localizationManagerKeys = LocalizationManagerKeys.new()
+		var keys = localizationManagerKeys.KEYS
+		_dropdown_ui.set_items(keys)
+		_dropdown_ui.set_selected_by_value(_sentence.text)
 
 func _init_connections() -> void:
 	if not _remove_ui.is_connected("pressed", self, "_on_remove_sentence_pressed"):
@@ -45,6 +56,9 @@ func _init_connections() -> void:
 		assert(_event_ui.connect("pressed", self, "_on_select_event_pressed") == OK)
 	if not _node.is_connected("sentence_event_changed", self, "_on_sentence_event_changed"):
 		assert(_node.connect("sentence_event_changed", self, "_on_sentence_event_changed") == OK)
+	if _data.setting_localization_editor_enabled():
+		if not _dropdown_ui.is_connected("selection_changed_value", self, "_on_selection_changed_value"):
+			assert(_dropdown_ui.connect("selection_changed_value", self, "_on_selection_changed_value") == OK)
 
 func _on_remove_sentence_pressed() -> void:
 	_node.del_sentence(_sentence)
@@ -68,11 +82,15 @@ func _on_select_sentence_pressed() -> void:
 func _on_sentence_event_changed(sentence) -> void:
 	_event_ui_draw()
 
+func _on_selection_changed_value(new_text: String) -> void:
+	_node.change_sentence_text(_sentence, new_text)
+
 func _update_view() -> void:
 	_remove_ui_draw()
 	_event_ui_draw()
 	_select_ui_draw()
 	_text_ui_draw()
+	_dropdown_ui_draw()
 	_event_box_ui_draw()
 	_event_text_ui_draw()
 	rect_size = Vector2.ZERO
@@ -94,7 +112,11 @@ func _select_ui_draw() -> void:
 		_select_ui.set_pressed(true)
 
 func _text_ui_draw() -> void:
+	_text_ui.visible = not _data.setting_localization_editor_enabled()
 	_text_ui.text = _sentence.text
+
+func _dropdown_ui_draw() -> void:
+	_dropdown_ui.visible = _data.setting_localization_editor_enabled()
 
 func _event_box_ui_draw() -> void:
 	_event_box_ui.visible = _sentence.has("event_visible") and _sentence.event_visible

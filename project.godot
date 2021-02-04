@@ -68,6 +68,21 @@ _global_script_classes=[ {
 "class": "DialogueSentence",
 "language": "GDScript",
 "path": "res://addons/dialogue_editor/model/DialogueSentence.gd"
+}, {
+"base": "Resource",
+"class": "LocalizationData",
+"language": "GDScript",
+"path": "res://addons/localization_editor/model/LocalizationData.gd"
+}, {
+"base": "Reference",
+"class": "LocalizationManagerKeys",
+"language": "GDScript",
+"path": "res://addons/localization_editor/LocalizationManagerKeys.gd"
+}, {
+"base": "Reference",
+"class": "LocalizationManagerPlaceholders",
+"language": "GDScript",
+"path": "res://addons/localization_editor/LocalizationManagerPlaceholders.gd"
 } ]
 _global_script_class_icons={
 "Dialogue2D": "",
@@ -81,7 +96,10 @@ _global_script_class_icons={
 "DialogueMangerEvents": "",
 "DialogueNode": "res://addons/dialogue_editor/icons/Node.png",
 "DialoguePanelSentence": "",
-"DialogueSentence": "res://addons/dialogue_editor/icons/Sentence.png"
+"DialogueSentence": "res://addons/dialogue_editor/icons/Sentence.png",
+"LocalizationData": "",
+"LocalizationManagerKeys": "",
+"LocalizationManagerPlaceholders": ""
 }
 
 [application]
@@ -104,7 +122,7 @@ dialogues_split_offset=192
 
 [editor_plugins]
 
-enabled=PoolStringArray( "dialogue_editor" )
+enabled=PoolStringArray( "dialogue_editor", "localization_editor" )
 
 [input]
 
@@ -138,6 +156,10 @@ cancel={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":81,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[locale]
+
+translations=PoolStringArray( "res://localization/localizations.en.translation", "res://localization/localizations.de.translation", "res://localization/localizations.ru.translation" )
 
 [rendering]
 

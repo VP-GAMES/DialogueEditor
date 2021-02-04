@@ -3,6 +3,9 @@
 tool
 extends Control
 
+var _localizationManager
+const _localizationManagerName = "localizationManager"
+
 var _sentence: DialogueSentence
 var _buttons_array = []
 
@@ -18,6 +21,16 @@ func sentence() -> DialogueSentence:
 
 func buttons() -> Array:
 	return _buttons_array
+
+func _ready() -> void:
+	if get_tree().get_root().has_node(_localizationManagerName):
+		_localizationManager = get_tree().get_root().get_node(_localizationManagerName)
+		if not _localizationManager.is_connected("translation_changed", self, "_update_translation_from_manager"):
+			_localizationManager.connect("translation_changed", self, "_update_translation_from_manager")
+
+func _update_translation_from_manager() -> void:
+	_text()
+	_buttons()
 
 func sentence_set(sentence: DialogueSentence) -> void:
 	_sentence = sentence
@@ -42,7 +55,10 @@ func _name() -> void:
 func _text() -> void:
 	if _sentence.text_exists():
 		_text_ui.visible = true
-		_text_ui.text = _sentence.texte_events[0].text
+		if _localizationManager:
+			_text_ui.text = _localizationManager.tr(_sentence.texte_events[0].text)
+		else:
+			_text_ui.text = _sentence.texte_events[0].text
 	else:
 		_text_ui.visible = false
 
@@ -73,7 +89,10 @@ func _buttons_generate() -> void:
 		var button_ui = _buttons_array[index] as Button
 		button_ui.anchor_top = _button_ui.anchor_top - offset * index
 		button_ui.anchor_bottom = _button_ui.anchor_bottom - offset * index
-		button_ui.text = _sentence.texte_events[index_reverse].text
+		if _localizationManager:
+			_text_ui.text = _localizationManager.tr(_sentence.texte_events[index_reverse].text)
+		else:
+			button_ui.text = _sentence.texte_events[index_reverse].text
 	for child in get_children():
 		for button_ui in _buttons_array:
 			if child == button_ui:
