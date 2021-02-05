@@ -18,11 +18,19 @@ func _ready():
 	else:
 		dialogueManager = get_tree().get_root().get_node(DialogueManagerName)
 		_init_dialogue_manager()
+	var locale = _setting_dialogue_editor_locale()
+	if locale:
+		TranslationServer.set_locale(locale)
 
 func _init_dialogue_manager() -> void:
 	dialogueManager.started_from_editor = true
 	dialogueManager.load_data()
 	dialogueManager.name = DialogueManagerName
+
+func _setting_dialogue_editor_locale():
+	if ProjectSettings.has_setting("dialogue_editor/dialogues_editor_locale"):
+		return ProjectSettings.get_setting("dialogue_editor/dialogues_editor_locale")
+	return null
 
 func _process(delta):
 	if not dialogueManagerAdded and ProjectSettings.has_setting(SETTINGS_DIALOGUES_SELECTED_DIALOGUE):

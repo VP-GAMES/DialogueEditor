@@ -275,7 +275,7 @@ func locales() -> Array:
 	var locales = []
 	for translation in _translations:
 		locales.append(translation.locale)
-	return locales()
+	return locales
 
 func get_locale() -> String:
 	return _locale
@@ -283,6 +283,8 @@ func get_locale() -> String:
 func set_locale(locale: String) -> void:
 	_locale = locale
 	_translation_by_locale()
+	setting_dialogue_editor_locale_put(_locale)
+	TranslationServer.set_locale(_locale)
 	emit_signal("locale_changed", _locale)
 
 func _translation_by_locale() -> void:

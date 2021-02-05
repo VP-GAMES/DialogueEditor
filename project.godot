@@ -119,6 +119,7 @@ scenes_split_offset=273
 dialogues_editor_type="NODES"
 dialogues_selected_dialogue="Simple"
 dialogues_split_offset=192
+dialogues_editor_locale="de"
 
 [editor_plugins]
 
