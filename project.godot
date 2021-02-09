@@ -68,21 +68,6 @@ _global_script_classes=[ {
 "class": "DialogueSentence",
 "language": "GDScript",
 "path": "res://addons/dialogue_editor/model/DialogueSentence.gd"
-}, {
-"base": "Resource",
-"class": "LocalizationData",
-"language": "GDScript",
-"path": "res://addons/localization_editor/model/LocalizationData.gd"
-}, {
-"base": "Reference",
-"class": "LocalizationManagerKeys",
-"language": "GDScript",
-"path": "res://addons/localization_editor/LocalizationManagerKeys.gd"
-}, {
-"base": "Reference",
-"class": "LocalizationManagerPlaceholders",
-"language": "GDScript",
-"path": "res://addons/localization_editor/LocalizationManagerPlaceholders.gd"
 } ]
 _global_script_class_icons={
 "Dialogue2D": "",
@@ -96,10 +81,7 @@ _global_script_class_icons={
 "DialogueMangerEvents": "",
 "DialogueNode": "res://addons/dialogue_editor/icons/Node.png",
 "DialoguePanelSentence": "",
-"DialogueSentence": "res://addons/dialogue_editor/icons/Sentence.png",
-"LocalizationData": "",
-"LocalizationManagerKeys": "",
-"LocalizationManagerPlaceholders": ""
+"DialogueSentence": "res://addons/dialogue_editor/icons/Sentence.png"
 }
 
 [application]
@@ -123,7 +105,7 @@ dialogues_editor_locale="de"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "dialogue_editor", "localization_editor" )
+enabled=PoolStringArray( "dialogue_editor" )
 
 [input]
 
