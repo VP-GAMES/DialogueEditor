@@ -22,6 +22,9 @@ func _ready() -> void:
 		assert(connect("body_exited", self, "_on_body_exited") == OK)
 
 func _on_body_entered(body: Node) -> void:
+	for child in get_children():
+		if body == child:
+			return 
 	inside = true
 	if autostart:
 		_start_dialogue()

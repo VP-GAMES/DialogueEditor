@@ -86,17 +86,14 @@ transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107,
 transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0 )
 script = ExtResource( 3 )
 dialogue_name = "Simple"
-autostart = false
-activate = "action"
-cancel = "cancel"
 
 [node name="CollisionShape" type="CollisionShape" parent="Girl/Dialogue3D"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.58307e-06, 2.26772, 4.57073 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.073782, 2.26772, 1.13945 )
 shape = SubResource( 5 )
 
-[node name="StaticBody" type="StaticBody" parent="Girl"]
+[node name="StaticBody" type="StaticBody" parent="Girl/Dialogue3D"]
 
-[node name="CollisionShape" type="CollisionShape" parent="Girl/StaticBody"]
+[node name="CollisionShape" type="CollisionShape" parent="Girl/Dialogue3D/StaticBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27477, 0 )
 shape = SubResource( 6 )
 
