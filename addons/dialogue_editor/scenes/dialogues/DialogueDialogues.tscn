@@ -51,31 +51,35 @@ icon = ExtResource( 1 )
 [node name="Label" type="Label" parent="Margin/VBox/HBox"]
 margin_left = 26.0
 margin_top = 4.0
-margin_right = 934.0
+margin_right = 960.0
 margin_bottom = 18.0
 size_flags_horizontal = 3
 text = "Dialogues"
 
 [node name="Play" type="Button" parent="Margin/VBox/HBox"]
-margin_left = 938.0
-margin_right = 960.0
+margin_left = 964.0
+margin_right = 986.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 20, 20 )
+hint_tooltip = "Play actual dialogue"
 icon = ExtResource( 5 )
 
 [node name="Nodes" type="Button" parent="Margin/VBox/HBox"]
-margin_left = 964.0
-margin_right = 992.0
+margin_left = 990.0
+margin_right = 1018.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 20, 20 )
+hint_tooltip = "Node view"
 toggle_mode = true
 icon = ExtResource( 3 )
 
 [node name="Bricks" type="Button" parent="Margin/VBox/HBox"]
+visible = false
 margin_left = 996.0
 margin_right = 1018.0
 margin_bottom = 22.0
 rect_min_size = Vector2( 20, 20 )
+hint_tooltip = "Briks view"
 toggle_mode = true
 icon = ExtResource( 4 )
 
