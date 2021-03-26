@@ -322,7 +322,10 @@ func _init_localizations() -> void:
 		if locale:
 			_locale = locale
 		else:
-			_locale = _translations[0].locale
+			if _translations:
+				_locale = _translations[0].locale
+			else:
+				_locale = OS.get_locale()
 		_translation_by_locale()
 
 func save() -> void:
