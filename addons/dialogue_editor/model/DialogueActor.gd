@@ -16,6 +16,7 @@ const UUID = preload("res://addons/dialogue_editor/uuid/uuid.gd")
 # ***** EDITOR_PLUGIN_END *****
 
 signal name_changed(name)
+signal uiname_changed(uiname)
 signal resource_added(resource)
 signal resource_removed(resource)
 signal resource_name_changed(resource)
@@ -24,6 +25,7 @@ signal resource_selection_changed(resource)
 
 export (String) var uuid
 export (String) var name = ""
+export (String) var uiname = ""
 export (Array) var resources = [] # List of Resources
 var _resource_selected = null
 
@@ -31,6 +33,11 @@ func change_name(new_name: String):
 	name = new_name
 	emit_signal("changed")
 	emit_signal("name_changed")
+
+func change_uiname(new_uiname: String):
+	uiname = new_uiname
+	emit_signal("changed")
+	emit_signal("uiname_changed")
 
 func add_resource() -> void:
 	var resource = _create_resource()
