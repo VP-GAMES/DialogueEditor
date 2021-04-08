@@ -117,5 +117,5 @@ func _on_selection_changed(index: int) -> void:
 	_popup_panel.hide()
 
 func _update_hint_tooltip() -> void:
-	if _data.setting_localization_editor_enabled():
+	if _data and _data.setting_localization_editor_enabled():
 		hint_tooltip = _data.tr(text)

@@ -1,11 +1,13 @@
 # EditorProperty for Dialogue2D and Dialogue3D in DialogueEditor : MIT License
 # @author Vladimir Petrenko
+tool
 extends EditorProperty
 class_name DialogueDialogueInspectorEditor
 
 const Dropdown = preload("res://addons/dialogue_editor/ui_extensions/dropdown/Dropdown.tscn")
 
 var updating = false
+var dialogue_editor
 var dropdown = Dropdown.instance()
 
 func _init():
@@ -16,8 +18,15 @@ func _init():
 
 func _on_gui_input(event: InputEvent) -> void:
 	dropdown.clear()
-	for item in DialogueMangerDialogues.DIALOGUES:
-		dropdown.add_item(item)
+	if not dialogue_editor:
+		dialogue_editor = get_tree().get_root().find_node("DialogueEditor", true, false)
+	if dialogue_editor:
+		var data = dialogue_editor.get_data() as DialogueData
+		if data:
+			for dialogue in data.dialogues:
+				var namePrepared = dialogue.name.replace(" ", "")
+				namePrepared = namePrepared.to_upper()
+				dropdown.add_item(namePrepared)
 
 func _on_selection_changed_value(value: String):
 	if (updating):
