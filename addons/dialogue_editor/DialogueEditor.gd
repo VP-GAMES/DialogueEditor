@@ -37,6 +37,9 @@ func _init_connections() -> void:
 	if not _tabs_ui.is_connected("tab_changed", self, "_on_tab_changed"):
 		assert(_tabs_ui.connect("tab_changed", self, "_on_tab_changed") == OK)
 
+func get_data() -> DialogueData:
+	return _data
+
 func _load_data() -> void:
 	_data.init_data()
 

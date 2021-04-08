@@ -16,6 +16,7 @@ var _dialogue_editor_plugin
 
 func _enter_tree():
 	_dialogue_main = DialogueMain.instance()
+	_dialogue_main.name = "DialogueEditor"
 	get_editor_interface().get_editor_viewport().add_child(_dialogue_main)
 	_dialogue_main.set_editor(self)
 	make_visible(false)
