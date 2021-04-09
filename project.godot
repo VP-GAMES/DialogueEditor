@@ -142,7 +142,7 @@ cancel={
 
 [locale]
 
-translations=PoolStringArray( "res://localization/localizations.en.translation", "res://localization/localizations.de.translation", "res://localization/localizations.ru.translation" )
+translations=PoolStringArray(  )
 
 [rendering]
 
