@@ -36,21 +36,28 @@ func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dial
 	_update_view()
 	_dropdown_ui.set_data(_data)
 
+func _process(delta: float) -> void:
+	if not localization_editor:
+		_dropdown_ui_init()
+
 func _dropdown_ui_init() -> void:
 	if not localization_editor:
 		localization_editor = get_tree().get_root().find_node("LocalizationEditor", true, false)
 	if localization_editor:
 		var data = localization_editor.get_data()
 		if data:
-			data.connect("data_changed", self, "_on_localization_data_changed")
-			data.connect("data_key_value_changed", self, "_on_localization_data_changed")
+			if not data.is_connected("data_changed", self, "_on_localization_data_changed"):
+				data.connect("data_changed", self, "_on_localization_data_changed")
+			if not data.is_connected("data_key_value_changed", self, "_on_localization_data_changed"):
+				data.connect("data_key_value_changed", self, "_on_localization_data_changed")
 			_on_localization_data_changed()
 
 func _on_localization_data_changed() -> void:
-	_dropdown_ui.clear()
-	for key in localization_editor.get_data().data.keys:
-		_dropdown_ui.add_item(key.value)
-	_dropdown_ui.set_selected_by_value(_sentence.text)
+	if _dropdown_ui:
+		_dropdown_ui.clear()
+		for key in localization_editor.get_data().data.keys:
+			_dropdown_ui.add_item(key.value)
+		_dropdown_ui.set_selected_by_value(_sentence.text)
 
 func _init_connections() -> void:
 	if not _remove_ui.is_connected("pressed", self, "_on_remove_sentence_pressed"):

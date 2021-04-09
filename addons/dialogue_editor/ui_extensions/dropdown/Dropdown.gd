@@ -7,6 +7,7 @@ signal selection_changed
 signal selection_changed_value(value)
 
 var _data: DialogueData
+var localization_editor
 
 var selected = -1
 export var popup_maxheight = 0
@@ -14,7 +15,6 @@ export var popup_maxheight = 0
 var _group = ButtonGroup.new()
 var _filter: String = ""
 var _items = []
-var localization_editor
 
 onready var _popup_panel: PopupPanel= $PopupPanel
 onready var _popup_panel_vbox: VBoxContainer= $PopupPanel/Scroll/VBox
@@ -26,6 +26,15 @@ func set_data(data: DialogueData) -> void:
 	if not _data.is_connected("locale_changed", self, "_on_locale_changed"):
 		_data.connect("locale_changed", self, "_on_locale_changed")
 	_update_hint_tooltip()
+
+func _process(delta: float) -> void:
+	if not localization_editor:
+		_dropdown_ui_init()
+
+func _dropdown_ui_init() -> void:
+	if not localization_editor:
+		localization_editor = get_tree().get_root().find_node("LocalizationEditor", true, false)
+		_update_hint_tooltip()
 
 func _on_locale_changed(locale: String) -> void:
 	_update_hint_tooltip()
@@ -118,7 +127,5 @@ func _on_selection_changed(index: int) -> void:
 	_popup_panel.hide()
 
 func _update_hint_tooltip() -> void:
-	if not localization_editor:
-		localization_editor = get_tree().get_root().find_node("LocalizationEditor", true, false)
-	if _data and localization_editor:
-		hint_tooltip = _data.tr(text)
+	if localization_editor and _data.setting_localization_editor_enabled():
+		hint_tooltip = localization_editor.get_data().value_by_locale_key(_data.get_locale(), text) 

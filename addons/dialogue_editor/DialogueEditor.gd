@@ -5,6 +5,7 @@ extends Control
 
 var _editor: EditorPlugin
 var _data:= DialogueData.new()
+var localization_editor
 
 onready var _save_ui = $VBox/Margin/HBox/Save as Button
 onready var _label_ui = $VBox/Margin/HBox/Label as Label
@@ -26,10 +27,29 @@ func _ready() -> void:
 func set_editor(editor: EditorPlugin) -> void:
 	_editor = editor
 	_init_connections()
-	_load_data()
 	_data.set_editor(editor)
+	_load_data()
 	_data_to_childs()
 	_init_localization()
+
+func _process(delta: float) -> void:
+	if not localization_editor:
+		_dropdown_ui_init()
+
+func _dropdown_ui_init() -> void:
+	if not localization_editor:
+		localization_editor = get_tree().get_root().find_node("LocalizationEditor", true, false)
+	if localization_editor:
+		var data = localization_editor.get_data()
+		if data:
+			if not data.is_connected("data_changed", self, "_on_localization_data_changed"):
+				data.connect("data_changed", self, "_on_localization_data_changed")
+			if not data.is_connected("data_key_value_changed", self, "_on_localization_data_changed"):
+				data.connect("data_key_value_changed", self, "_on_localization_data_changed")
+			_on_localization_data_changed()
+
+func _on_localization_data_changed() -> void:
+	init_languages()
 
 func _init_connections() -> void:
 	if not _save_ui.is_connected("pressed", self, "save_data"):
@@ -58,14 +78,14 @@ func _init_localization() -> void:
 	if _data.setting_localization_editor_enabled():
 		_label_ui.show()
 		_languages_ui.show()
-		init_languages()
 	else:
 		_label_ui.hide()
 		_languages_ui.hide()
 
 var _locales
 func init_languages() -> void:
-	_locales = _data.locales()
+	_languages_ui.clear()
+	_locales = localization_editor.get_data().locales()
 	var index: = -1
 	for i in range(_locales.size()):
 		_languages_ui.add_item(TranslationServer.get_locale_name(_locales[i]))

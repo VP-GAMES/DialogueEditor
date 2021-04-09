@@ -7,6 +7,7 @@ class_name DialogueData
 # ***** EDITOR_PLUGIN *****
 var _editor: EditorPlugin
 var _undo_redo: UndoRedo
+var localization_editor
 
 func editor() -> EditorPlugin:
 	return _editor
@@ -23,6 +24,23 @@ const UUID = preload("res://addons/dialogue_editor/uuid/uuid.gd")
 # ***** EDITOR_PLUGIN_END *****
 
 const default_path = "res://dialogue/"
+
+# ***** LOCALIZATION *****
+var _locale
+
+signal locale_changed(locale)
+
+func get_locale() -> String:
+	_locale = setting_dialogue_editor_locale()
+	if not _locale:
+		_locale = TranslationServer.get_locale()
+	return _locale
+
+func set_locale(locale: String) -> void:
+	_locale = locale
+	setting_dialogue_editor_locale_put(_locale)
+	TranslationServer.set_locale(_locale)
+	emit_signal("locale_changed", _locale)
 
 # ***** ACTORS *****
 signal actor_added(actor)
@@ -266,41 +284,6 @@ func select_dialogue(dialogue: DialogueDialogue, emitSignal = true) -> void:
 	if emitSignal:
 		emit_signal("dialogue_selection_changed", _dialogue_selected)
 
-# ***** LOCALIZATION *****
-var _locale
-var _translation
-var _translations
-
-signal locale_changed(locale)
-
-func locales() -> Array:
-	var locales = []
-	for translation in _translations:
-		locales.append(translation.locale)
-	return locales
-
-func get_locale() -> String:
-	return _locale
-
-func set_locale(locale: String) -> void:
-	_locale = locale
-	_translation_by_locale()
-	setting_dialogue_editor_locale_put(_locale)
-	TranslationServer.set_locale(_locale)
-	emit_signal("locale_changed", _locale)
-
-func _translation_by_locale() -> void:
-	for translation in _translations:
-		if translation.locale == _locale:
-			_translation = translation
-			break
-
-func tr(key: String) -> String:
-	var text = ""
-	if _translation:
-		text = _translation.get_message(key)
-	return text
-
 # ***** LOAD SAVE *****
 func init_data() -> void:
 	var file = File.new()
@@ -312,23 +295,6 @@ func init_data() -> void:
 			scenes = resource.scenes
 		if resource.dialogues and not resource.dialogues.empty():
 			dialogues = resource.dialogues
-	_init_localizations()
-
-func _init_localizations() -> void:
-	if setting_localization_editor_enabled():
-		var LocalizationData = load("res://addons/localization_editor/model/LocalizationData.gd")
-		var localizationData = LocalizationData.new()
-		localizationData.init_data_translations()
-		_translations = localizationData.get_translations()
-		var locale = setting_dialogue_editor_locale()
-		if locale:
-			_locale = locale
-		else:
-			if _translations:
-				_locale = _translations[0].locale
-			else:
-				_locale = OS.get_locale()
-		_translation_by_locale()
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)
