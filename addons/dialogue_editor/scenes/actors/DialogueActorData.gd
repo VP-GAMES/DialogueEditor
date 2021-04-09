@@ -86,13 +86,14 @@ func _on_selection_changed_value(new_text: String) -> void:
 	_actor.change_uiname(new_text)
 
 func _update_view() -> void:
-	_actor = _data.selected_actor()
-	if _actor:
-		_init_actor_connections()
-		_clear_view()
-		_draw_view()
-	else:
-		_clear_view()
+	if _data:
+		_actor = _data.selected_actor()
+		if _actor:
+			_init_actor_connections()
+			_clear_view()
+			_draw_view()
+		else:
+			_clear_view()
 
 func _draw_view() -> void:
 	_uiname_ui_draw()
