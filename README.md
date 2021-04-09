@@ -2,7 +2,7 @@
 
 This is a Godot Editor plugin to manage dialogues in godot. The plugin allows you to quickly and easily manage all your actors and dialogues. You can also create your own dialog ui. Resources are assigned very easily using drag and drop. The assigned resources can be viewed in preview window, to check them. You can also test all your dialogues in preview mode with simple play system.
 
-Version: 1.1.5
+Version: 1.2.6
 
 The following screenshots show the working areas of the plugin:
 
