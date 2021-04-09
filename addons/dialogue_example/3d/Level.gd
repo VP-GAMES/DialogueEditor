@@ -17,9 +17,9 @@ func _ready() -> void:
 				assert(dialogueManager.connect("dialogue_event", self, "_on_dialogue_event") == OK)
 
 func _on_dialogue_event(event: String) -> void:
-	if event == DialogueMangerEvents.QUESTION_EVENT_RIGHT or event == DialogueMangerEvents.QUESTION_EVENT_WRONG:
-		_flag_yellow_ui.visible = event == DialogueMangerEvents.QUESTION_EVENT_RIGHT
-		_flag_red_ui.visible = event == DialogueMangerEvents.QUESTION_EVENT_WRONG
+	if event == DialogueEvents.QUESTION_EVENT_RIGHT or event == DialogueEvents.QUESTION_EVENT_WRONG:
+		_flag_yellow_ui.visible = event == DialogueEvents.QUESTION_EVENT_RIGHT
+		_flag_red_ui.visible = event == DialogueEvents.QUESTION_EVENT_WRONG
 		_timer_ui.start()
 		if not _timer_ui.is_connected("timeout", self, "_on_timeout"):
 			assert(_timer_ui.connect("timeout", self, "_on_timeout") == OK)

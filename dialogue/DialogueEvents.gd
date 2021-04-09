@@ -1,7 +1,7 @@
 # Events for DialogueManger to use in source code: MIT License
 # @author Vladimir Petrenko
 tool
-class_name DialogueMangerEvents
+class_name DialogueEvents
 
 
 const QUESTION_EVENT_QUESTION = "QUESTION"

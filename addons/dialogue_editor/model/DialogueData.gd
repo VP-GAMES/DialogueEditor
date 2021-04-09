@@ -22,6 +22,8 @@ func set_editor(editor: EditorPlugin) -> void:
 const UUID = preload("res://addons/dialogue_editor/uuid/uuid.gd")
 # ***** EDITOR_PLUGIN_END *****
 
+const default_path = "res://dialogue/"
+
 # ***** ACTORS *****
 signal actor_added(actor)
 signal actor_removed(actor)
@@ -335,12 +337,15 @@ func save() -> void:
 	_editor.get_editor_interface().get_resource_filesystem().scan()
 
 func _save_data_dialogue_names() -> void:
+	var directory = Directory.new()
+	if not directory.dir_exists(default_path):
+		directory.make_dir(default_path)
 	var file = File.new()
-	file.open("res://addons/dialogue_editor/DialogueMangerDialogues.gd", File.WRITE)
+	file.open(default_path + "DialogueDialogues.gd", File.WRITE)
 	var source_code = "# Names for DialogueManger to use in source code: MIT License\n"
 	source_code += AUTHOR
 	source_code += "tool\n"
-	source_code += "class_name DialogueMangerDialogues\n\n"
+	source_code += "class_name DialogueDialogues\n\n"
 	for dialogue in dialogues:
 		var namePrepared = dialogue.name.replace(" ", "")
 		namePrepared = namePrepared.to_upper()
@@ -356,11 +361,11 @@ func _save_data_dialogue_names() -> void:
 
 func _save_data_dialogue_events() -> void:
 	var file = File.new()
-	file.open("res://addons/dialogue_editor/DialogueMangerEvents.gd", File.WRITE)
+	file.open(default_path + "DialogueEvents.gd", File.WRITE)
 	var source_code = "# Events for DialogueManger to use in source code: MIT License\n"
 	source_code += AUTHOR
 	source_code += "tool\n"
-	source_code += "class_name DialogueMangerEvents\n\n"
+	source_code += "class_name DialogueEvents\n\n"
 	for dialogue in dialogues:
 		for event in dialogue.events():
 			source_code += "const " + dialogue.name.to_upper() + "_EVENT_" + event.to_upper()
