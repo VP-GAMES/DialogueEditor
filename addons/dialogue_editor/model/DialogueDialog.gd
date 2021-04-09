@@ -48,7 +48,11 @@ func _texture() -> void:
 
 func _name() -> void:
 	if show_name and _sentence and _sentence.actor:
-		_name_ui.text = _sentence.actor.name
+		var uiname = _sentence.actor.uiname
+		if uiname and not uiname.empty():
+			_name_ui.text = TranslationServer.tr(uiname)
+		else:
+			_name_ui.text = _sentence.actor.name
 	else:
 		_name_ui.text = ""
 

@@ -42,10 +42,11 @@ func _dropdown_ui_init() -> void:
 func _on_localization_data_changed() -> void:
 	if _dropdown_ui:
 		_dropdown_ui.clear()
-		for key in localization_editor.get_data().data.keys:
-			_dropdown_ui.add_item(key.value)
-		if _actor:
-			_dropdown_ui.set_selected_by_value(_actor.uiname)
+		if localization_editor:
+			for key in localization_editor.get_data().data.keys:
+				_dropdown_ui.add_item(key.value)
+			if _actor:
+				_dropdown_ui.set_selected_by_value(_actor.uiname)
 
 func _init_connections() -> void:
 	if not _add_ui.is_connected("pressed", self, "_on_add_pressed"):
@@ -96,6 +97,7 @@ func _update_view() -> void:
 func _draw_view() -> void:
 	_uiname_ui_draw()
 	_dropdown_ui_draw()
+	_on_localization_data_changed()
 	_add_ui.disabled = false
 	for resource in _actor.resources:
 		_draw_resource(resource)
