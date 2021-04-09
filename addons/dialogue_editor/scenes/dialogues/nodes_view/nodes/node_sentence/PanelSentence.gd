@@ -9,6 +9,7 @@ var _data: DialogueData
 var _node: DialogueNode
 var _sentence: Dictionary
 var _dialogue: DialogueDialogue
+var localization_editor
 
 onready var _remove_ui = $VBox/HBox/Remove as Button
 onready var _event_ui = $VBox/HBox/Event as Button
@@ -36,12 +37,20 @@ func set_data(group: ButtonGroup, sentence: Dictionary, node: DialogueNode, dial
 	_dropdown_ui.set_data(_data)
 
 func _dropdown_ui_init() -> void:
-	if _data.setting_localization_editor_enabled():
-		var LocalizationManagerKeys = load("res://addons/localization_editor/LocalizationManagerKeys.gd")
-		var localizationManagerKeys = LocalizationManagerKeys.new()
-		var keys = localizationManagerKeys.KEYS
-		_dropdown_ui.set_items(keys)
-		_dropdown_ui.set_selected_by_value(_sentence.text)
+	if not localization_editor:
+		localization_editor = get_tree().get_root().find_node("LocalizationEditor", true, false)
+	if localization_editor:
+		var data = localization_editor.get_data()
+		if data:
+			data.connect("data_changed", self, "_on_localization_data_changed")
+			data.connect("data_key_value_changed", self, "_on_localization_data_changed")
+			_on_localization_data_changed()
+
+func _on_localization_data_changed() -> void:
+	_dropdown_ui.clear()
+	for key in localization_editor.get_data().data.keys:
+		_dropdown_ui.add_item(key.value)
+	_dropdown_ui.set_selected_by_value(_sentence.text)
 
 func _init_connections() -> void:
 	if not _remove_ui.is_connected("pressed", self, "_on_remove_sentence_pressed"):

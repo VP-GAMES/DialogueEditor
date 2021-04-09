@@ -14,6 +14,7 @@ export var popup_maxheight = 0
 var _group = ButtonGroup.new()
 var _filter: String = ""
 var _items = []
+var localization_editor
 
 onready var _popup_panel: PopupPanel= $PopupPanel
 onready var _popup_panel_vbox: VBoxContainer= $PopupPanel/Scroll/VBox
@@ -117,5 +118,7 @@ func _on_selection_changed(index: int) -> void:
 	_popup_panel.hide()
 
 func _update_hint_tooltip() -> void:
-	if _data and _data.setting_localization_editor_enabled():
+	if not localization_editor:
+		localization_editor = get_tree().get_root().find_node("LocalizationEditor", true, false)
+	if _data and localization_editor:
 		hint_tooltip = _data.tr(text)

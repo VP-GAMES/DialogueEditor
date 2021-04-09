@@ -24,9 +24,7 @@ func _on_gui_input(event: InputEvent) -> void:
 		var data = dialogue_editor.get_data() as DialogueData
 		if data:
 			for dialogue in data.dialogues:
-				var namePrepared = dialogue.name.replace(" ", "")
-				namePrepared = namePrepared.to_upper()
-				dropdown.add_item(namePrepared)
+				dropdown.add_item(dialogue.name)
 
 func _on_selection_changed_value(value: String):
 	if (updating):
