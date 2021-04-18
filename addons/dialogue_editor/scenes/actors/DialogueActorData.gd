@@ -79,7 +79,7 @@ func _on_resource_added(resource) -> void:
 func _on_resource_removed(resource) -> void:
 	_update_view()
 
-func _on_text_changed(new_text: String) -> void:
+func _on_uiname_changed(new_text: String) -> void:
 	_actor.change_uiname(new_text)
 
 func _on_selection_changed_value(new_text: String) -> void:
