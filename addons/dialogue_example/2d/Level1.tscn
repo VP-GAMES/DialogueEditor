@@ -76,7 +76,7 @@ texture = ExtResource( 3 )
 
 [node name="Dialogue2D" type="Area2D" parent="Girl"]
 script = ExtResource( 9 )
-dialogue_name = "Simple"
+dialogue_name = "ade89692-0b62-47dd-bacf-2b835ca69902"
 autostart = false
 activate = "action"
 cancel = "cancel"

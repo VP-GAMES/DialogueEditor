@@ -4,35 +4,46 @@ tool
 extends EditorProperty
 class_name DialogueDialogueInspectorEditor
 
-const Dropdown = preload("res://addons/dialogue_editor/ui_extensions/dropdown/Dropdown.tscn")
+const Dropdown = preload("res://addons/dialogue_editor/ui_extensions/dropdown_uuid/Dropdown.tscn")
 
 var updating = false
 var dialogue_editor
 var dropdown = Dropdown.instance()
+var _data: DialogueData
+var _items: Array
+
+func set_data(data: DialogueData) -> void:
+	_data = data
+	_items = _data.dialogues
 
 func _init():
 	add_child(dropdown)
 	add_focusable(dropdown)
 	dropdown.connect("gui_input", self, "_on_gui_input")
-	dropdown.connect("selection_changed_value", self, "_on_selection_changed_value")
+	dropdown.connect("selection_changed", self, "_on_selection_changed")
 
 func _on_gui_input(event: InputEvent) -> void:
+	_items = _data.dialogues
 	dropdown.clear()
-	if not dialogue_editor:
-		dialogue_editor = get_tree().get_root().find_node("DialogueEditor", true, false)
-	if dialogue_editor:
-		var data = dialogue_editor.get_data() as DialogueData
-		if data:
-			for dialogue in data.dialogues:
-				dropdown.add_item(dialogue.name)
+	for item in _items:
+		var item_d = {"text": item.name, "value": item.uuid }
+		dropdown.add_item(item_d)
 
-func _on_selection_changed_value(value: String):
+func _on_selection_changed(item: Dictionary):
 	if (updating):
 		return
-	emit_changed(get_edited_property(), value)
+	emit_changed(get_edited_property(), item.value)
 
 func update_property():
 	var new_value = get_edited_object()[get_edited_property()]
 	updating = true
-	dropdown.text = new_value
+	var item = item_by_uuid(new_value)
+	if item and item.text:
+		dropdown.text = item.text
 	updating = false
+
+func item_by_uuid(uuid: String) -> Dictionary:
+	for item in _items:
+		if item.uuid == uuid:
+			return {"text": item.name, "value": item.uuid}
+	return {"text": null, "value": null}

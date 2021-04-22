@@ -85,7 +85,10 @@ transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107,
 [node name="Dialogue3D" type="Area" parent="Girl"]
 transform = Transform( 1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0, 0, 0 )
 script = ExtResource( 3 )
-dialogue_name = "Simple"
+dialogue_name = "ade89692-0b62-47dd-bacf-2b835ca69902"
+autostart = false
+activate = "action"
+cancel = "cancel"
 
 [node name="CollisionShape" type="CollisionShape" parent="Girl/Dialogue3D"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.073782, 2.26772, 1.13945 )
