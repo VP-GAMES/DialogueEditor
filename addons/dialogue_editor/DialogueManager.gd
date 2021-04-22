@@ -38,8 +38,30 @@ func actual_dialogue() -> String:
 func is_started() -> bool:
 	return _dialogue != null
 
-func start_dialogue(dialogue_name: String) -> void:
-	if not _data.dialogue_exists(dialogue_name):
+func start_dialogue(dialogue: String) -> void:
+	if not _data.dialogue_exists(dialogue):
+		printerr("Dialogue ", dialogue,  " doesn't exists")
+		_reset()
+		return
+	_dialogue = _data.dialogue(dialogue) as DialogueDialogue
+	_node = _dialogue.node_start() as DialogueNode
+	if _node and started_from_editor:
+		_next_sentence(0)
+	emit_signal("dialogue_started", _dialogue.name)
+
+func start_dialogue_by_uuid(dialogue_uuid: String) -> void:
+	if not _data.dialogue_exists_by_uuid(dialogue_uuid):
+		printerr("Dialogue ", dialogue_uuid,  " doesn't exists")
+		_reset()
+		return
+	_dialogue = _data.dialogue_by_uuid(dialogue_uuid) as DialogueDialogue
+	_node = _dialogue.node_start() as DialogueNode
+	if _node and started_from_editor:
+		_next_sentence(0)
+	emit_signal("dialogue_started", _dialogue.name)
+
+func start_dialogue_by_name(dialogue_name: String) -> void:
+	if not _data.dialogue_exists_by_name(dialogue_name):
 		printerr("Dialogue ", dialogue_name,  " doesn't exists")
 		_reset()
 		return

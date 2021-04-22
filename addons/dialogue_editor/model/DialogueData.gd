@@ -217,6 +217,7 @@ func add_dialogue(sendSignal = true) -> void:
 
 func _create_dialogue() -> DialogueDialogue:
 	var dialogue = DialogueDialogue.new()
+	dialogue.uuid = UUID.v4()
 	dialogue.name = _next_dialogue_name() 
 	dialogue.set_editor(_editor)
 	return dialogue
@@ -295,6 +296,18 @@ func init_data() -> void:
 			scenes = resource.scenes
 		if resource.dialogues and not resource.dialogues.empty():
 			dialogues = resource.dialogues
+		_chech_uuids()
+
+func _chech_uuids() -> void:
+		for actor in actors:
+			if not actor.uuid or actor.uuid.empty():
+				actor.uuid = UUID.v4()
+		for scene in scenes:
+			if not scene.uuid or scene.uuid.empty():
+				scene.uuid = UUID.v4()
+		for dialogue in dialogues:
+			if not dialogue.uuid or dialogue.uuid.empty():
+				dialogue.uuid = UUID.v4()
 
 func save() -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)
@@ -315,7 +328,7 @@ func _save_data_dialogue_names() -> void:
 	for dialogue in dialogues:
 		var namePrepared = dialogue.name.replace(" ", "")
 		namePrepared = namePrepared.to_upper()
-		source_code += "const " + namePrepared + " = \"" + dialogue.name +"\"\n"
+		source_code += "const " + namePrepared + " = \"" + dialogue.uuid +"\"\n"
 	source_code += "\nconst DIALOGUES = [\n"
 	for index in range(dialogues.size()):
 		source_code += " \"" + dialogues[index].name + "\""
@@ -340,11 +353,35 @@ func _save_data_dialogue_events() -> void:
 	file.store_string(source_code)
 	file.close()
 
-func dialogue_exists(dialogue_name: String) -> bool:
+func dialogue_exists(dialogue_uuid_or_name: String) -> bool:
+	if dialogue_exists_by_uuid(dialogue_uuid_or_name):
+		return true
+	return dialogue_exists_by_name(dialogue_uuid_or_name)
+
+func dialogue_exists_by_uuid(dialogue_uuid: String) -> bool:
+	for dialogue in dialogues:
+		if dialogue.uuid == dialogue_uuid:
+			return true
+	return false
+
+func dialogue_exists_by_name(dialogue_name: String) -> bool:
 	for dialogue in dialogues:
 		if dialogue.name == dialogue_name:
 			return true
 	return false
+
+func dialogue(dialogue_uuid_or_name: String) -> DialogueDialogue:
+	var dialogue = dialogue_by_uuid(dialogue_uuid_or_name)
+	if dialogue:
+		return dialogue
+	else:
+		return dialogue_by_name(dialogue_uuid_or_name)
+
+func dialogue_by_uuid(dialogue_uuid: String) -> DialogueDialogue:
+	for dialogue in dialogues:
+		if dialogue.uuid == dialogue_uuid:
+			return dialogue
+	return null
 
 func dialogue_by_name(dialogue_name: String) -> DialogueDialogue:
 	for dialogue in dialogues:
