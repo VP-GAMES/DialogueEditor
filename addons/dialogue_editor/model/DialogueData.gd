@@ -281,7 +281,7 @@ func selected_dialogue() -> DialogueDialogue:
 func select_dialogue(dialogue: DialogueDialogue, emitSignal = true) -> void:
 	_dialogue_selected = dialogue
 	if _dialogue_selected:
-		setting_dialogues_selected_dialogue_put(_dialogue_selected.name)
+		setting_dialogues_selected_dialogue_put(_dialogue_selected.uuid)
 	if emitSignal:
 		emit_signal("dialogue_selection_changed", _dialogue_selected)
 
@@ -418,6 +418,7 @@ func setting_actors_split_offset() -> int:
 
 func setting_actors_split_offset_put(offset: int) -> void:
 	ProjectSettings.set_setting(SETTINGS_ACTORS_SPLIT_OFFSET, offset)
+	ProjectSettings.save()
 
 func setting_scenes_split_offset() -> int:
 	var offset = SETTINGS_SCENES_SPLIT_OFFSET_DEFAULT
@@ -427,6 +428,7 @@ func setting_scenes_split_offset() -> int:
 
 func setting_scenes_split_offset_put(offset: int) -> void:
 	ProjectSettings.set_setting(SETTINGS_SCENES_SPLIT_OFFSET, offset)
+	ProjectSettings.save()
 
 func setting_dialogues_split_offset() -> int:
 	var offset = SETTINGS_DIALOGUES_SPLIT_OFFSET_DEFAULT
@@ -436,6 +438,7 @@ func setting_dialogues_split_offset() -> int:
 
 func setting_dialogues_split_offset_put(offset: int) -> void:
 	ProjectSettings.set_setting(SETTINGS_DIALOGUES_SPLIT_OFFSET, offset)
+	ProjectSettings.save()
 
 func setting_dialogues_selected_dialogue() -> String:
 	var dialogue_name
@@ -445,6 +448,7 @@ func setting_dialogues_selected_dialogue() -> String:
 
 func setting_dialogues_selected_dialogue_put(dialogue_name: String) -> void:
 	ProjectSettings.set_setting(SETTINGS_DIALOGUES_SELECTED_DIALOGUE, dialogue_name)
+	ProjectSettings.save()
 
 func setting_dialogues_editor_type() -> String:
 	var type = SETTINGS_DIALOGUES_EDITOR_TYPE_DEFAULT
@@ -454,6 +458,7 @@ func setting_dialogues_editor_type() -> String:
 
 func setting_dialogues_editor_type_put(type: String) -> void:
 	ProjectSettings.set_setting(SETTINGS_DIALOGUES_EDITOR_TYPE, type)
+	ProjectSettings.save()
 	emit_signal("dialogue_view_selection_changed")
 
 func setting_display_size() -> Vector2:
@@ -468,6 +473,7 @@ func setting_dialogue_editor_locale():
 
 func setting_dialogue_editor_locale_put(locale: String) -> void:
 	ProjectSettings.set_setting(SETTINGS_DIALOGUES_EDITOR_LOCALE, locale)
+	ProjectSettings.save()
 
 func setting_localization_editor_enabled() -> bool:
 	if ProjectSettings.has_setting("editor_plugins/enabled"):
