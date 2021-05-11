@@ -131,7 +131,7 @@ func _draw_view() -> void:
 	_draw_sentence()
 
 func _clear_sentences() -> void:
-	if _layer:
+	if _layer and is_instance_valid(_layer):
 		get_tree().get_root().call_deferred("remove_child", _layer)
 		_layer.queue_free()
 
