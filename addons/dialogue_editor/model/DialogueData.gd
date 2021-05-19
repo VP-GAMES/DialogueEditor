@@ -309,11 +309,12 @@ func _chech_uuids() -> void:
 			if not dialogue.uuid or dialogue.uuid.empty():
 				dialogue.uuid = UUID.v4()
 
-func save() -> void:
+func save(update_script_classes = false) -> void:
 	ResourceSaver.save(PATH_TO_SAVE, self)
 	_save_data_dialogue_names()
 	_save_data_dialogue_events()
-	_editor.get_editor_interface().get_resource_filesystem().scan()
+	if update_script_classes:
+		_editor.get_editor_interface().get_resource_filesystem().update_script_classes()
 
 func _save_data_dialogue_names() -> void:
 	var directory = Directory.new()

@@ -52,8 +52,8 @@ func _on_localization_data_changed() -> void:
 	init_languages()
 
 func _init_connections() -> void:
-	if not _save_ui.is_connected("pressed", self, "save_data"):
-		assert(_save_ui.connect("pressed", self, "save_data") == OK)
+	if not _save_ui.is_connected("pressed", self, "_on_save_data"):
+		assert(_save_ui.connect("pressed", self, "_on_save_data") == OK)
 	if not _tabs_ui.is_connected("tab_changed", self, "_on_tab_changed"):
 		assert(_tabs_ui.connect("tab_changed", self, "_on_tab_changed") == OK)
 
@@ -71,8 +71,11 @@ func _data_to_childs() -> void:
 	_scenes_ui.set_data(_data)
 	_dialogues_ui.set_data(_data)
 
-func save_data() -> void:
-	_data.save()
+func _on_save_data() -> void:
+	save_data(true)
+
+func save_data(update_script_classes = false) -> void:
+	_data.save(update_script_classes)
 
 func _init_localization() -> void:
 	if _data.setting_localization_editor_enabled():
