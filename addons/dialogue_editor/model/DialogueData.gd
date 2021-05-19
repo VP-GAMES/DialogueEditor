@@ -478,7 +478,9 @@ func setting_dialogue_editor_locale_put(locale: String) -> void:
 func setting_localization_editor_enabled() -> bool:
 	if ProjectSettings.has_setting("editor_plugins/enabled"):
 		var enabled_plugins = ProjectSettings.get_setting("editor_plugins/enabled") as Array
-		return enabled_plugins.has("localization_editor")
+		for plugin in enabled_plugins:
+			if "localization_editor" in plugin:
+				return true
 	return false
 
 # ***** UTILS *****

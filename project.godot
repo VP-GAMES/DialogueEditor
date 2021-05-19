@@ -105,7 +105,7 @@ dialogues_editor_locale="de"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "dialogue_editor" )
+enabled=PoolStringArray( "res://addons/dialogue_editor/plugin.cfg" )
 
 [input]
 
