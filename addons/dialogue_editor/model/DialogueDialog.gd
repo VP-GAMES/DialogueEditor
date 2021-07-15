@@ -4,7 +4,7 @@ tool
 extends Control
 
 var _localizationManager
-const _localizationManagerName = "localizationManager"
+const _localizationManagerName = "LocalizationManager"
 
 var _sentence: DialogueSentence
 var _buttons_array = []
@@ -94,7 +94,7 @@ func _buttons_generate() -> void:
 		button_ui.anchor_top = _button_ui.anchor_top - offset * index
 		button_ui.anchor_bottom = _button_ui.anchor_bottom - offset * index
 		if _localizationManager:
-			_text_ui.text = _localizationManager.tr(_sentence.texte_events[index_reverse].text)
+			button_ui.text = _localizationManager.tr(_sentence.texte_events[index_reverse].text)
 		else:
 			button_ui.text = _sentence.texte_events[index_reverse].text
 	for child in get_children():
