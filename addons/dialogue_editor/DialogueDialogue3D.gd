@@ -38,9 +38,11 @@ func _on_body_exited(body: Node) -> void:
 func _input(event: InputEvent):
 	if inside and dialogueManager:
 		if event.is_action_released(activate):
-			_start_dialogue()
-		if event.is_action_released(activate):
-			dialogueManager.next_sentence()
+			if dialogueManager.is_started():
+				dialogueManager.next_sentence()
+			else:
+				_start_dialogue()
+				dialogueManager.next_sentence()
 		if event.is_action_released(cancel):
 			dialogueManager.cancel_dialogue()
 
