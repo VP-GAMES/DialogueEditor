@@ -86,8 +86,8 @@ shape = SubResource( 3 )
 [node name="Label" type="Label" parent="CanvasError"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 4 )
 custom_colors/font_color = Color( 0.823529, 0.533333, 0.121569, 1 )
+custom_fonts/font = SubResource( 4 )
 text = "To support dialogues you have to autoload res://addons/dialogue_editor/DialogueManager.gd"
 align = 1
 valign = 1

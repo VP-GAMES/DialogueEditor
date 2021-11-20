@@ -5,10 +5,10 @@ extends Resource
 class_name DialogueNode, "res://addons/dialogue_editor/icons/Node.png"
 
 # ***** EDITOR_PLUGIN BOILERPLATE *****
-var _editor: EditorPlugin
-var _undo_redo: UndoRedo
+var _editor
+var _undo_redo
 
-func set_editor(editor: EditorPlugin) -> void:
+func set_editor(editor) -> void:
 	_editor = editor
 	_undo_redo = _editor.get_undo_redo()
 
