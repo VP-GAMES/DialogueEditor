@@ -15,6 +15,7 @@ var _dialogue_editor
 var _dialogue_editor_plugin
 
 func _enter_tree():
+	add_autoload_singleton("DialogueManager", "res://addons/dialogue_editor/DialogueManager.gd")
 	_dialogue_editor = DialogueMain.instance()
 	_dialogue_editor.name = "DialogueEditor"
 	get_editor_interface().get_editor_viewport().add_child(_dialogue_editor)
@@ -27,6 +28,7 @@ func _enter_tree():
 	add_inspector_plugin(_dialogue_editor_plugin)
 
 func _exit_tree():
+	remove_autoload_singleton("DialogueManager")
 	if _dialogue_editor:
 		_dialogue_editor.queue_free()
 	remove_custom_type("Dialogue2D")
