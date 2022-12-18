@@ -198,6 +198,11 @@ func _node_disconnection_request(from_node, from_slot, to_node, to_slot, sentenc
 	emit_signal("nodes_disconnected", from_node, to_node)
 	emit_signal("update_view")
 
+# ***** MOVE REQUEST *****
+func node_move_request(uuid, offset):
+	var node = _node_by_uuid(uuid) as DialogueNode
+	node.position = offset
+
 # ***** HELPER *****
 func node_start() -> DialogueNode:
 	for node_index in range(nodes.size()):

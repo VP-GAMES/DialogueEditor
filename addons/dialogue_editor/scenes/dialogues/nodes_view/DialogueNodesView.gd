@@ -44,6 +44,8 @@ func _init_connections() -> void:
 		assert(_popup_ui.connect("id_pressed", self, "_on_popup_item_selected") == OK)
 	if not _dialogue.is_connected("update_view", self, "_on_update_view"):
 		assert(_dialogue.connect("update_view", self, "_on_update_view") == OK)
+	if not _graph_ui.is_connected("_end_node_move", self, "_on_end_node_move"):
+		assert(_graph_ui.connect("_end_node_move", self, "_on_end_node_move") == OK)
 
 func _on_scroll_offset_changed(ofs: Vector2) -> void:
 	_dialogue.scroll_offset = ofs
@@ -65,6 +67,10 @@ func _on_mouse_popup_exited() -> void:
 
 func _on_update_view() -> void:
 	_update_view()
+
+func _on_end_node_move():
+	var node = _selected_node._node
+	_dialogue.node_move_request(node.uuid, _selected_node.offset)
 
 func _on_gui_input(event: InputEvent) -> void:
 	if _dialogue:
